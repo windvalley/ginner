@@ -1,0 +1,12 @@
+server_port = ":8000"
+runmode = "release"
+
+[db_demo]
+address = "127.0.0.1:3306"
+dbname = "demo"
+user = "sre"
+password = "sre.im"
+
+[acl]
+allow_url = ["/v1/demo1", "/v1/demo2"]
+allow_ip = ["127.0.0.1", "10.10.10.10"]
