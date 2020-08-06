@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"use-gin/errcode"
+	"use-gin/logger"
 )
 
 // response json format
@@ -17,13 +18,17 @@ type Response struct {
 
 // response JSON
 func SendResponse(c *gin.Context, err error, data interface{}) {
-	code, message := errcode.DecodeErr(err)
+	status, code, message := errcode.DecodeErr(err)
 
-	c.JSON(http.StatusOK, Response{
+	c.JSON(status, Response{
 		Code:    code,
 		Message: message,
 		Data:    data,
 	})
+
+	if status != http.StatusOK {
+		logger.Log.Error(err)
+	}
 }
 
 // response file

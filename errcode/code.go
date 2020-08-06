@@ -1,61 +1,80 @@
 package errcode
 
-var (
-	OK = &ErrCode{Code: "OK", Message: "OK"}
+import "net/http"
 
-	InternalServerError = &ErrCode{
-		Code:    "InternalError",
-		Message: "Internal server error.",
+var (
+	OK = &ErrCode{
+		Status:  http.StatusOK,
+		Code:    "OK",
+		Message: "OK",
 	}
 
-	ErrMysqlDB = &ErrCode{
+	InternalServerError = &ErrCode{
+		Status:  http.StatusInternalServerError,
+		Code:    "InternalError",
+		Message: "Internal server error",
+	}
+
+	MysqlDBError = &ErrCode{
 		Code:    "MysqlError",
-		Message: "MySQL error.",
+		Message: "MySQL error",
 	}
 
 	// How to use:
 	// err := errcode.New(errcode.ErrDataNotExist, nil)
 	// errFormat := err.Add("somestring")
 	// handler.SendResponse(c, errFormat, nil)
-	ErrDataNotExist = &ErrCode{
+	DataNotExistError = &ErrCode{
+		Status:  http.StatusInternalServerError,
 		Code:    "NoData",
 		Message: "%s has no data.",
 	}
 
-	ErrValidation = &ErrCode{
+	ValidationError = &ErrCode{
 		Code:    "ValidationError",
 		Message: "Validation failed.",
 	}
 
 	// user/client errors
-	ErrArgsNotFound = &ErrCode{
-		Code: "ParameterMissing",
-		Message: "The input parameter 'timestart' or 'timeend' that " +
-			"is mandatory for processing this request was not supplied " +
-			"or its value was null.",
+
+	ArgsNotFoundError = &ErrCode{
+		Status:  http.StatusBadRequest,
+		Code:    "ParameterMissing",
+		Message: "The parameter %s was not found",
 	}
 
-	ErrPostData = &ErrCode{
+	ArgsValueError = &ErrCode{
+		Status:  http.StatusBadRequest,
+		Code:    "ArgsValueError",
+		Message: "The value of %s was invalid",
+	}
+
+	PostDataError = &ErrCode{
+		Status:  http.StatusBadRequest,
 		Code:    "PostDataError",
 		Message: "The post data was invalid.",
 	}
 
-	ErrRecordNotFound = &ErrCode{
+	RecordNotFoundError = &ErrCode{
+		Status:  http.StatusBadRequest,
 		Code:    "RecordNotFound",
 		Message: "record not found in database.",
 	}
 
-	ErrUserNotFound = &ErrCode{
+	UserNotFoundError = &ErrCode{
+		Status:  http.StatusBadRequest,
 		Code:    "UserNotFound",
 		Message: "The user was not found.",
 	}
 
-	ErrPasswordIncorrect = &ErrCode{
+	PasswordIncorrectError = &ErrCode{
+		Status:  http.StatusBadRequest,
 		Code:    "PasswordInvalid",
 		Message: "The password was incorrect.",
 	}
 
-	ErrTokenInvalid = &ErrCode{
+	TokenInvalidError = &ErrCode{
+		Status:  http.StatusBadRequest,
 		Code:    "TokenInvalid",
 		Message: "The token was invalid.",
 	}
