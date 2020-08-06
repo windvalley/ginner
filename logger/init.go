@@ -103,3 +103,47 @@ func IsPathExist(path string) bool {
 	}
 	return true
 }
+
+// InitCMDLog preserve error log for cmd
+func InitCMDLog() {
+	abPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		panic(err)
+	}
+
+	logDir := abPath + "/logs"
+	if !IsPathExist(logDir) {
+		if err := os.Mkdir(logDir, 0755); err != nil {
+			panic(err)
+		}
+	}
+
+	Log.SetLevel(logrus.DebugLevel)
+
+	filename := filepath.Base(os.Args[0])
+	logfile := logDir + "/" + filename + ".log"
+	logWiter, err := rotatelogs.New(
+		logfile+"-%Y-%m-%d",
+		rotatelogs.WithLinkName(logfile),
+		rotatelogs.WithRotationTime(24*time.Hour),
+		rotatelogs.WithMaxAge(7*24*time.Hour),
+	)
+	if err != nil {
+		panic(fmt.Sprintf("log rotate faield: %v", err))
+	}
+
+	writeMap := lfshook.WriterMap{
+		logrus.DebugLevel: logWiter,
+		logrus.InfoLevel:  logWiter,
+		logrus.WarnLevel:  logWiter,
+		logrus.ErrorLevel: logWiter,
+		logrus.PanicLevel: logWiter,
+		logrus.FatalLevel: logWiter,
+	}
+
+	lfHook := lfshook.NewHook(writeMap, &logrus.JSONFormatter{
+		TimestampFormat: "2006-01-02 15:04:05",
+	})
+	Log.AddHook(lfHook)
+	//Log.Out = ioutil.Discard
+}
