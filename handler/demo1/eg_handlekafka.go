@@ -63,7 +63,7 @@ func (h consumeHandler) ConsumeClaim(
 
 		if ct.ID == h.taskID {
 
-			// omit your specific logic
+			// your specific logic
 
 			h.ctxCancel()
 			return nil

@@ -9,9 +9,10 @@ import (
 type GlobalConfig struct {
 	ServerPort string `toml:"server_port"`
 	Runmode    string `toml:"runmode"`
-	DBDemo     `toml:"db_demo"`
+	DBDemo     DBDemo `toml:"db_demo"`
 	Kafka      Kafka
-	ACL
+	Influxdb   Influxdb
+	ACL        ACL
 }
 
 var (
@@ -31,6 +32,14 @@ type Kafka struct {
 	ProducerTopic string `toml:"producer_topic"`
 	ConsumerTopic string `toml:"consumer_topic"`
 	ConsumerGroup string `toml:"consumer_group"`
+}
+
+type Influxdb struct {
+	Address     string
+	Username    string
+	Password    string
+	DBName      string
+	Measurement string
 }
 
 type ACL struct {

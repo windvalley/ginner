@@ -3,6 +3,8 @@ package midware
 import (
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
+
+	"use-gin/logger"
 )
 
 func RequestId() gin.HandlerFunc {
@@ -12,7 +14,10 @@ func RequestId() gin.HandlerFunc {
 
 		// Create request id with UUID4
 		if requestId == "" {
-			u4 := uuid.NewV4()
+			u4, err := uuid.NewV4()
+			if err != nil {
+				logger.Log.Errorf("create uuid error: %v", err)
+			}
 			requestId = u4.String()
 		}
 
