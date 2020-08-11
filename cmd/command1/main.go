@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/signal"
@@ -27,7 +28,6 @@ func main() {
 	config.ParseConfig(*cfg)
 	logger.InitCMDLog()
 
-	// process lock
 	lock, lockFile, err := utils.ProcessLock()
 	if err != nil {
 		logger.Log.Fatal(err)
@@ -35,8 +35,8 @@ func main() {
 	defer os.Remove(lockFile)
 	defer lock.Close()
 
-	//ctx, cancel := context.WithCancel(context.Background())
-	//go xxx(ctx)
+	ctx, cancel := context.WithCancel(context.Background())
+	go yourLogic(ctx)
 
 	sigC := make(chan os.Signal)
 	signal.Notify(sigC)
@@ -45,9 +45,22 @@ func main() {
 		case syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT,
 			syscall.SIGKILL:
 			logger.Log.Infof("%v signal captured, quit.", sig)
-			//cancel()
+			cancel()
 			os.Remove(lockFile)
 			os.Exit(1)
+		}
+	}
+}
+
+func yourLogic(ctx context.Context) {
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		default:
+
+			// your specific logic
+
 		}
 	}
 }
