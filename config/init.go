@@ -10,7 +10,8 @@ type GlobalConfig struct {
 	ServerPort string `toml:"server_port"`
 	Runmode    string `toml:"runmode"`
 	DBDemo     `toml:"db_demo"`
-	ACL        `toml:"acl"`
+	Kafka      Kafka
+	ACL
 }
 
 var (
@@ -23,6 +24,13 @@ type DBDemo struct {
 	DBName   string
 	User     string
 	Password string
+}
+
+type Kafka struct {
+	Brokers       []string
+	ProducerTopic string `toml:"producer_topic"`
+	ConsumerTopic string `toml:"consumer_topic"`
+	ConsumerGroup string `toml:"consumer_group"`
 }
 
 type ACL struct {

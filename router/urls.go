@@ -2,6 +2,8 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+
+	"use-gin/handler/demo1"
 )
 
 func urls(router *gin.Engine) {
@@ -11,8 +13,8 @@ func urls(router *gin.Engine) {
 	router.Static("s", "html/statics")
 
 	// url group1
-	demo1 := router.Group("/v1/demo1")
+	g1 := router.Group("/v1/demo1")
 	{
-		demo1.GET("")
+		g1.GET("/eg-handlekafka", demo1.HandleKafkaDemo)
 	}
 }

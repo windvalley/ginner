@@ -9,6 +9,7 @@ import (
 
 	"use-gin/config"
 	"use-gin/logger"
+	"use-gin/model/kafka"
 	"use-gin/model/mysql"
 	"use-gin/router"
 )
@@ -27,11 +28,16 @@ func main() {
 
 	logger.Init()
 
+	// mysqldb
 	mysql.DBs.Init()
 	mysql.DBs.Useraccount.Set("gorm:table_options", "ENGIN=InnoDB").AutoMigrate(
 	//&mysql.xxx{},
 	)
 	defer mysql.DBs.Close()
+
+	// kafka
+	kafka.InitKafkaClient()
+	kafka.InitKafkaProducer()
 
 	router.RouterGroup()
 }

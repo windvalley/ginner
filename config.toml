@@ -7,6 +7,17 @@ dbname = "demo"
 user = "sre"
 password = "sre.im"
 
+[kafka]
+brokers = [
+    "kafka01.sre.im:9092",
+    "kafka02.sre.im:9092",
+    "kafka03.sre.im:9092",
+]
+producer_topic = ""
+consumer_topic = ""
+consumer_group = ""
+
+# disable this feature when the item value is []
 [acl]
 allow_url = ["/v1/demo1", "/v1/demo2"]
 allow_ip = ["127.0.0.1", "10.10.10.10"]
