@@ -3,51 +3,52 @@ package utils
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/pquerna/ffjson/ffjson"
 )
 
-func HttpRequest(method, url string, postData interface{}) (string, error) {
+func HttpRequest(
+	method, url string,
+	postData interface{},
+) (io.ReadCloser, error) {
 	jsonStr, err := json.Marshal(postData)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	body := bytes.NewBuffer(jsonStr)
 
 	req, err := http.NewRequest(method, url, body)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	defer res.Body.Close()
 
-	data, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return "", err
-	}
-
-	return string(data), nil
+	return res.Body, nil
 }
 
 // PostWithUrlencoded
 //     e.g. payload := url.Values{}
 // payload.Set("key", value1)
 // payload.Add("key", value2)
-func PostWithUrlencoded(api string, payload url.Values) (string, error) {
+func PostWithUrlencoded(api string, payload url.Values) (io.ReadCloser, error) {
 	req, err := http.NewRequest(
 		http.MethodPost,
 		api,
 		strings.NewReader(payload.Encode()),
 	)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	req.Header.Add(
@@ -55,23 +56,21 @@ func PostWithUrlencoded(api string, payload url.Values) (string, error) {
 		"application/x-www-form-urlencoded",
 	)
 
-	resp, err := http.DefaultClient.Do(req)
+	res, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	defer resp.Body.Close()
+	defer res.Body.Close()
 
-	data, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return "", err
-	}
-
-	return string(data), err
+	return res.Body, err
 }
 
 // PostWithFormdata
 //     e.g. postData := map[string]string{"key":"value"}
-func PostWithFormdata(url string, postData map[string]string) (string, error) {
+func PostWithFormdata(
+	url string,
+	postData map[string]string,
+) (io.ReadCloser, error) {
 	body := new(bytes.Buffer)
 	mw := multipart.NewWriter(body)
 	for k, v := range postData {
@@ -81,20 +80,35 @@ func PostWithFormdata(url string, postData map[string]string) (string, error) {
 
 	req, err := http.NewRequest(http.MethodPost, url, body)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	req.Header.Add("Content-Type", mw.FormDataContentType())
 
-	resp, err := http.DefaultClient.Do(req)
+	res, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	defer resp.Body.Close()
+	defer res.Body.Close()
 
-	data, err := ioutil.ReadAll(resp.Body)
+	return res.Body, err
+}
+
+func GetBodyStringData(resBody io.ReadCloser) (string, error) {
+	data, err := ioutil.ReadAll(resBody)
 	if err != nil {
-		return "", err
+		return "", nil
 	}
+	return string(data), nil
+}
 
-	return string(data), err
+// parameter structData is a Struct that contains the fields which you want from resBody.
+func GetBodyStructData(
+	resBody io.ReadCloser,
+	structData interface{},
+) (interface{}, error) {
+	decoder := ffjson.NewDecoder()
+	if err := decoder.DecodeReader(resBody, &structData); err != nil {
+		return nil, err
+	}
+	return structData, nil
 }
