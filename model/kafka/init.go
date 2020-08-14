@@ -11,11 +11,11 @@ import (
 )
 
 var (
-	ClientGroup sarama.ConsumerGroup
-	Producer    sarama.AsyncProducer
+	Consumer sarama.ConsumerGroup
+	Producer sarama.AsyncProducer
 )
 
-func InitKafkaClient() {
+func InitKafkaConsumer() {
 	var err error
 	config := sarama.NewConfig()
 	config.Net.KeepAlive = 10 * time.Second
@@ -23,7 +23,7 @@ func InitKafkaClient() {
 	config.Producer.Timeout = 20 * time.Second
 	config.Version = sarama.V2_0_0_0
 
-	ClientGroup, err = sarama.NewConsumerGroup(
+	Consumer, err = sarama.NewConsumerGroup(
 		cfg.Config().Kafka.Brokers,
 		cfg.Config().Kafka.ConsumerGroup,
 		config,
@@ -75,7 +75,7 @@ func ConsumeTopics(
 			logger.Log.Errorf("task %v timeout", handler)
 			cancel()
 		default:
-			if err := ClientGroup.Consume(
+			if err := Consumer.Consume(
 				ctx, topics, handler); err != nil {
 				logger.Log.Errorf("consume error: %v", err)
 			}

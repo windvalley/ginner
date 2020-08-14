@@ -38,7 +38,7 @@ func main() {
 	defer mysql.DBs.Close()
 
 	// kafka
-	kafka.InitKafkaClient()
+	kafka.InitKafkaConsumer()
 	kafka.InitKafkaProducer()
 
 	// cron
