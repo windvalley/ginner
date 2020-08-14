@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/pflag"
 
 	"use-gin/config"
+	"use-gin/cron"
 	"use-gin/logger"
 	"use-gin/model/kafka"
 	"use-gin/model/mysql"
@@ -15,6 +16,7 @@ import (
 )
 
 func main() {
+	// config
 	cfg := pflag.StringP("config", "c", "", "Specify your configuration file")
 	pflag.Parse()
 	if *cfg == "" {
@@ -23,9 +25,9 @@ func main() {
 			"   Specify your configuration file\n", binName)
 		os.Exit(2)
 	}
-
 	config.ParseConfig(*cfg)
 
+	// logger
 	logger.Init()
 
 	// mysqldb
@@ -39,5 +41,9 @@ func main() {
 	kafka.InitKafkaClient()
 	kafka.InitKafkaProducer()
 
+	// cron
+	cron.Init()
+
+	// router
 	router.RouterGroup()
 }

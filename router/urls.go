@@ -16,5 +16,6 @@ func urls(router *gin.Engine) {
 	g1 := router.Group("/v1/demo1")
 	{
 		g1.GET("/eg-handlekafka", demo1.HandleKafkaDemo)
+		g1.GET("/eg-handleinfluxdb", demo1.HandleInfluxdbDemo)
 	}
 }
