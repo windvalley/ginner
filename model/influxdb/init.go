@@ -9,44 +9,35 @@ import (
 	"use-gin/logger"
 )
 
-type InfluxDB struct {
-	Address     string
-	Username    string
-	Password    string
-	DBName      string
-	Measurement string
-}
+var Client client.Client
 
-func New() *InfluxDB {
-	return &InfluxDB{
-		Address:     config.Config().Influxdb.Address,
-		Username:    config.Config().Influxdb.Username,
-		Password:    config.Config().Influxdb.Password,
-		DBName:      config.Config().Influxdb.DBName,
-		Measurement: config.Config().Influxdb.Measurement,
-	}
-}
-
-func (i *InfluxDB) Connect() (client.Client, error) {
-	c, err := client.NewHTTPClient(client.HTTPConfig{
-		Addr:     i.Address,
-		Username: i.Username,
-		Password: i.Password,
+func Init() {
+	var err error
+	Client, err = client.NewHTTPClient(client.HTTPConfig{
+		Addr:     config.Config().Influxdb.Address,
+		Username: config.Config().Influxdb.Username,
+		Password: config.Config().Influxdb.DBName,
 	})
 	if err != nil {
 		logger.Log.Errorf("connect influxdb error: %v", err)
-		return nil, err
 	}
-
-	return c, nil
 }
 
-func (i *InfluxDB) NewPoint(
+func Close() {
+	Client.Close()
+}
+
+func NewPoint(
 	tags map[string]string,
 	fields map[string]interface{},
 	time time.Time,
 ) (*client.Point, error) {
-	pt, err := client.NewPoint(i.Measurement, tags, fields, time)
+	pt, err := client.NewPoint(
+		config.Config().Influxdb.Measurement,
+		tags,
+		fields,
+		time,
+	)
 	if err != nil {
 		logger.Log.Errorf("influxdb client NewPoint error: %v", err)
 		return nil, err
@@ -55,9 +46,9 @@ func (i *InfluxDB) NewPoint(
 	return pt, nil
 }
 
-func (i *InfluxDB) NewBatchPoints() (client.BatchPoints, error) {
+func NewBatchPoints() (client.BatchPoints, error) {
 	bp, err := client.NewBatchPoints(client.BatchPointsConfig{
-		Database:  i.DBName,
+		Database:  config.Config().Influxdb.DBName,
 		Precision: "s",
 	})
 	if err != nil {
@@ -68,8 +59,32 @@ func (i *InfluxDB) NewBatchPoints() (client.BatchPoints, error) {
 	return bp, nil
 }
 
+//    e.g.
+// bp, err := influxdb.NewBatchPoints()
+//if err != nil {
+//return err
+//}
+//tags := map[string]string{}
+//fields := map[string]interface{}{}
+//time := time.Now()
+//pt, err := influxdb.NewPoint(tags, fields, time)
+//if err != nil {
+//return err
+//}
+//bp.AddPoint(pt)
+//if err := influxdb.Write(bp); err != nil {
+//return err
+//}
+//return nil
+func Write(bp client.BatchPoints) error {
+	if err := Client.Write(bp); err != nil {
+		return err
+	}
+	return nil
+}
+
 //     e.g.
-//res, err := i.QueryDB(c, sql)
+//res, err := influxdb.Query(sql)
 //if err != nil {
 //return nil, err
 //}
@@ -78,16 +93,13 @@ func (i *InfluxDB) NewBatchPoints() (client.BatchPoints, error) {
 //return nil, err
 //}
 //return res[0].Series[0], nil
-func (i *InfluxDB) QueryDB(
-	c client.Client,
-	cmd string,
-) ([]client.Result, error) {
+func Query(cmd string) ([]client.Result, error) {
 	q := client.Query{
 		Command:  cmd,
-		Database: i.DBName,
+		Database: config.Config().Influxdb.DBName,
 	}
 
-	response, err := c.Query(q)
+	response, err := Client.Query(q)
 	if err != nil {
 		return nil, err
 	}

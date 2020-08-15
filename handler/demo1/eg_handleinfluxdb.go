@@ -4,16 +4,13 @@ import (
 	"errors"
 	"fmt"
 	"time"
+	"use-gin/model/influxdb"
 
 	"github.com/gin-gonic/gin"
 	"github.com/influxdata/influxdb/models"
-
-	"use-gin/model/influxdb"
 )
 
 const SQL_PART_END = "fill(0) tz('Asia/Shanghai')"
-
-var influx = influxdb.New()
 
 func HandleInfluxdbDemo(c *gin.Context) {
 
@@ -22,13 +19,7 @@ func HandleInfluxdbDemo(c *gin.Context) {
 }
 
 func WriteInfluxdb() error {
-	client, err := influx.Connect()
-	if err != nil {
-		return err
-	}
-	defer client.Close()
-
-	bp, err := influx.NewBatchPoints()
+	bp, err := influxdb.NewBatchPoints()
 	if err != nil {
 		return err
 	}
@@ -37,29 +28,22 @@ func WriteInfluxdb() error {
 	fields := map[string]interface{}{}
 	time := time.Now()
 
-	pt, err := influx.NewPoint(tags, fields, time)
+	pt, err := influxdb.NewPoint(tags, fields, time)
 	if err != nil {
 		return err
 	}
 	bp.AddPoint(pt)
 
-	if err := client.Write(bp); err != nil {
+	if err := influxdb.Write(bp); err != nil {
 		return err
 	}
-
 	return nil
 }
 
 func ReadInfluxdb() (*models.Row, error) {
-	client, err := influx.Connect()
-	if err != nil {
-		return nil, err
-	}
-	defer client.Close()
-
 	sql := fmt.Sprintf("select * from ... %s", SQL_PART_END)
 
-	res, err := influx.QueryDB(client, sql)
+	res, err := influxdb.Query(sql)
 	if err != nil {
 		return nil, err
 	}
