@@ -1,4 +1,4 @@
-package mysql
+package rdb
 
 import (
 	"fmt"
@@ -6,45 +6,64 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
+	// _ "github.com/jinzhu/gorm/dialects/postgres"
+	// _ "github.com/jinzhu/gorm/dialects/sqlite"
+	// _ "github.com/jinzhu/gorm/dialects/mssql"
+
 	"use-gin/config"
 	"use-gin/logger"
 )
 
+// if have any other databases, just put it in this struct
 type Databases struct {
-	Useraccount *gorm.DB
+	MySQL      *gorm.DB
+	PostgreSQL *gorm.DB
 }
 
 var DBs *Databases
 
-func (*Databases) Init() {
+func Init() {
 	DBs = &Databases{
-		Useraccount: GetDemoDB(),
+		MySQL:      GetMySQL(),
+		PostgreSQL: GetPostgreSQL(),
 	}
 }
 
-func (*Databases) Close() {
-	DBs.Useraccount.Close()
+func Close() {
+	DBs.MySQL.Close()
+	DBs.PostgreSQL.Close()
 }
 
-func GetDemoDB() *gorm.DB {
-	address := config.Config().DBDemo.Address
-	dbname := config.Config().DBDemo.DBName
-	user := config.Config().DBDemo.User
-	password := config.Config().DBDemo.Password
+func GetMySQL() *gorm.DB {
+	dbtype := config.Config().MySQL.DBType
+	address := config.Config().MySQL.Address
+	dbname := config.Config().MySQL.DBName
+	user := config.Config().MySQL.User
+	password := config.Config().MySQL.Password
 
-	return Connect(user, password, address, dbname)
+	return Connect(dbtype, user, password, address, dbname)
 }
 
-func Connect(username, password, address, dbname string) *gorm.DB {
-	db, err := gorm.Open("mysql",
+func GetPostgreSQL() *gorm.DB {
+	dbtype := config.Config().PostgreSQL.DBType
+	address := config.Config().PostgreSQL.Address
+	dbname := config.Config().PostgreSQL.DBName
+	user := config.Config().PostgreSQL.User
+	password := config.Config().PostgreSQL.Password
+
+	return Connect(dbtype, user, password, address, dbname)
+}
+
+func Connect(dbtype, username, password, address, dbname string) *gorm.DB {
+	db, err := gorm.Open(dbtype,
 		fmt.Sprintf("%s:%s@(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 			username,
 			password,
 			address,
-			dbname))
+			dbname,
+		))
 	if err != nil {
-		//logger.Log.Fatalf("Connect mysql database %s failed: %v", dbname, err)
-		logger.Log.Panicf("Connect mysql database %s failed: %v", dbname, err)
+		logger.Log.Fatalf("connect mysql database %s failed: %v", dbname, err)
 	}
 
 	if config.Config().Runmode != "release" {
@@ -52,6 +71,7 @@ func Connect(username, password, address, dbname string) *gorm.DB {
 	}
 	db.SingularTable(true)
 	db.DB().SetMaxIdleConns(10)
+	db.DB().SetMaxOpenConns(100)
 
 	return db
 }
