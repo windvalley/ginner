@@ -12,15 +12,13 @@ func init() {
 	//    e.g. ./use-gin -c conf/dev.config.conf
 	//config.LoadFromCLIParams()
 
-	// load from system environment variable RUNENV: prod/dev
+	// load config from system environment variable RUNENV: prod/dev
 	//    e.g. export RUNENV=dev
 	// ./use-gin
 	config.LoadFromENV()
 
-	// logger
 	logger.Init()
 
-	// cron
 	cron.Init()
 
 	// relation db

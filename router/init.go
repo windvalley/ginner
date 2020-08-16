@@ -48,7 +48,7 @@ func RouterGroup() {
 	urls(router)
 
 	// normal start server
-	//if err := router.Run(config.Config().ServerPort); err != nil {
+	//if err := router.Run(config.Conf().ServerPort); err != nil {
 	//logger.Log.Errorf("router started failed: %+v", err)
 	//}
 

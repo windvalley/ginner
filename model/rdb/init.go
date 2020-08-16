@@ -5,8 +5,8 @@ import (
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 
-	// _ "github.com/jinzhu/gorm/dialects/postgres"
 	// _ "github.com/jinzhu/gorm/dialects/sqlite"
 	// _ "github.com/jinzhu/gorm/dialects/mssql"
 
@@ -35,21 +35,21 @@ func Close() {
 }
 
 func GetMySQL() *gorm.DB {
-	dbtype := config.Config().MySQL.DBType
-	address := config.Config().MySQL.Address
-	dbname := config.Config().MySQL.DBName
-	user := config.Config().MySQL.User
-	password := config.Config().MySQL.Password
+	dbtype := config.Conf().MySQL.DBType
+	address := config.Conf().MySQL.Address
+	dbname := config.Conf().MySQL.DBName
+	user := config.Conf().MySQL.User
+	password := config.Conf().MySQL.Password
 
 	return Connect(dbtype, user, password, address, dbname)
 }
 
 func GetPostgreSQL() *gorm.DB {
-	dbtype := config.Config().PostgreSQL.DBType
-	address := config.Config().PostgreSQL.Address
-	dbname := config.Config().PostgreSQL.DBName
-	user := config.Config().PostgreSQL.User
-	password := config.Config().PostgreSQL.Password
+	dbtype := config.Conf().PostgreSQL.DBType
+	address := config.Conf().PostgreSQL.Address
+	dbname := config.Conf().PostgreSQL.DBName
+	user := config.Conf().PostgreSQL.User
+	password := config.Conf().PostgreSQL.Password
 
 	return Connect(dbtype, user, password, address, dbname)
 }
@@ -66,7 +66,7 @@ func Connect(dbtype, username, password, address, dbname string) *gorm.DB {
 		logger.Log.Fatalf("connect mysql database %s failed: %v", dbname, err)
 	}
 
-	if config.Config().Runmode != "release" {
+	if config.Conf().Runmode != "release" {
 		db.LogMode(true)
 	}
 	db.SingularTable(true)
