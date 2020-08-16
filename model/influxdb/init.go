@@ -14,9 +14,9 @@ var Client client.Client
 func Init() {
 	var err error
 	Client, err = client.NewHTTPClient(client.HTTPConfig{
-		Addr:     config.Config().Influxdb.Address,
-		Username: config.Config().Influxdb.Username,
-		Password: config.Config().Influxdb.DBName,
+		Addr:     config.Conf().Influxdb.Address,
+		Username: config.Conf().Influxdb.Username,
+		Password: config.Conf().Influxdb.DBName,
 	})
 	if err != nil {
 		logger.Log.Errorf("connect influxdb error: %v", err)
@@ -33,7 +33,7 @@ func NewPoint(
 	time time.Time,
 ) (*client.Point, error) {
 	pt, err := client.NewPoint(
-		config.Config().Influxdb.Measurement,
+		config.Conf().Influxdb.Measurement,
 		tags,
 		fields,
 		time,
@@ -48,7 +48,7 @@ func NewPoint(
 
 func NewBatchPoints() (client.BatchPoints, error) {
 	bp, err := client.NewBatchPoints(client.BatchPointsConfig{
-		Database:  config.Config().Influxdb.DBName,
+		Database:  config.Conf().Influxdb.DBName,
 		Precision: "s",
 	})
 	if err != nil {
@@ -96,7 +96,7 @@ func Write(bp client.BatchPoints) error {
 func Query(cmd string) ([]client.Result, error) {
 	q := client.Query{
 		Command:  cmd,
-		Database: config.Config().Influxdb.DBName,
+		Database: config.Conf().Influxdb.DBName,
 	}
 
 	response, err := Client.Query(q)

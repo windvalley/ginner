@@ -24,8 +24,8 @@ func InitKafkaConsumer() {
 	config.Version = sarama.V2_0_0_0
 
 	Consumer, err = sarama.NewConsumerGroup(
-		cfg.Config().Kafka.Brokers,
-		cfg.Config().Kafka.ConsumerGroup,
+		cfg.Conf().Kafka.Brokers,
+		cfg.Conf().Kafka.ConsumerGroup,
 		config,
 	)
 	if err != nil {
@@ -40,7 +40,7 @@ func InitKafkaProducer() {
 	config.Producer.Return.Successes = true
 	config.Producer.Timeout = 20 * time.Second
 
-	Producer, err = sarama.NewAsyncProducer(cfg.Config().Kafka.Brokers, config)
+	Producer, err = sarama.NewAsyncProducer(cfg.Conf().Kafka.Brokers, config)
 	if err != nil {
 		panic(err)
 	}

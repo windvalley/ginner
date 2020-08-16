@@ -1,2 +1,5 @@
-logs
+logs/
+use-gin
 go.sum
+tmpdoc
+todo

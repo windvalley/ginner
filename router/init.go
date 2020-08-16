@@ -16,7 +16,7 @@ import (
 )
 
 func RouterGroup() {
-	runmode := config.Config().Runmode
+	runmode := config.Conf().Runmode
 
 	switch runmode {
 	case "release":
@@ -53,7 +53,7 @@ func RouterGroup() {
 	//}
 
 	// graceful restart or shutdown server
-	server := endless.NewServer(config.Config().ServerPort, router)
+	server := endless.NewServer(config.Conf().ServerPort, router)
 	server.BeforeBegin = func(add string) {
 		pid := syscall.Getpid()
 		logger.Log.Infof("current pid is %d", pid)

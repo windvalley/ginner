@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/pquerna/ffjson/ffjson"
 
-	"use-gin/config"
 	cfg "use-gin/config"
 	"use-gin/errcode"
 	"use-gin/handler"
@@ -57,7 +56,7 @@ func (h consumeHandler) ConsumeClaim(
 		}
 		logger.Log.Infof(
 			"received from %s: %+v",
-			config.Config().Kafka.ConsumerTopic,
+			cfg.Conf().Kafka.ConsumerTopic,
 			ct,
 		)
 
@@ -84,7 +83,7 @@ func HandleKafkaDemo(c *gin.Context) {
 
 	// consumer
 	taskID := produceTask.ID
-	consumeTopics := []string{cfg.Config().Kafka.ConsumerTopic}
+	consumeTopics := []string{cfg.Conf().Kafka.ConsumerTopic}
 	ctx, cancel := context.WithCancel(context.Background())
 	handler := consumeHandler{c, taskID, cancel}
 
@@ -104,7 +103,7 @@ func addTaskToTopic(task ProduceTask) error {
 		return err
 	}
 
-	topic := cfg.Config().Kafka.ProducerTopic
+	topic := cfg.Conf().Kafka.ProducerTopic
 	msg := &sarama.ProducerMessage{
 		Topic: topic,
 		Value: sarama.StringEncoder(reqStr),

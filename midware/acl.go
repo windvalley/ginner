@@ -11,11 +11,11 @@ func ACL() gin.HandlerFunc {
 	permitURLMap := make(map[string]bool)
 	permitIPMap := make(map[string]bool)
 
-	for _, v := range config.Config().ACL.AllowURL {
+	for _, v := range config.Conf().ACL.AllowURL {
 		permitURLMap[v] = true
 	}
 
-	for _, v := range config.Config().ACL.AllowIP {
+	for _, v := range config.Conf().ACL.AllowIP {
 		permitIPMap[v] = true
 	}
 

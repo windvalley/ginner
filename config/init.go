@@ -1,61 +1,64 @@
 package config
 
 import (
+	"fmt"
+	"os"
+	"path/filepath"
 	"sync"
 
 	"github.com/BurntSushi/toml"
+	"github.com/spf13/pflag"
 )
-
-type GlobalConfig struct {
-	ServerPort string `toml:"server_port"`
-	Runmode    string `toml:"runmode"`
-	DBDemo     DBDemo `toml:"db_demo"`
-	Kafka      Kafka
-	Influxdb   Influxdb
-	ACL        ACL
-}
 
 var (
-	config *GlobalConfig
-	lock   = new(sync.RWMutex)
+	conf *GlobalConfig
+	lock = new(sync.RWMutex)
 )
 
-type DBDemo struct {
-	Address  string
-	DBName   string
-	User     string
-	Password string
-}
-
-type Kafka struct {
-	Brokers       []string
-	ProducerTopic string `toml:"producer_topic"`
-	ConsumerTopic string `toml:"consumer_topic"`
-	ConsumerGroup string `toml:"consumer_group"`
-}
-
-type Influxdb struct {
-	Address     string
-	Username    string
-	Password    string
-	DBName      string
-	Measurement string
-}
-
-type ACL struct {
-	AllowURL []string `toml:"allow_url"`
-	AllowIP  []string `toml:"allow_ip"`
-}
-
 func ParseConfig(f string) {
-	if _, err := toml.DecodeFile(f, &config); err != nil {
+	if _, err := toml.DecodeFile(f, &conf); err != nil {
 		panic(err)
 	}
-	return
 }
 
-func Config() *GlobalConfig {
+func Conf() *GlobalConfig {
 	lock.RLock()
 	defer lock.RUnlock()
-	return config
+	return conf
+}
+
+// load config from command line parameters
+func LoadFromCLIParams() {
+	cfg := pflag.StringP("config", "c", "", "Specify your configuration file")
+	pflag.Parse()
+	if *cfg == "" {
+		binName := filepath.Base(os.Args[0])
+		fmt.Printf("missing parameter\nUsage of %s:\n  -c, --config string"+
+			"   Specify your configuration file\n", binName)
+		os.Exit(2)
+	}
+
+	ParseConfig(*cfg)
+}
+
+// load from system environment variable RUNENV: prod/dev
+func LoadFromENV() {
+	abPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		panic(err)
+	}
+
+	confPath := abPath + "/conf/"
+	runenv := os.Getenv("RUNENV")
+
+	switch runenv {
+	case "dev":
+		ParseConfig(confPath + "dev.config.toml")
+	case "prod":
+		ParseConfig(confPath + "config.toml")
+	case "":
+		panic("system environment variable RUNENV is not set, optinal value: prod or dev")
+	default:
+		panic("the value of RUNENV can only be prod or dev")
+	}
 }

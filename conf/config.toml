@@ -1,0 +1,43 @@
+server_port = ":8000"
+runmode = "release" # debug/release/test
+
+[log]
+dirname = "logs"
+rotation_hours = 24
+save_days = 7
+
+[mysql]
+dbtype = "mysql"  # mysql/mssql/postgres/sqlite3
+address = "127.0.0.1:3306"
+dbname = "demo"
+user = "sre"
+password = "sre.im"
+
+[postgresql]
+dbtype = "postgres"
+address = "127.0.0.1:5432"
+dbname = "demo"
+user = "sre"
+password = "sre.im"
+
+[kafka]
+brokers = [
+    "kafka01.sre.im:9092",
+    "kafka02.sre.im:9092",
+    "kafka03.sre.im:9092",
+]
+producer_topic = ""
+consumer_topic = ""
+consumer_group = ""
+
+[influxdb]
+address = "http://127.0.0.1:8086"
+username = ""
+password = ""
+dbname = ""
+measurement = ""
+
+# disable this feature when the item value is []
+[acl]
+allow_url = []
+allow_ip = ["127.0.0.1", "10.10.10.10"]

@@ -1,8 +1,21 @@
-server_port = ":8000"
-runmode = "release"
+server_port = ":9000"
+runmode = "debug" # debug/release/test
 
-[db_demo]
+[log]
+dirname = "logs"
+rotation_hours = 24
+save_days = 7
+
+[mysql]
+dbtype = "mysql"  # mysql/mssql/postgres/sqlite3
 address = "127.0.0.1:3306"
+dbname = "demo"
+user = "sre"
+password = "sre.im"
+
+[postgresql]
+dbtype = "postgres"
+address = "127.0.0.1:5432"
 dbname = "demo"
 user = "sre"
 password = "sre.im"
@@ -26,5 +39,5 @@ measurement = ""
 
 # disable this feature when the item value is []
 [acl]
-allow_url = ["/v1/demo1", "/v1/demo2"]
-allow_ip = ["127.0.0.1", "10.10.10.10"]
+allow_url = []
+allow_ip = []
