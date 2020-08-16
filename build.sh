@@ -2,4 +2,10 @@
 # go get -u github.com/mitchellh/gox
 
 
-gox -osarch="linux/amd64 darwin/amd64"
+OSARCH="linux/amd64 darwin/amd64"
+
+gox -osarch="$OSARCH" || {
+    go get -u github.com/mitchellh/gox
+    gox -osarch="$OSARCH"
+}
+
