@@ -19,49 +19,32 @@ import (
 var Log = logrus.New()
 
 func Init() {
-	abPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	logDir, err := createLogdir()
 	if err != nil {
-		panic(err)
-	}
-
-	logDir := abPath + "/logs"
-	if !IsPathExist(logDir) {
-		if err := os.Mkdir(logDir, 0755); err != nil {
-			panic(err)
-		}
+		panic(fmt.Sprintf("create log dir failed: %v", err))
 	}
 
 	Log.SetLevel(logrus.DebugLevel)
 
 	accessLog := path.Join(logDir, "access.log")
-	accesslogWiter, err := rotatelogs.New(
-		accessLog+"-%Y-%m-%d",
-		rotatelogs.WithLinkName(accessLog),
-		rotatelogs.WithRotationTime(24*time.Hour),
-		rotatelogs.WithMaxAge(7*24*time.Hour),
-	)
+	accesslogWriter, err := getLogWriter(accessLog)
 	if err != nil {
-		panic(fmt.Sprintf("log rotate faield: %v", err))
+		panic(fmt.Sprintf("log rotate failed: %v", err))
 	}
 
 	errorLog := path.Join(logDir, "error.log")
-	errorlogWiter, err := rotatelogs.New(
-		errorLog+"-%Y-%m-%d",
-		rotatelogs.WithLinkName(errorLog),
-		rotatelogs.WithRotationTime(24*time.Hour),
-		rotatelogs.WithMaxAge(7*24*time.Hour),
-	)
+	errorlogWriter, err := getLogWriter(errorLog)
 	if err != nil {
-		panic(fmt.Sprintf("log rotate faield: %v", err))
+		panic(fmt.Sprintf("log rotate failed: %v", err))
 	}
 
 	writeMap := lfshook.WriterMap{
-		logrus.DebugLevel: accesslogWiter,
-		logrus.InfoLevel:  errorlogWiter,
-		logrus.WarnLevel:  errorlogWiter,
-		logrus.ErrorLevel: errorlogWiter,
-		logrus.PanicLevel: errorlogWiter,
-		logrus.FatalLevel: errorlogWiter,
+		logrus.DebugLevel: accesslogWriter,
+		logrus.InfoLevel:  errorlogWriter,
+		logrus.WarnLevel:  errorlogWriter,
+		logrus.ErrorLevel: errorlogWriter,
+		logrus.PanicLevel: errorlogWriter,
+		logrus.FatalLevel: errorlogWriter,
 	}
 
 	lfHook := lfshook.NewHook(writeMap, &logrus.JSONFormatter{
@@ -70,7 +53,7 @@ func Init() {
 	Log.AddHook(lfHook)
 
 	// Only log in file, not to screen(io.Stderr) in production.
-	if config.Config().Runmode == "release" {
+	if config.Conf().Runmode == "release" {
 		Log.Out = ioutil.Discard
 	}
 }
@@ -79,8 +62,7 @@ func AccessLogger() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now()
 		c.Next()
-		end := time.Now()
-		latencyTime := end.Sub(start).Seconds()
+		latencyTime := time.Since(start).Seconds()
 		reqPath := c.Request.URL.Path
 		clientIP := c.ClientIP()
 		reqMethod := c.Request.Method
@@ -96,49 +78,29 @@ func AccessLogger() gin.HandlerFunc {
 	}
 }
 
-// IsPathExist file or dir is exist or not
-func IsPathExist(path string) bool {
-	if _, err := os.Stat(path); err != nil && os.IsNotExist(err) {
-		return false
-	}
-	return true
-}
-
 // InitCMDLog preserve error log for cmd
 func InitCMDLog() {
-	abPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	logDir, err := createLogdir()
 	if err != nil {
-		panic(err)
-	}
-
-	logDir := abPath + "/logs"
-	if !IsPathExist(logDir) {
-		if err := os.Mkdir(logDir, 0755); err != nil {
-			panic(err)
-		}
+		panic(fmt.Sprintf("create log dir failed: %v", err))
 	}
 
 	Log.SetLevel(logrus.DebugLevel)
 
 	filename := filepath.Base(os.Args[0])
 	logfile := logDir + "/" + filename + ".log"
-	logWiter, err := rotatelogs.New(
-		logfile+"-%Y-%m-%d",
-		rotatelogs.WithLinkName(logfile),
-		rotatelogs.WithRotationTime(24*time.Hour),
-		rotatelogs.WithMaxAge(7*24*time.Hour),
-	)
+	logWriter, err := getLogWriter(logfile)
 	if err != nil {
-		panic(fmt.Sprintf("log rotate faield: %v", err))
+		panic(fmt.Sprintf("log rotate failed: %v", err))
 	}
 
 	writeMap := lfshook.WriterMap{
-		logrus.DebugLevel: logWiter,
-		logrus.InfoLevel:  logWiter,
-		logrus.WarnLevel:  logWiter,
-		logrus.ErrorLevel: logWiter,
-		logrus.PanicLevel: logWiter,
-		logrus.FatalLevel: logWiter,
+		logrus.DebugLevel: logWriter,
+		logrus.InfoLevel:  logWriter,
+		logrus.WarnLevel:  logWriter,
+		logrus.ErrorLevel: logWriter,
+		logrus.PanicLevel: logWriter,
+		logrus.FatalLevel: logWriter,
 	}
 
 	lfHook := lfshook.NewHook(writeMap, &logrus.JSONFormatter{
@@ -146,4 +108,45 @@ func InitCMDLog() {
 	})
 	Log.AddHook(lfHook)
 	//Log.Out = ioutil.Discard
+}
+
+func createLogdir() (string, error) {
+	abPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		return "", err
+	}
+
+	logDir := abPath + "/" + config.Conf().Log.Dirname
+	if !IsPathExist(logDir) {
+		if err := os.Mkdir(logDir, 0755); err != nil {
+			return "", err
+		}
+	}
+
+	return logDir, nil
+}
+
+func getLogWriter(logFile string) (*rotatelogs.RotateLogs, error) {
+	rotationHours := time.Duration(config.Conf().Log.RotationHours)
+	saveDays := time.Duration(config.Conf().Log.SaveDays)
+
+	logWiter, err := rotatelogs.New(
+		logFile+"-%Y-%m-%d",
+		rotatelogs.WithLinkName(logFile),
+		rotatelogs.WithRotationTime(rotationHours*time.Hour),
+		rotatelogs.WithMaxAge(saveDays*24*time.Hour),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return logWiter, nil
+}
+
+// IsPathExist file or dir is exist or not
+func IsPathExist(path string) bool {
+	if _, err := os.Stat(path); err != nil && os.IsNotExist(err) {
+		return false
+	}
+	return true
 }
