@@ -6,9 +6,11 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+
+	"use-gin/config"
 )
 
-//ProcessLock How to use:
+// ProcessLock How to use:
 //func main() {
 //lock, lockFile, err := utils.ProcessLock()
 //if err != nil {
@@ -18,8 +20,14 @@ import (
 //defer lock.Close()
 //}
 func ProcessLock() (*os.File, string, error) {
+	abPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		return nil, "", err
+	}
+
+	logDir := abPath + "/" + config.Conf().Log.Dirname + "/"
 	filename := filepath.Base(os.Args[0])
-	lockFile := "/var/run/" + filename + ".pid"
+	lockFile := logDir + filename + ".pid"
 
 	lock, err := os.Open(lockFile)
 	if err != nil {
@@ -37,7 +45,11 @@ func ProcessLock() (*os.File, string, error) {
 		return lock, lockFile, err
 	}
 
-	pid, _ := strconv.Atoi(string(filePid))
+	pid, err := strconv.Atoi(string(filePid))
+	if err != nil {
+		return lock, lockFile, err
+	}
+
 	return lock, lockFile, fmt.Errorf(
 		"Found lockfile %s, another copy is running, pid %d",
 		lockFile,
