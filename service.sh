@@ -1,5 +1,9 @@
 #!/bin/bash
-# start gin and graceful stop or restart gin
+# Start gin and graceful stop or restart gin.
+#
+# Mind that execute `export RUNENV=dev` first in development environment,
+# or execute `export RUNENV=prod` first in production environment.
+
 
 
 [[ -z "$1" ]] || [[ "$#" != 1 ]] && {
@@ -9,9 +13,8 @@
 
 PROJECT_PATH="./"
 BIN_NAME="use-gin"
-CONFIG_FILE="./dev.config.toml"
 PID_FILE=$PROJECT_PATH/logs/${BIN_NAME}.pid
-PID=$(cat $PID_FILE)
+PID=$(cat $PID_FILE 2>/dev/null)
 
 
 status(){
@@ -26,7 +29,7 @@ case $1 in
             echo "error: $BIN_NAME is already running, do not start again."
             exit 1
         }
-        $PROJECT_PATH/$BIN_NAME -c $CONFIG_FILE &
+        $PROJECT_PATH/$BIN_NAME &
         ;;
     stop)
         status | grep -q stopped && {
