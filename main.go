@@ -8,19 +8,25 @@ import (
 )
 
 func init() {
-	// load config from command line parameters.
+	// Load config from command line parameters.
 	//    e.g. ./use-gin -c conf/dev.config.conf
 	//config.LoadFromCLIParams()
 
-	// load config from system environment variable RUNENV: prod/dev
-	//    e.g. export RUNENV=dev
-	// ./use-gin
-	config.LoadFromENV()
+	// Load config from system environment variable RUNENV: prod/dev
+	//    e.g. RUNENV=dev ./use-gin
+	//config.LoadFromENV()
+
+	// If load config from CLI params failed,
+	// then load config from system environment variable RUNENV,
+	// and the value of RUNENV can only be dev or prod.
+	config.Init()
 
 	logger.Init()
 
 	cron.Init()
+}
 
+func main() {
 	// relation db
 	//rdb.Init()
 	//rdb.DBs.MySQL.Set("gorm:table_options", "ENGIN=InnoDB").AutoMigrate(
@@ -35,8 +41,6 @@ func init() {
 	// kafka
 	//kafka.InitKafkaConsumer()
 	//kafka.InitKafkaProducer()
-}
 
-func main() {
 	router.RouterGroup()
 }

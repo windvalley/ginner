@@ -3,7 +3,9 @@
 #
 # Mind that execute `export RUNENV=dev` first in development environment,
 # or execute `export RUNENV=prod` first in production environment.
-
+#
+# Or execute as:
+# RUNENV=<dev|prod> ./service.sh <start|stop|restart|status>
 
 
 [[ -z "$1" ]] || [[ "$#" != 1 ]] && {

@@ -27,10 +27,22 @@ func Conf() *GlobalConfig {
 	return conf
 }
 
-// load config from command line parameters
+// If load config from CLI params failed,
+// then load config from system environment variable RUNENV,
+// and the value of RUNENV can only be dev or prod.
+func Init() {
+	cfg := getConfigFromCLI()
+	if *cfg != "" {
+		ParseConfig(*cfg)
+		return
+	}
+
+	LoadFromENV()
+}
+
+// load config from command line parameters.
 func LoadFromCLIParams() {
-	cfg := pflag.StringP("config", "c", "", "Specify your configuration file")
-	pflag.Parse()
+	cfg := getConfigFromCLI()
 	if *cfg == "" {
 		binName := filepath.Base(os.Args[0])
 		fmt.Printf("missing parameter\nUsage of %s:\n  -c, --config string"+
@@ -61,4 +73,10 @@ func LoadFromENV() {
 	default:
 		panic("the value of RUNENV can only be prod or dev")
 	}
+}
+
+func getConfigFromCLI() *string {
+	cfg := pflag.StringP("config", "c", "", "Specify your configuration file")
+	pflag.Parse()
+	return cfg
 }
