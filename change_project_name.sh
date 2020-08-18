@@ -12,3 +12,6 @@ NEW_PROJECT_NAME=$1
 find . -type f -name "*.go" -o -name "go.mod" |
     xargs gsed -i "s#${CURRENT_PROJECT_NAME}#${NEW_PROJECT_NAME}#"
 
+gsed -i "/^BIN_NAME=/s/${CURRENT_PROJECT_NAME}/${NEW_PROJECT_NAME}/" ./service.sh
+gsed -i "s/${CURRENT_PROJECT_NAME}/${NEW_PROJECT_NAME}/g" ./Dockerfile
+
