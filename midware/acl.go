@@ -1,32 +1,53 @@
 package midware
 
 import (
+	"net/http"
+	"strings"
+
 	"github.com/gin-gonic/gin"
 
 	"use-gin/config"
+	"use-gin/handler"
 )
 
 // ACL access limited
 func ACL() gin.HandlerFunc {
-	permitURLMap := make(map[string]bool)
-	permitIPMap := make(map[string]bool)
+	allowURLMap := make(map[string]bool)
+	allowIPMap := make(map[string]bool)
 
 	for _, v := range config.Conf().ACL.AllowURL {
-		permitURLMap[v] = true
+		allowURLMap[v] = true
 	}
 
 	for _, v := range config.Conf().ACL.AllowIP {
-		permitIPMap[v] = true
+		allowIPMap[v] = true
 	}
 
 	return func(ctx *gin.Context) {
-		if permitURLMap[ctx.Request.URL.Path] || len(permitURLMap) == 0 {
-			ip := ctx.Request.Header.Get("X-Real-Ip")
-			if permitIPMap[ip] || len(permitIPMap) == 0 {
-				ctx.Next()
-				return
-			}
+		requestPath := ctx.Request.URL.Path
+		ip := strings.Split(ctx.Request.RemoteAddr, ":")[0]
+		if ip == "[" {
+			ipTmp := strings.Split(ctx.Request.RemoteAddr, "[")[1]
+			ip = strings.Split(ipTmp, "]")[0]
 		}
-		ctx.AbortWithStatus(403)
+
+		if !allowURLMap[requestPath] && len(allowURLMap) != 0 {
+			ctx.AbortWithStatusJSON(http.StatusForbidden, &handler.Response{
+				Code:    "AccessForbidden",
+				Message: requestPath + " is not allowed",
+				Data:    nil,
+			})
+		}
+
+		if !allowIPMap[ip] && len(allowIPMap) != 0 {
+			ctx.AbortWithStatusJSON(http.StatusForbidden, &handler.Response{
+				Code:    "AccessForbidden",
+				Message: ip + " is not allowed",
+				Data:    nil,
+			})
+		}
+
+		ctx.Next()
+		return
 	}
 }
