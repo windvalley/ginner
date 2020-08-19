@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"
@@ -55,26 +54,6 @@ func Init() {
 	// Only log in file, not to screen(io.Stderr) in production.
 	if config.Conf().Runmode == "release" {
 		Log.Out = ioutil.Discard
-	}
-}
-
-func AccessLogger() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		start := time.Now()
-		c.Next()
-		latencyTime := time.Since(start).Seconds()
-		reqPath := c.Request.URL.Path
-		clientIP := c.ClientIP()
-		reqMethod := c.Request.Method
-		statusCode := c.Writer.Status()
-
-		Log.WithFields(logrus.Fields{
-			"status_code":  statusCode,
-			"latency_time": latencyTime,
-			"client_ip":    clientIP,
-			"req_method":   reqMethod,
-			"req_uri":      reqPath,
-		}).Debug()
 	}
 }
 

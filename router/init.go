@@ -34,7 +34,7 @@ func RouterGroup() {
 		router.Use(gin.Logger())
 	}
 	router.Use(gin.Recovery())
-	router.Use(logger.AccessLogger())
+	router.Use(midware.AccessLogger())
 	router.Use(midware.ACL())
 	router.Use(midware.RequestId())
 

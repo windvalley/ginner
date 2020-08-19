@@ -1,10 +1,8 @@
 Name
 ===
 
-`use-gin` - is a `gin` scaffolding for accelerating your Web API development.
+`use-gin` - Using Go `gin` to develop high quality applications(Web API) efficiently.
 
-Feature
+Features
 ===
-
-- 
 
