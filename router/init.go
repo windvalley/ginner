@@ -78,7 +78,7 @@ func createPidFile(pid int) error {
 	filename := filepath.Base(os.Args[0])
 	pidFile := logDir + filename + ".pid"
 
-	file, err := os.OpenFile(pidFile, os.O_RDWR|os.O_CREATE, 0644)
+	file, err := os.OpenFile(pidFile, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0644)
 	if err != nil {
 		return err
 	}
