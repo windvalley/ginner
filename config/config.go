@@ -13,8 +13,9 @@ type GlobalConfig struct {
 
 type Log struct {
 	Dirname       string
-	RotationHours int `toml:"rotation_hours"`
-	SaveDays      int `toml:"save_days"`
+	RotationHours int    `toml:"rotation_hours"`
+	SaveDays      int    `toml:"save_days"`
+	LogFormat     string `toml:"log_format"`
 }
 
 type MySQL struct {

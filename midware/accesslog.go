@@ -29,7 +29,10 @@ func (w bodyLogWriter) WriteString(s string) (int, error) {
 
 func AccessLogger() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		bodyLogWriter := &bodyLogWriter{body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
+		bodyLogWriter := &bodyLogWriter{
+			body:           bytes.NewBufferString(""),
+			ResponseWriter: c.Writer,
+		}
 		c.Writer = bodyLogWriter
 
 		startTime := time.Now()
@@ -52,25 +55,25 @@ func AccessLogger() gin.HandlerFunc {
 			}
 		}
 
-		latencyTime := time.Since(startTime).Milliseconds()
+		latencyTime := time.Since(startTime).Seconds()
 
 		if c.Request.Method == "POST" {
 			_ = c.Request.ParseForm()
 		}
 
 		logger.Log.WithFields(logrus.Fields{
-			"client_ip":    c.ClientIP(),
-			"req_method":   c.Request.Method,
-			"req_uri":      c.Request.URL.Path,
-			"http_status":  c.Writer.Status(),
-			"latency_time": latencyTime,
-			"req_proto":    c.Request.Proto,
-			"req_referer":  c.Request.Referer(),
-			"req_body":     c.Request.PostForm.Encode(),
-			"res_code":     responseCode,
-			"res_msg":      responseMsg,
-			"res_data":     responseData,
-			"req_ua":       c.Request.UserAgent(),
-		}).Debug()
+			"client_ip":       c.ClientIP(),
+			"request_method":  c.Request.Method,
+			"request_uri":     c.Request.URL.Path,
+			"http_status":     c.Writer.Status(),
+			"latency_time":    latencyTime,
+			"request_proto":   c.Request.Proto,
+			"request_referer": c.Request.Referer(),
+			"request_body":    c.Request.PostForm.Encode(),
+			"response_code":   responseCode,
+			"response_msg":    responseMsg,
+			"response_data":   responseData,
+			"reqponse_ua":     c.Request.UserAgent(),
+		}).Info("accesslog")
 	}
 }

@@ -38,17 +38,24 @@ func Init() {
 	}
 
 	writeMap := lfshook.WriterMap{
-		logrus.DebugLevel: accesslogWriter,
-		logrus.InfoLevel:  errorlogWriter,
+		logrus.InfoLevel:  accesslogWriter,
+		logrus.DebugLevel: errorlogWriter,
 		logrus.WarnLevel:  errorlogWriter,
 		logrus.ErrorLevel: errorlogWriter,
-		logrus.PanicLevel: errorlogWriter,
 		logrus.FatalLevel: errorlogWriter,
+		logrus.PanicLevel: errorlogWriter,
 	}
 
 	lfHook := lfshook.NewHook(writeMap, &logrus.JSONFormatter{
 		TimestampFormat: "2006-01-02 15:04:05",
 	})
+
+	if config.Conf().Log.LogFormat == "txt" {
+		lfHook = lfshook.NewHook(writeMap, &logrus.TextFormatter{
+			TimestampFormat: "2006-01-02 15:04:05",
+		})
+	}
+
 	Log.AddHook(lfHook)
 
 	// Only log in file, not to screen(io.Stderr) in production.

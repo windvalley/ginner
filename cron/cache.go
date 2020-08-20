@@ -31,5 +31,5 @@ func UpdateCacheKey() {
 
 	Cache.Add(DemoKey, 0, "your specific object")
 
-	logger.Log.Infof("cron: %s is updated", DemoKey)
+	logger.Log.Debugf("cron: %s is updated", DemoKey)
 }

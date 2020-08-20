@@ -2,7 +2,6 @@ package errcode
 
 import (
 	"fmt"
-	"net/http"
 )
 
 type ErrCode struct {
@@ -49,18 +48,19 @@ func (e *Err) Addf(format string, a ...interface{}) error {
 	return e
 }
 
-// get Status, Code and Message field from ErrCode、Err、error for showing to client
-func DecodeErr(err error) (int, string, string) {
+// get Status, Code and Message field from ErrCode、Err、error for showing to client,
+// and get SysErr field from Err for logging in the server local log file.
+func DecodeErr(err error) (int, string, string, string) {
 	if err == nil {
-		return OK.Status, OK.Code, OK.Message
+		return OK.Status, OK.Code, OK.Message, ""
 	}
 
-	switch typed := err.(type) {
+	switch v := err.(type) {
 	case *Err:
-		return typed.Status, typed.Code, typed.Message
+		return v.Status, v.Code, v.Message, v.SysErr.Error()
 	case *ErrCode:
-		return typed.Status, typed.Code, typed.Message
+		return v.Status, v.Code, v.Message, ""
 	default:
-		return http.StatusInternalServerError, InternalServerError.Code, err.Error()
+		return InternalServerError.Status, InternalServerError.Code, err.Error(), ""
 	}
 }

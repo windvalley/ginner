@@ -5,6 +5,7 @@ runmode = "release" # debug/release/test
 dirname = "logs"
 rotation_hours = 24
 save_days = 7
+log_format = "json"  # json/txt
 
 [mysql]
 dbtype = "mysql"  # mysql/mssql/postgres/sqlite3

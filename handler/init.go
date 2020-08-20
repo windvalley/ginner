@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 
 	"use-gin/errcode"
 	"use-gin/logger"
@@ -18,7 +19,7 @@ type Response struct {
 
 // response JSON
 func SendResponse(c *gin.Context, err error, data interface{}) {
-	status, code, message := errcode.DecodeErr(err)
+	status, code, message, sysErrMsg := errcode.DecodeErr(err)
 
 	c.JSON(status, Response{
 		Code:    code,
@@ -26,8 +27,22 @@ func SendResponse(c *gin.Context, err error, data interface{}) {
 		Data:    data,
 	})
 
+	// error.log
 	if status != http.StatusOK {
-		logger.Log.Error(err)
+		logger.Log.WithFields(logrus.Fields{
+			"client_ip":       c.ClientIP(),
+			"request_method":  c.Request.Method,
+			"request_uri":     c.Request.URL.Path,
+			"http_status":     c.Writer.Status(),
+			"latency_time":    nil,
+			"request_proto":   c.Request.Proto,
+			"request_referer": c.Request.Referer(),
+			"request_body":    c.Request.PostForm.Encode(),
+			"response_code":   code,
+			"response_msg":    message,
+			"response_data":   data,
+			"reqponse_ua":     c.Request.UserAgent(),
+		}).Error(sysErrMsg)
 	}
 }
 
