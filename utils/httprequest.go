@@ -32,7 +32,6 @@ func HttpRequest(
 	if err != nil {
 		return nil, err
 	}
-	defer res.Body.Close()
 
 	return res.Body, nil
 }
@@ -60,7 +59,6 @@ func PostWithUrlencoded(api string, payload url.Values) (io.ReadCloser, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer res.Body.Close()
 
 	return res.Body, err
 }
@@ -88,12 +86,12 @@ func PostWithFormdata(
 	if err != nil {
 		return nil, err
 	}
-	defer res.Body.Close()
 
 	return res.Body, err
 }
 
 func GetBodyStringData(resBody io.ReadCloser) (string, error) {
+	defer resBody.Close()
 	data, err := ioutil.ReadAll(resBody)
 	if err != nil {
 		return "", nil
@@ -101,14 +99,28 @@ func GetBodyStringData(resBody io.ReadCloser) (string, error) {
 	return string(data), nil
 }
 
-// parameter structData is a Struct that contains the fields which you want from resBody.
+// GetBodyStructData parameter structData is a Struct that contains the fields which you want from resBody.
+//    e.g.:
+//type Response struct {
+//	Code   int               `json:"code"`
+//	Msg    string            `json:"msg"`
+//	Data   interface{}       `json:"data"`
+//}
+//response := new(Response)
+//data, err := utils.GetBodyStructData(res, response)
+//if err != nil {
+//return err
+//}
+//v := data.(*Response)
 func GetBodyStructData(
 	resBody io.ReadCloser,
 	structData interface{},
 ) (interface{}, error) {
+	defer resBody.Close()
 	decoder := ffjson.NewDecoder()
 	if err := decoder.DecodeReader(resBody, &structData); err != nil {
 		return nil, err
 	}
+
 	return structData, nil
 }
