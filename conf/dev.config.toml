@@ -1,3 +1,4 @@
+app_name = "use-gin"
 server_port = ":8000"
 runmode = "debug" # debug/release/test
 
@@ -6,6 +7,16 @@ dirname = "logs"
 rotation_hours = 24
 save_days = 7
 log_format = "json"  # json/txt
+
+[mail]
+smtp_host = "smtp.example.com"
+port = 587
+user = "no-reply@example.com"
+password = "your-password"
+mail_to = [
+    "name1@xxx.com",
+    "name2@xxx.com",
+]
 
 [mysql]
 dbtype = "mysql"  # mysql/mssql/postgres/sqlite3

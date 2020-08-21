@@ -1,9 +1,11 @@
 package config
 
 type GlobalConfig struct {
+	AppName    string `toml:"app_name"`
 	ServerPort string `toml:"server_port"`
 	Runmode    string
 	Log        Log
+	Mail       Mail
 	MySQL      MySQL
 	PostgreSQL PostgreSQL
 	Kafka      Kafka
@@ -16,6 +18,14 @@ type Log struct {
 	RotationHours int    `toml:"rotation_hours"`
 	SaveDays      int    `toml:"save_days"`
 	LogFormat     string `toml:"log_format"`
+}
+
+type Mail struct {
+	SMTPHost string `toml:"smtp_host"`
+	Port     int
+	User     string
+	Password string
+	MailTo   []string `toml:"mail_to"`
 }
 
 type MySQL struct {
