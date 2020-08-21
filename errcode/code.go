@@ -15,7 +15,14 @@ var (
 		Message: "Internal server error",
 	}
 
+	ServerPanicError = &ErrCode{
+		Status:  http.StatusInternalServerError,
+		Code:    "PanicError",
+		Message: "System meets up panic error, please contact admin",
+	}
+
 	MysqlDBError = &ErrCode{
+		Status:  http.StatusInternalServerError,
 		Code:    "MysqlError",
 		Message: "MySQL error",
 	}
@@ -31,6 +38,7 @@ var (
 	}
 
 	ValidationError = &ErrCode{
+		Status:  http.StatusInternalServerError,
 		Code:    "ValidationError",
 		Message: "Validation failed.",
 	}
