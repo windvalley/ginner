@@ -18,12 +18,16 @@ mail_to = [
     "name2@xxx.com",
 ]
 
+[auth]
+jwt_secret = "helloworld"
+jwt_lifetime = 24  # hours
+
 [mysql]
 dbtype = "mysql"  # mysql/mssql/postgres/sqlite3
-address = "127.0.0.1:3306"
-dbname = "demo"
-user = "sre"
-password = "sre.im"
+address = "localhost:3306"
+dbname = "demo"  # must be create the database manually
+user = "root"
+password = ""
 
 [postgresql]
 dbtype = "postgres"

@@ -6,6 +6,7 @@ type GlobalConfig struct {
 	Runmode    string
 	Log        Log
 	Mail       Mail
+	Auth       Auth
 	MySQL      MySQL
 	PostgreSQL PostgreSQL
 	Kafka      Kafka
@@ -26,6 +27,11 @@ type Mail struct {
 	User     string
 	Password string
 	MailTo   []string `toml:"mail_to"`
+}
+
+type Auth struct {
+	JWTSecret   string `toml:"jwt_secret"`
+	JWTLifetime int    `toml:"jwt_lifetime"`
 }
 
 type MySQL struct {
