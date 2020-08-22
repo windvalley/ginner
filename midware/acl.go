@@ -1,12 +1,10 @@
 package midware
 
 import (
-	"net/http"
-	"strings"
-
 	"github.com/gin-gonic/gin"
 
 	"use-gin/config"
+	"use-gin/errcode"
 	"use-gin/handler"
 )
 
@@ -23,31 +21,29 @@ func ACL() gin.HandlerFunc {
 		allowIPMap[v] = true
 	}
 
-	return func(ctx *gin.Context) {
-		requestPath := ctx.Request.URL.Path
-		ip := strings.Split(ctx.Request.RemoteAddr, ":")[0]
-		if ip == "[" {
-			ipTmp := strings.Split(ctx.Request.RemoteAddr, "[")[1]
-			ip = strings.Split(ipTmp, "]")[0]
-		}
+	return func(c *gin.Context) {
+		requestPath := c.Request.URL.Path
+		ip := c.ClientIP()
 
 		if !allowURLMap[requestPath] && len(allowURLMap) != 0 {
-			ctx.AbortWithStatusJSON(http.StatusForbidden, &handler.Response{
-				Code:    "AccessForbidden",
-				Message: requestPath + " is not allowed",
-				Data:    nil,
-			})
+			err := errcode.New(errcode.AccessForbiddenError, nil)
+			err.Add(requestPath + " is not allowed")
+
+			handler.SendResponse(c, err, nil)
+			c.Abort()
+			return
 		}
 
 		if !allowIPMap[ip] && len(allowIPMap) != 0 {
-			ctx.AbortWithStatusJSON(http.StatusForbidden, &handler.Response{
-				Code:    "AccessForbidden",
-				Message: ip + " is not allowed",
-				Data:    nil,
-			})
+			err := errcode.New(errcode.AccessForbiddenError, nil)
+			err.Add(ip + " is not allowed")
+			handler.SendResponse(c, err, nil)
+
+			c.Abort()
+			return
 		}
 
-		ctx.Next()
+		c.Next()
 		return
 	}
 }
