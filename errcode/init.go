@@ -57,7 +57,10 @@ func DecodeErr(err error) (int, string, string, string) {
 
 	switch v := err.(type) {
 	case *Err:
-		return v.Status, v.Code, v.Message, v.SysErr.Error()
+		if v.SysErr != nil {
+			return v.Status, v.Code, v.Message, v.SysErr.Error()
+		}
+		return v.Status, v.Code, v.Message, ""
 	case *ErrCode:
 		return v.Status, v.Code, v.Message, ""
 	default:
