@@ -12,7 +12,7 @@ import (
 
 	"use-gin/config"
 	"use-gin/logger"
-	"use-gin/utils"
+	"use-gin/util"
 )
 
 func main() {
@@ -28,7 +28,7 @@ func main() {
 	config.ParseConfig(*cfg)
 	logger.InitCMDLog()
 
-	lock, lockFile, err := utils.ProcessLock()
+	lock, lockFile, err := util.ProcessLock()
 	if err != nil {
 		logger.Log.Fatal(err)
 	}

@@ -12,7 +12,7 @@ import (
 	"use-gin/errcode"
 	"use-gin/handler"
 	"use-gin/template"
-	"use-gin/utils"
+	"use-gin/util"
 )
 
 func Exception() gin.HandlerFunc {
@@ -49,7 +49,7 @@ func Exception() gin.HandlerFunc {
 				body = strings.ReplaceAll(body, "{RequestIP}", c.ClientIP())
 				body = strings.ReplaceAll(body, "{Debug Stack}", debugStack)
 
-				if err := utils.SendMail(
+				if err := util.SendMail(
 					config.Conf().Mail.MailTo,
 					subject,
 					body,

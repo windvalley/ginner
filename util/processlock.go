@@ -1,4 +1,4 @@
-package utils
+package util
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ import (
 
 // ProcessLock How to use:
 //func main() {
-//lock, lockFile, err := utils.ProcessLock()
+//lock, lockFile, err := util.ProcessLock()
 //if err != nil {
 //logger.Log.Fatal(err)
 //}

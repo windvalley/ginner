@@ -1,4 +1,4 @@
-package utils
+package util
 
 import (
 	"bytes"
@@ -107,7 +107,7 @@ func GetBodyStringData(resBody io.ReadCloser) (string, error) {
 //	Data   interface{}       `json:"data"`
 //}
 //response := new(Response)
-//data, err := utils.GetBodyStructData(res, response)
+//data, err := util.GetBodyStructData(res, response)
 //if err != nil {
 //return err
 //}

@@ -1,4 +1,4 @@
-package utils
+package util
 
 import (
 	"gopkg.in/gomail.v2"
@@ -13,7 +13,7 @@ import (
 //}
 //subject := "[alert] use-gin error"
 //body := "some html codes"
-//if err := utils.SendMail(mailTo, subject, body); err != nil {
+//if err := util.SendMail(mailTo, subject, body); err != nil {
 //return err
 //}
 func SendMail(mailTo []string, subject string, body string) error {
