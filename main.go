@@ -4,6 +4,7 @@ import (
 	"use-gin/config"
 	"use-gin/cron"
 	"use-gin/logger"
+	"use-gin/model/rdb"
 	"use-gin/router"
 )
 
@@ -28,11 +29,11 @@ func init() {
 
 func main() {
 	// relation db
-	//rdb.Init()
-	//rdb.DBs.MySQL.Set("gorm:table_options", "ENGIN=InnoDB").AutoMigrate(
-	////&rdb.xxx{},
-	//)
-	//defer rdb.Close()
+	rdb.Init()
+	rdb.DBs.MySQL.AutoMigrate(
+		&rdb.User{},
+	)
+	defer rdb.Close()
 
 	// influxdb
 	//influxdb.Init()

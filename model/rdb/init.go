@@ -24,14 +24,14 @@ var DBs *Databases
 
 func Init() {
 	DBs = &Databases{
-		MySQL:      GetMySQL(),
-		PostgreSQL: GetPostgreSQL(),
+		MySQL: GetMySQL(),
+		//PostgreSQL: GetPostgreSQL(),
 	}
 }
 
 func Close() {
 	DBs.MySQL.Close()
-	DBs.PostgreSQL.Close()
+	//DBs.PostgreSQL.Close()
 }
 
 func GetMySQL() *gorm.DB {
