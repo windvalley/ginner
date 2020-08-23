@@ -21,7 +21,7 @@ var (
 	ServerPanicError = &ErrCode{
 		Status:  http.StatusInternalServerError,
 		Code:    "PanicError",
-		Message: "System meets up panic error, please contact admin",
+		Message: "Server meets up panic error, please contact admin.",
 	}
 
 	// Usage:
@@ -64,5 +64,11 @@ var (
 		Status:  http.StatusForbidden,
 		Code:    "AccessForbidden",
 		Message: "%s",
+	}
+
+	RecordNotFoundError = &ErrCode{
+		Status:  http.StatusBadRequest,
+		Code:    "RecordNotFound",
+		Message: "Record not found.",
 	}
 )
