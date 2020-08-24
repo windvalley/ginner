@@ -17,7 +17,7 @@ var UserInfos = map[string]userInfo{
 	"keyid_3rqjdjfde33derljl": userInfo{
 		keySecret: keySecret{
 			MD5: "fjadoifjadjfqjowerqfdafafdjafl",
-			AES: "fjadoifjadjfqjowerqfdafafdjafl",
+			AES: "707c8d56d87a5650ae6492e67be6ffc4", // length must be 16
 			RSA: "auth/rsa/id_rsa.pub",
 		},
 		AppName: "robot",

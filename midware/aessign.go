@@ -8,9 +8,9 @@ import (
 	"use-gin/handler"
 )
 
-func Md5Sign() gin.HandlerFunc {
+func AESSign() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		debugMsg, err := auth.VerifySign(c, "md5")
+		debugMsg, err := auth.VerifySign(c, "aes")
 		if err != nil {
 			err1 := errcode.New(errcode.APISignError, nil)
 			err1.Add(err)
