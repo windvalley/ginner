@@ -1,9 +1,14 @@
 package auth
 
+type RSA struct {
+	Private string
+	Public  string
+}
+
 type keySecret struct {
 	MD5 string
 	AES string
-	RSA string
+	RSA
 }
 
 type userInfo struct {
@@ -18,7 +23,10 @@ var UserInfos = map[string]userInfo{
 		keySecret: keySecret{
 			MD5: "fjadoifjadjfqjowerqfdafafdjafl",
 			AES: "707c8d56d87a5650ae6492e67be6ffc4", // length must be 16
-			RSA: "auth/rsa/id_rsa.pub",
+			RSA: RSA{
+				"auth/rsa/private.pem",
+				"auth/rsa/public.pem",
+			},
 		},
 		AppName: "robot",
 		Roles:   []string{"access"},

@@ -31,7 +31,9 @@ func urls(router *gin.Engine) {
 
 	// api signature demo
 	g2 := router.Group("/v1/signdemo")
-	g2.Use(midware.Md5sign())
+	//g2.Use(midware.Md5Sign())
+	//g2.Use(midware.AESSign())
+	g2.Use(midware.RSASign())
 	{
 		g2.GET("/hello", signdemo.Hello)
 		g2.POST("/hello", signdemo.Hello)

@@ -23,9 +23,9 @@ type PublicParamsDebug struct {
 
 type PublicParams struct {
 	PublicParamsDebug
-	Timestamp string `form:"Timestamp" binding:"required"`
-	Nonce     string `form:"Nonce" binding:"required"`
-	Signature string `form:"Signature" binding:"required"`
+	Timestamp time.Time `form:"Timestamp" binding:"required" time_format:"unix"`
+	Nonce     int       `form:"Nonce" binding:"required"`
+	Signature string    `form:"Signature" binding:"required"`
 }
 
 func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
@@ -54,7 +54,9 @@ func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
 		}
 		keyID = paramsDebug.KeyID
 	} else {
-		if err := c.Bind(&params); err != nil {
+		if err := c.ShouldBind(&params); err != nil {
+			fmt.Println(err)
+
 			err1 := errcode.New(errcode.ValidationError, err)
 			err1.Add(err)
 			handler.SendResponse(c, err1, nil)
@@ -76,6 +78,9 @@ func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
 	}
 	if signType == "aes" {
 		keySecret = userInfo.AES
+	}
+	if signType == "rsa" {
+		keySecret = userInfo.RSA.Public
 	}
 
 	curTimestamp := time.Now().Unix()
@@ -104,15 +109,10 @@ func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
 		return nil, errors.New("debug forbidden in release runmode")
 	}
 
-	timestampReq, err := strconv.ParseInt(params.Timestamp, 10, 64)
-	if err != nil {
-		return nil, err
-	}
-
 	apisignLifetime := config.Conf().Auth.APISignLifetime
 
-	if timestampReq > curTimestamp ||
-		curTimestamp-timestampReq >= apisignLifetime {
+	if params.Timestamp.Unix() > curTimestamp ||
+		curTimestamp-params.Timestamp.Unix() >= apisignLifetime {
 		return nil, errors.New("Signature expired")
 	}
 
@@ -128,13 +128,21 @@ func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
 			return nil, errors.New("Signature invalid")
 		}
 	case "aes":
-		srcStr := createStrForSign(c, allParamsMap)
-		decryptStr, err := AESDecrypt(params.Signature, keySecret)
+		srcStr, err := AESDecrypt(params.Signature, keySecret)
 		if err != nil {
 			return nil, err
 		}
 
-		if decryptStr != srcStr {
+		if srcStr != strForSign {
+			return nil, errors.New("Signature invalid")
+		}
+	case "rsa":
+		srcStr, err := DecryptByPrivate(params.Signature, userInfo.RSA.Private)
+		if err != nil {
+			return nil, err
+		}
+
+		if srcStr != strForSign {
 			return nil, errors.New("Signature invalid")
 		}
 	default:
@@ -174,6 +182,11 @@ func generateSign(strForSign, keySecret, signType string) (string, error) {
 		signature = Md5sum(keySecret + strForSign + keySecret)
 	case "aes":
 		signature, err = AESEncrypt(strForSign, keySecret)
+		if err != nil {
+			return "", err
+		}
+	case "rsa":
+		signature, err = EncryptByPublic(strForSign, keySecret)
 		if err != nil {
 			return "", err
 		}
