@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"use-gin/handler/demo1"
+	"use-gin/handler/signdemo"
 	"use-gin/handler/user"
 	"use-gin/midware"
 )
@@ -20,7 +21,7 @@ func urls(router *gin.Engine) {
 	router.GET("/login", user.Login)
 	router.GET("/auth", user.Login)
 
-	// group1
+	// user manage demo
 	g1 := router.Group("/v1/users")
 	g1.POST("", user.Create) // user register request do not use jwt
 	g1.Use(midware.JWT())    // use jwt
@@ -28,12 +29,20 @@ func urls(router *gin.Engine) {
 		g1.GET("/:username", user.GetUser)
 	}
 
-	// group2
-	g2 := router.Group("/v1/demo1")
-	g2.Use(midware.JWT())
+	// api signature demo
+	g2 := router.Group("/v1/signdemo")
+	g2.Use(midware.Md5sign())
 	{
-		g2.GET("/eg-handlekafka", demo1.HandleKafkaDemo)
-		g2.POST("/eg-handleinfluxdb", demo1.HandleInfluxdbDemo)
-		g2.GET("/hello", demo1.HelloWorld)
+		g2.GET("/hello", signdemo.Hello)
+		g2.POST("/hello", signdemo.Hello)
+	}
+
+	// another demo
+	g3 := router.Group("/v1/demo1")
+	g3.Use(midware.JWT())
+	{
+		g3.GET("/eg-handlekafka", demo1.HandleKafkaDemo)
+		g3.POST("/eg-handleinfluxdb", demo1.HandleInfluxdbDemo)
+		g3.GET("/hello", demo1.HelloWorld)
 	}
 }
