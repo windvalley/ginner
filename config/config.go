@@ -30,8 +30,9 @@ type Mail struct {
 }
 
 type Auth struct {
-	JWTSecret   string `toml:"jwt_secret"`
-	JWTLifetime int    `toml:"jwt_lifetime"`
+	JWTSecret       string `toml:"jwt_secret"`
+	JWTLifetime     int    `toml:"jwt_lifetime"`
+	APISignLifetime int64  `toml:"apisign_lifetime"`
 }
 
 type MySQL struct {

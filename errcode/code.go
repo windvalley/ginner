@@ -60,6 +60,12 @@ var (
 		Message: "%v",
 	}
 
+	APISignError = &ErrCode{
+		Status:  http.StatusUnauthorized,
+		Code:    "SignatureInvalid",
+		Message: "%v",
+	}
+
 	AccessForbiddenError = &ErrCode{
 		Status:  http.StatusForbidden,
 		Code:    "AccessForbidden",

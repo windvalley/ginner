@@ -21,13 +21,18 @@ mail_to = [
 [auth]
 jwt_secret = "helloworld"
 jwt_lifetime = 24  # hours
+apisign_lifetime = 600  # seconds
 
 [mysql]
 dbtype = "mysql"  # mysql/mssql/postgres/sqlite3
 address = "127.0.0.1:3306"
-dbname = "demo"
-user = "sre"
-password = "sre.im"
+dbname = "demo"  # must be create the database manually
+#user = "sre"
+#password = "sre.im"
+user = "root"
+password = ""
+
+
 
 [postgresql]
 dbtype = "postgres"
@@ -56,4 +61,4 @@ measurement = ""
 # disable this feature when the item value is []
 [acl]
 allow_url = []
-allow_ip = ["127.0.0.1", "10.10.10.10"]
+allow_ip = ["127.0.0.1", "::1"]
