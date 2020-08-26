@@ -77,4 +77,10 @@ var (
 		Code:    "RecordNotFound",
 		Message: "Record not found.",
 	}
+
+	TooManyRequestError = &ErrCode{
+		Status:  http.StatusTooManyRequests,
+		Code:    "TooManyRequest",
+		Message: "too many request.",
+	}
 )
