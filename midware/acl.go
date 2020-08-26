@@ -28,8 +28,8 @@ func ACL() gin.HandlerFunc {
 		if !allowURLMap[requestPath] && len(allowURLMap) != 0 {
 			err := errcode.New(errcode.AccessForbiddenError, nil)
 			err.Add(requestPath + " is not allowed")
-
 			handler.SendResponse(c, err, nil)
+
 			c.Abort()
 			return
 		}

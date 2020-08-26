@@ -25,6 +25,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/tebeka/strftime v0.1.5 // indirect
 	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37
+	golang.org/x/time v0.0.0-20190308202827-9d24e82272b4
 	gopkg.in/go-playground/validator.v9 v9.31.0
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 )
