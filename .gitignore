@@ -1,4 +1,5 @@
 logs/
+*.swp
 use-gin
 go.sum
 tmpdoc
