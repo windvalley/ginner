@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 
+	"use-gin/handler"
 	"use-gin/handler/demo1"
 	"use-gin/handler/signdemo"
 	"use-gin/handler/user"
@@ -15,6 +16,9 @@ func urls(router *gin.Engine) {
 	// i.e.: request path: /s/js/xxx.js vs real path: html/statics/js/xxx.js
 	router.Static("s", "html/statics")
 
+	// for monitor the server
+	router.GET("/status", handler.Status)
+
 	// get jwt
 	router.POST("/login", user.Login)
 	router.POST("/auth", user.Login)
@@ -25,7 +29,7 @@ func urls(router *gin.Engine) {
 	g1 := router.Group("/v1/users")
 	g1.POST("", user.Create)          // user register request do not use jwt
 	g1.Use(midware.JWT())             // use jwt
-	g1.Use(midware.TrafficLimit(100)) // limit 100requests/second per source IP
+	g1.Use(midware.TrafficLimit(100)) // limit 100 requests/second per source IP
 	{
 		g1.GET("/:username", user.GetUser)
 	}
