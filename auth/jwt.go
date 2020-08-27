@@ -5,38 +5,32 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-
-	"use-gin/config"
 )
 
 type Claims struct {
-	Username string `json:"username"`
 	jwt.StandardClaims
 }
 
-func GenerateJWT(username string) (string, error) {
-	jwtSecret := []byte(config.Conf().Auth.JWTSecret)
-
+func GenerateJWT(key, secret string, jwtLifetime int64) (string, error) {
 	nowTime := time.Now()
-	expireTime := nowTime.Add(
-		time.Duration(config.Conf().Auth.JWTLifetime) * time.Hour)
+	expireTime := nowTime.Add(time.Duration(jwtLifetime) * time.Minute)
 
 	claims := Claims{
-		username,
 		jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
-			Issuer:    config.Conf().AppName,
+			IssuedAt:  nowTime.Unix(),
+			Issuer:    key, // key can be understood as username
 		},
 	}
 
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	token, err := tokenClaims.SignedString(jwtSecret)
+	token, err := tokenClaims.SignedString(secret)
 
 	return token, err
 }
 
-func ParseJWT(token string) (*Claims, error) {
-	jwtSecret := []byte(config.Conf().Auth.JWTSecret)
+func ParseJWT(token, secret string) (*Claims, error) {
+	jwtSecret := []byte(secret)
 
 	tokenClaims, err := jwt.ParseWithClaims(
 		token,

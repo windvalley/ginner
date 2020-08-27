@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"use-gin/auth"
+	"use-gin/config"
 	"use-gin/errcode"
 	"use-gin/handler"
 	"use-gin/model/rdb"
@@ -53,7 +54,9 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	jwt, err := auth.GenerateJWT(u.Username)
+	secret := config.Conf().Auth.JWTSecret
+	jwtLifetime := config.Conf().Auth.JWTLifetime
+	jwt, err := auth.GenerateJWT(u.Username, secret, jwtLifetime)
 	if err != nil {
 		err1 := errcode.New(errcode.InternalServerError, err)
 		handler.SendResponse(c, err1, nil)

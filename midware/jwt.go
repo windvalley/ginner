@@ -7,11 +7,14 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"use-gin/auth"
+	"use-gin/config"
 	"use-gin/errcode"
 	"use-gin/handler"
 )
 
 func JWT() gin.HandlerFunc {
+	jwtSecret := config.Conf().Auth.JWTSecret
+
 	return func(c *gin.Context) {
 		jwtToken := c.Query("jwt")
 
@@ -43,7 +46,7 @@ func JWT() gin.HandlerFunc {
 			c.Abort()
 			return
 		} else {
-			claims, err := auth.ParseJWT(jwtToken)
+			claims, err := auth.ParseJWT(jwtToken, jwtSecret)
 			if err != nil {
 				switch err.(*jwt.ValidationError).Errors {
 				case jwt.ValidationErrorExpired:
@@ -65,7 +68,7 @@ func JWT() gin.HandlerFunc {
 			}
 
 			// NOTE: handler function can be get username by c.Get("username")
-			c.Set("username", claims.Username)
+			c.Set("username", claims.Issuer)
 		}
 
 		c.Next()
