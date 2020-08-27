@@ -29,7 +29,7 @@ func SendResponse(c *gin.Context, err error, data interface{}) {
 
 	// error.log
 	if status != http.StatusOK {
-		requestID, ok := c.Get("X-Request-ID")
+		requestID, ok := c.Get("X-Request-Id")
 		if !ok {
 			requestID = ""
 		}

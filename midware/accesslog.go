@@ -61,7 +61,7 @@ func AccessLogger() gin.HandlerFunc {
 			_ = c.Request.ParseForm()
 		}
 
-		requestID, ok := c.Get("X-Request-ID")
+		requestID, ok := c.Get("X-Request-Id")
 		if !ok {
 			requestID = ""
 		}

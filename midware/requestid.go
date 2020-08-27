@@ -9,7 +9,7 @@ import (
 
 func RequestID() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		requestID := c.Request.Header.Get("X-Request-ID")
+		requestID := c.Request.Header.Get("X-Request-Id")
 
 		if requestID == "" {
 			u4, err := uuid.NewV4()
@@ -20,10 +20,10 @@ func RequestID() gin.HandlerFunc {
 			logger.Log.Warnf(requestID)
 		}
 
-		// NOTE: handler function can be get X-Request-ID by c.Get("X-Request-ID")
-		c.Set("X-Request-ID", requestID)
+		// NOTE: handler function can be get X-Request-Id by c.Get("X-Request-Id")
+		c.Set("X-Request-Id", requestID)
 
-		c.Writer.Header().Set("X-Request-ID", requestID)
+		c.Writer.Header().Set("X-Request-Id", requestID)
 		c.Next()
 	}
 }
