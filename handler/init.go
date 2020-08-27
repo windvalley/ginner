@@ -29,6 +29,11 @@ func SendResponse(c *gin.Context, err error, data interface{}) {
 
 	// error.log
 	if status != http.StatusOK {
+		requestID, ok := c.Get("X-Request-ID")
+		if !ok {
+			requestID = ""
+		}
+
 		logger.Log.WithFields(logrus.Fields{
 			"client_ip":       c.ClientIP(),
 			"request_method":  c.Request.Method,
@@ -38,6 +43,7 @@ func SendResponse(c *gin.Context, err error, data interface{}) {
 			"request_proto":   c.Request.Proto,
 			"request_referer": c.Request.Referer(),
 			"request_body":    c.Request.PostForm.Encode(),
+			"request_id":      requestID,
 			"response_code":   code,
 			"response_msg":    message,
 			"response_data":   data,

@@ -34,9 +34,9 @@ func RouterGroup() {
 		router.Use(gin.Logger())
 	}
 	router.Use(gin.Recovery())
+	router.Use(midware.RequestID())
 	router.Use(midware.AccessLogger())
 	router.Use(midware.ACL())
-	router.Use(midware.RequestId())
 
 	router.NoRoute(func(c *gin.Context) {
 		c.String(

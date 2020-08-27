@@ -7,25 +7,23 @@ import (
 	"use-gin/logger"
 )
 
-func RequestId() gin.HandlerFunc {
+func RequestID() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// Check for incoming header, use it if exists
-		requestId := c.Request.Header.Get("X-Request-Id")
+		requestID := c.Request.Header.Get("X-Request-ID")
 
-		// Create request id with UUID4
-		if requestId == "" {
+		if requestID == "" {
 			u4, err := uuid.NewV4()
 			if err != nil {
-				logger.Log.Errorf("create uuid error: %v", err)
+				logger.Log.Errorf("create uuid failed: %v", err)
 			}
-			requestId = u4.String()
+			requestID = u4.String()
+			logger.Log.Warnf(requestID)
 		}
 
-		// Expose it for use in the application
-		c.Set("X-Request-Id", requestId)
+		// NOTE: handler function can be get X-Request-ID by c.Get("X-Request-ID")
+		c.Set("X-Request-ID", requestID)
 
-		// Set X-Request-Id header
-		c.Writer.Header().Set("X-Request-Id", requestId)
+		c.Writer.Header().Set("X-Request-ID", requestID)
 		c.Next()
 	}
 }

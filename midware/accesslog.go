@@ -61,6 +61,11 @@ func AccessLogger() gin.HandlerFunc {
 			_ = c.Request.ParseForm()
 		}
 
+		requestID, ok := c.Get("X-Request-ID")
+		if !ok {
+			requestID = ""
+		}
+
 		logger.Log.WithFields(logrus.Fields{
 			"client_ip":       c.ClientIP(),
 			"request_method":  c.Request.Method,
@@ -70,6 +75,7 @@ func AccessLogger() gin.HandlerFunc {
 			"request_proto":   c.Request.Proto,
 			"request_referer": c.Request.Referer(),
 			"request_body":    c.Request.PostForm.Encode(),
+			"request_id":      requestID,
 			"response_code":   responseCode,
 			"response_msg":    responseMsg,
 			"response_data":   responseData,
