@@ -37,6 +37,7 @@ func RouterGroup() {
 	router.Use(midware.RequestID())
 	router.Use(midware.AccessLogger())
 	router.Use(midware.ACL())
+	router.Use(midware.CORS())
 
 	router.NoRoute(func(c *gin.Context) {
 		c.String(
