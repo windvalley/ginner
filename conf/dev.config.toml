@@ -19,14 +19,14 @@ mail_to = [
 ]
 
 [auth]
-jwt_secret = "helloworld"
+jwt_secret = "3f017bc64bb365167987e307cc41c9f4"
 jwt_lifetime = 24  # hours
 apisign_lifetime = 600  # seconds
 
 [mysql]
 dbtype = "mysql"  # mysql/mssql/postgres/sqlite3
 address = "localhost:3306"
-dbname = "demo"  # must be create the database manually
+dbname = "demo"  # create the database manually
 user = "root"
 password = ""
 

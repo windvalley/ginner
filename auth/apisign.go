@@ -73,14 +73,15 @@ func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
 	}
 
 	keySecret := ""
-	if signType == "md5" {
+	switch keySecret {
+	case "md5":
 		keySecret = userInfo.MD5
-	}
-	if signType == "aes" {
+	case "aes":
 		keySecret = userInfo.AES
-	}
-	if signType == "rsa" {
+	case "rsa":
 		keySecret = userInfo.RSA.Public
+	case "hmac_md5", "hmac_sha1", "hmac_sha256":
+		keySecret = userInfo.Hmac
 	}
 
 	curTimestamp := time.Now().Unix()
@@ -145,6 +146,15 @@ func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
 		if srcStr != strForSign {
 			return nil, errors.New("Signature invalid")
 		}
+	case "hmac_md5", "hmac_sha1", "hmac_sha256":
+		signature, err := generateSign(strForSign, keySecret, signType)
+		if err != nil {
+			return nil, err
+		}
+
+		if params.Signature != signature {
+			return nil, errors.New("Signature invalid")
+		}
 	default:
 		return nil, errors.New("Signature encrypt type invalid")
 	}
@@ -190,6 +200,12 @@ func generateSign(strForSign, keySecret, signType string) (string, error) {
 		if err != nil {
 			return "", err
 		}
+	case "hmac_md5", "hmac_sha1", "hmac_sha256":
+		signature, err = Hmac(signType, strForSign, keySecret)
+		if err != nil {
+			return "", err
+		}
+
 	}
 
 	return signature, nil

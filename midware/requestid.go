@@ -17,7 +17,6 @@ func RequestID() gin.HandlerFunc {
 				logger.Log.Errorf("create uuid failed: %v", err)
 			}
 			requestID = u4.String()
-			logger.Log.Warnf(requestID)
 		}
 
 		// NOTE: handler function can be get X-Request-Id by c.Get("X-Request-Id")
