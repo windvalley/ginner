@@ -42,7 +42,7 @@ func RouterGroup() {
 	router.NoRoute(func(c *gin.Context) {
 		c.String(
 			http.StatusNotFound,
-			"404 Page: The API route is not correct",
+			"404 page: url path is not correct",
 		)
 	})
 

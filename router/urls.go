@@ -1,9 +1,10 @@
 package router
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 
-	"use-gin/handler"
 	"use-gin/handler/demo1"
 	"use-gin/handler/signdemo"
 	"use-gin/handler/user"
@@ -17,7 +18,12 @@ func urls(router *gin.Engine) {
 	router.Static("s", "html/statics")
 
 	// for monitor the server
-	router.GET("/status", handler.Status)
+	router.GET("/status", func(c *gin.Context) {
+		c.String(http.StatusOK, "ok")
+	})
+	router.GET("/ping", func(c *gin.Context) {
+		c.String(http.StatusOK, "pong")
+	})
 
 	// get jwt
 	router.POST("/login", user.Login)
