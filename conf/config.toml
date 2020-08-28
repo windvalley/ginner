@@ -20,7 +20,8 @@ mail_to = [
 
 [auth]
 jwt_secret = "3f017bc64bb365167987e307cc41c9f4"  # for /login
-jwt_lifetime = 2880  # minutes, for /login
+jwt_lifetime = 86400  # seconds, for jwt token that /login generate
+jwt_max_lifetime = 600  # for jwt token that user generate
 # seconds, for api signature, considering the time gap between client and server
 apisign_lifetime = 600
 

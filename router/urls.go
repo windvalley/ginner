@@ -25,15 +25,13 @@ func urls(router *gin.Engine) {
 		c.String(http.StatusOK, "pong")
 	})
 
-	// get jwt
+	// get jwt token
 	router.POST("/login", user.Login)
-	router.POST("/auth", user.Login)
 	router.GET("/login", user.Login)
-	router.GET("/auth", user.Login)
 
 	// user manage demo
 	g1 := router.Group("/v1/users")
-	g1.POST("", user.Create)          // user register request do not use jwt
+	g1.POST("", user.Create)          // user register request can not use jwt
 	g1.Use(midware.JWT())             // use jwt
 	g1.Use(midware.TrafficLimit(100)) // limit 100 requests/second per source IP
 	{
@@ -47,7 +45,10 @@ func urls(router *gin.Engine) {
 	//g2.Use(midware.RSASign())
 	//g2.Use(midware.HmacMd5Sign())
 	//g2.Use(midware.HmacSha1Sign())
-	g2.Use(midware.HmacSha256Sign())
+	//g2.Use(midware.HmacSha256Sign())
+
+	// NOTE: need to issue appKey and appSecret to users in advance
+	g2.Use(midware.JWT())
 	{
 		g2.GET("/hello", signdemo.Hello)
 		g2.POST("/hello", signdemo.Hello)

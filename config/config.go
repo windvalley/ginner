@@ -32,6 +32,7 @@ type Mail struct {
 type Auth struct {
 	JWTSecret       string `toml:"jwt_secret"`
 	JWTLifetime     int64  `toml:"jwt_lifetime"`
+	JWTMaxLifetime  int64  `toml:"jwt_max_lifetime"`
 	APISignLifetime int64  `toml:"apisign_lifetime"`
 }
 

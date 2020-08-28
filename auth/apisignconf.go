@@ -9,6 +9,7 @@ type keySecret struct {
 	MD5  string
 	AES  string
 	Hmac string
+	JWT  string
 	RSA
 }
 
@@ -24,7 +25,8 @@ var UserInfos = map[string]userInfo{
 		keySecret: keySecret{
 			MD5:  "fjadoifjadjfqjowerqfdafafdjafl",
 			AES:  "707c8d56d87a5650ae6492e67be6ffc4", // length must be 16
-			Hmac: "707c8d56d87a5650ae6492e67be6ffc4",
+			Hmac: "b4984088af5b2dd6236b1aa5d51aa3c4",
+			JWT:  "f2c40107cae3ee4e16270150b513dba0",
 			RSA: RSA{
 				"auth/rsa/private.pem",
 				"auth/rsa/public.pem",

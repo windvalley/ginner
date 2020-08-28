@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"encoding/json"
 	"errors"
 	"time"
 
@@ -11,10 +12,10 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-// Parameter key can be understood as username or appname.
+// Parameter key can be understood as username or appkey.
 func GenerateJWT(key, secret string, jwtLifetime int64) (string, error) {
 	nowTime := time.Now()
-	expireTime := nowTime.Add(time.Duration(jwtLifetime) * time.Minute)
+	expireTime := nowTime.Add(time.Duration(jwtLifetime) * time.Second)
 
 	claims := Claims{
 		jwt.StandardClaims{
@@ -50,4 +51,28 @@ func ParseJWT(token, secret string) (*Claims, error) {
 	}
 
 	return nil, errors.New("token invalid")
+}
+
+func GetPayload(seg string) (*jwt.StandardClaims, error) {
+	claims := &jwt.StandardClaims{}
+
+	claimsBytes, err := jwt.DecodeSegment(seg)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal(claimsBytes, claims); err != nil {
+		return nil, err
+	}
+
+	return claims, nil
+}
+
+func GetSecretOfAppkey(appKey string) (string, bool) {
+	userInfo, ok := UserInfos[appKey]
+	if !ok {
+		return "", false
+	}
+
+	return userInfo.keySecret.JWT, true
 }
