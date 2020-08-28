@@ -11,6 +11,7 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
+// Parameter key can be understood as username or appname.
 func GenerateJWT(key, secret string, jwtLifetime int64) (string, error) {
 	nowTime := time.Now()
 	expireTime := nowTime.Add(time.Duration(jwtLifetime) * time.Minute)
@@ -19,12 +20,12 @@ func GenerateJWT(key, secret string, jwtLifetime int64) (string, error) {
 		jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
 			IssuedAt:  nowTime.Unix(),
-			Issuer:    key, // key can be understood as username
+			Issuer:    key,
 		},
 	}
 
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	token, err := tokenClaims.SignedString(secret)
+	token, err := tokenClaims.SignedString([]byte(secret))
 
 	return token, err
 }
