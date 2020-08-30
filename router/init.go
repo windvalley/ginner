@@ -9,6 +9,8 @@ import (
 
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 
 	"use-gin/config"
 	"use-gin/logger"
@@ -45,6 +47,11 @@ func RouterGroup() {
 			"404 page: url path is not correct",
 		)
 	})
+
+	if runmode == "debug" {
+		// NOTE: swag init first
+		router.GET("/doc/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
 
 	urls(router)
 

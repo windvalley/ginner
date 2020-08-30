@@ -33,6 +33,15 @@ func init() {
 	redclus.Init()
 }
 
+// @title Use-Gin API
+// @version 0.1.0
+// @description Using Go Gin to develop high quality applications(Web API) efficiently.
+// @contact.name Windvalley
+// @contact.email i@sre.im
+// @license.name MIT
+// @license.url https://github.com/windvalley/use-gin/blob/master/LICENSE
+// @host use-gin.sre.im:8000
+// @BasePath /api
 func main() {
 	// relation db
 	rdb.Init()

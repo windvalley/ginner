@@ -27,6 +27,7 @@ require (
 	github.com/satori/go.uuid v1.2.1-0.20181028125025-b2ce2384e17b
 	github.com/sirupsen/logrus v1.6.0
 	github.com/spf13/pflag v1.0.5
+	github.com/swaggo/gin-swagger v1.2.0
 	github.com/tebeka/strftime v0.1.5 // indirect
 	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37
 	golang.org/x/time v0.0.0-20190308202827-9d24e82272b4
