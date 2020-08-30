@@ -29,14 +29,17 @@ func Init() {
 					return nil, err
 				}
 			}
-			return c, err
+
+			if _, err := c.Do("SELECT", config.Conf().Redis.DB); err != nil {
+				c.Close()
+				return nil, err
+			}
+
+			return c, nil
 		},
 		TestOnBorrow: func(c redis.Conn, t time.Time) error {
 			_, err := c.Do("PING")
-			if err != nil {
-				panic(err)
-			}
-			return nil
+			return err
 		},
 	}
 }

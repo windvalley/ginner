@@ -58,6 +58,7 @@ measurement = ""
 
 [redis]
 address = "127.0.0.1:6379"
+db = 0
 password = ""
 max_idle = 30
 max_active = 30

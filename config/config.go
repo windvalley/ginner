@@ -72,6 +72,7 @@ type Influxdb struct {
 
 type Redis struct {
 	Address     string
+	DB          int
 	Password    string
 	MaxIdle     int
 	MaxActive   int
