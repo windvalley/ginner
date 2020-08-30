@@ -5,6 +5,7 @@ import (
 	"use-gin/cron"
 	"use-gin/logger"
 	"use-gin/model/rdb"
+	"use-gin/model/redis"
 	"use-gin/router"
 )
 
@@ -25,6 +26,8 @@ func init() {
 	logger.Init()
 
 	cron.Init()
+
+	redis.Init()
 }
 
 func main() {

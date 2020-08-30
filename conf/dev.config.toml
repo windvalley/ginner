@@ -30,7 +30,7 @@ dbtype = "mysql"  # mysql/mssql/postgres/sqlite3
 address = "localhost:3306"
 dbname = "demo"  # create the database manually
 user = "root"
-password = ""
+password = "123456"
 
 [postgresql]
 dbtype = "postgres"
@@ -55,6 +55,13 @@ username = ""
 password = ""
 dbname = ""
 measurement = ""
+
+[redis]
+address = "127.0.0.1:6379"
+password = ""
+max_idle = 30
+max_active = 30
+idle_timeout = 180
 
 # disable this feature when the item value is []
 [acl]

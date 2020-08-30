@@ -1,5 +1,7 @@
 package config
 
+import "time"
+
 type GlobalConfig struct {
 	AppName    string `toml:"app_name"`
 	ServerPort string `toml:"server_port"`
@@ -11,6 +13,7 @@ type GlobalConfig struct {
 	PostgreSQL PostgreSQL
 	Kafka      Kafka
 	Influxdb   Influxdb
+	Redis      Redis
 	ACL        ACL
 }
 
@@ -65,6 +68,14 @@ type Influxdb struct {
 	Password    string
 	DBName      string
 	Measurement string
+}
+
+type Redis struct {
+	Address     string
+	Password    string
+	MaxIdle     int
+	MaxActive   int
+	IdleTimeout time.Duration
 }
 
 type ACL struct {
