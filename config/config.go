@@ -3,18 +3,19 @@ package config
 import "time"
 
 type GlobalConfig struct {
-	AppName    string `toml:"app_name"`
-	ServerPort string `toml:"server_port"`
-	Runmode    string
-	Log        Log
-	Mail       Mail
-	Auth       Auth
-	MySQL      MySQL
-	PostgreSQL PostgreSQL
-	Kafka      Kafka
-	Influxdb   Influxdb
-	Redis      Redis
-	ACL        ACL
+	AppName      string `toml:"app_name"`
+	ServerPort   string `toml:"server_port"`
+	Runmode      string
+	Log          Log
+	Mail         Mail
+	Auth         Auth
+	MySQL        MySQL
+	PostgreSQL   PostgreSQL
+	Kafka        Kafka
+	Influxdb     Influxdb
+	Redis        Redis
+	RedisCluster RedisCluster `toml:"redis_cluster"`
+	ACL          ACL
 }
 
 type Log struct {
@@ -77,6 +78,13 @@ type Redis struct {
 	MaxIdle     int
 	MaxActive   int
 	IdleTimeout time.Duration
+}
+
+type RedisCluster struct {
+	Nodes       []string
+	Secret      string
+	PoolSize    int
+	PoolTimeout time.Duration
 }
 
 type ACL struct {

@@ -5,6 +5,7 @@ import (
 	"use-gin/cron"
 	"use-gin/logger"
 	"use-gin/model/rdb"
+	"use-gin/model/redclus"
 	"use-gin/model/redis"
 	"use-gin/router"
 )
@@ -28,6 +29,8 @@ func init() {
 	cron.Init()
 
 	redis.Init()
+
+	redclus.Init()
 }
 
 func main() {

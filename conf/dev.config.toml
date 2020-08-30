@@ -64,6 +64,16 @@ max_idle = 30
 max_active = 30
 idle_timeout = 180
 
+[redis_cluster]
+nodes = [
+    "10.10.10.1:7001",
+    "10.10.10.2:7001",
+    "10.10.10.3:7001"
+]
+secret = ""
+pool_size = 20
+pool_timeout = 60
+
 # disable this feature when the item value is []
 [acl]
 allow_url = []
