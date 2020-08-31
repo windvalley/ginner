@@ -73,7 +73,7 @@ var (
 		Message: "%v",
 	}
 
-	// AccessForbiddentError The client ip or the server api is disallowed to access.
+	// AccessForbiddenError The client ip or the server api is disallowed to access.
 	AccessForbiddenError = &ErrCode{
 		Status:  http.StatusForbidden,
 		Code:    "AccessForbidden",
