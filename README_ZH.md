@@ -1,10 +1,8 @@
-Use Gin [![rcard](https://goreportcard.com/badge/github.com/windvalley/use-gin)](https://goreportcard.com/report/github.com/windvalley/use-gin) [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://godoc.org/github.com/windvalley/use-gin) [![License](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](https://raw.githubusercontent.com/windvalley/use-gin/master/LICENSE)
-===
+# Use Gin [![rcard](https://goreportcard.com/badge/github.com/windvalley/use-gin)](https://goreportcard.com/report/github.com/windvalley/use-gin) [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://godoc.org/github.com/windvalley/use-gin) [![License](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](https://raw.githubusercontent.com/windvalley/use-gin/master/LICENSE)
 
 `Go Gin`脚手架, 帮助用户高效地编写高质量的`Web API`.
 
-Features
-===
+## 主要特性
 - [x] 项目依赖管理`Go Modules`
 - [x] 配置文件组件
     - [x] 采用面向对象配置文件包`toml`
@@ -63,10 +61,9 @@ Features
     - [x] 分页
     - [x] 请求客户端`httprequest`
 
-Deployment
-===
+## 项目部署
 
-## Normal
+### 常规方式
 ```bash
 ./build.sh
 
@@ -78,7 +75,7 @@ export RUNENV=prod
 ./service.sh start
 ```
 
-## Docker
+### 容器方式
 ```bash
 docker build -t use-gin .
 
@@ -89,3 +86,6 @@ docker container run --name use-gin -p80:8000 -d use-gin
 docker container run --name use-gin -p80:8000 -d -e RUNENV=prod use-gin
 ```
 
+## 授权许可
+
+本项目采用`MIT`开源授权许可证, 完整的授权说明已放置在[LICENSE](LICENSE)文件中.

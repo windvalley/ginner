@@ -1,12 +1,10 @@
-Use Gin [![rcard](https://goreportcard.com/badge/github.com/windvalley/use-gin)](https://goreportcard.com/report/github.com/windvalley/use-gin) [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://godoc.org/github.com/windvalley/use-gin) [![License](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](https://raw.githubusercontent.com/windvalley/use-gin/master/LICENSE)
-===
+# Use Gin [![rcard](https://goreportcard.com/badge/github.com/windvalley/use-gin)](https://goreportcard.com/report/github.com/windvalley/use-gin) [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://godoc.org/github.com/windvalley/use-gin) [![License](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](https://raw.githubusercontent.com/windvalley/use-gin/master/LICENSE)
 
 Using Go `Gin` to develop high quality applications(Web API) efficiently.
 
-[简体中文](https://github.com/windvalley/use-gin/blob/master/README_ZH.md)
+[简体中文](README_ZH.md)
 
-Features
-===
+## Features
 - [x] Go Modules
 - [x] Configuration
     - [x] BurntSushi/toml
@@ -65,10 +63,9 @@ Features
     - [x] pagination
     - [x] httprequest
 
-Deployment
-===
+## Deployment
 
-## Normal
+### Normal
 ```bash
 ./build.sh
 
@@ -80,7 +77,7 @@ export RUNENV=prod
 ./service.sh start
 ```
 
-## Docker
+### Docker
 ```bash
 docker build -t use-gin .
 
@@ -91,3 +88,6 @@ docker container run --name use-gin -p80:8000 -d use-gin
 docker container run --name use-gin -p80:8000 -d -e RUNENV=prod use-gin
 ```
 
+## License
+
+This project is under the MIT License. See the [LICENSE](LICENSE) file for the full license text.
