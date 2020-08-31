@@ -1,4 +1,4 @@
-Use Gin [![License](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](https://raw.githubusercontent.com/windvalley/use-gin/master/LICENSE)
+Use Gin [![License](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](https://raw.githubusercontent.com/windvalley/use-gin/master/LICENSE)[![rcard](https://goreportcard.com/badge/github.com/windvalley/use-gin)](https://goreportcard.com/report/github.com/windvalley/use-gin) [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://godoc.org/github.com/windvalley/use-gin)
 ===
 
 `Go Gin`脚手架, 帮助用户高效地编写高质量的`Web API`.
