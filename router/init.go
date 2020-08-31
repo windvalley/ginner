@@ -17,7 +17,8 @@ import (
 	"use-gin/midware"
 )
 
-func RouterGroup() {
+// Group router group
+func Group() {
 	runmode := config.Conf().Runmode
 
 	switch runmode {

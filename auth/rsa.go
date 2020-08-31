@@ -9,6 +9,7 @@ import (
 	"os"
 )
 
+// EncryptByPublic encrypt str by public key
 func EncryptByPublic(src, path string) (string, error) {
 	block, err := getPemBlock(path)
 	if err != nil {
@@ -29,6 +30,7 @@ func EncryptByPublic(src, path string) (string, error) {
 	return base64.URLEncoding.EncodeToString(signatureBytes), nil
 }
 
+// DecryptByPrivate decrypt signature by private key
 func DecryptByPrivate(signature, path string) (string, error) {
 	block, err := getPemBlock(path)
 	if err != nil {

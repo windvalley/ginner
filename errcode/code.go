@@ -3,7 +3,7 @@ package errcode
 import "net/http"
 
 var (
-	// success response
+	// OK success response
 	OK = &ErrCode{
 		Status:  http.StatusOK,
 		Code:    "OK",
@@ -12,19 +12,21 @@ var (
 
 	// follows are error responses of server-side
 
+	// InternalServerError unknown errors of inside server
 	InternalServerError = &ErrCode{
 		Status:  http.StatusInternalServerError,
 		Code:    "InternalError",
 		Message: "Internal server error",
 	}
 
+	// ServerPanicError panic error
 	ServerPanicError = &ErrCode{
 		Status:  http.StatusInternalServerError,
 		Code:    "PanicError",
 		Message: "Server meets up panic error, please contact admin.",
 	}
 
-	// Usage:
+	// DBError Usage:
 	// err := errcode.New(errcode.ErrDataNotExist, nil)
 	// err1 := err.Add("somestring")
 	// handler.SendResponse(c, err1, nil)

@@ -6,32 +6,38 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// User user table
 type User struct {
 	Model
 	Username string `json:"username" gorm:"column:username;not null"`
 	Password string `json:"password" gorm:"column:password;not null"`
 }
 
+// Create insert a record
 func (u *User) Create() error {
 	return DBs.MySQL.Create(&u).Error
 }
 
+// GetUser get user by username
 func GetUser(username string) (*User, error) {
 	u := &User{}
 	d := DBs.MySQL.Where("username = ?", username).First(&u)
 	return u, d.Error
 }
 
+// Update update an user record
 func (u *User) Update() error {
 	return DBs.MySQL.Save(u).Error
 }
 
+// DeleteUser delete an user by user id
 func DeleteUser(id uint) error {
 	user := User{}
 	user.ID = id
 	return DBs.MySQL.Delete(&user).Error
 }
 
+// ListUser list users by username, offset, limit
 func ListUser(username string, offset, limit int) ([]*User, uint, error) {
 	users := make([]*User, 0)
 	var count uint
@@ -48,6 +54,7 @@ func ListUser(username string, offset, limit int) ([]*User, uint, error) {
 	return users, count, nil
 }
 
+// EncryptPassword encrypt user's password before write in database
 func (u *User) EncryptPassword() (err error) {
 	hashedBytes, err := bcrypt.GenerateFromPassword(
 		[]byte(u.Password),
@@ -57,6 +64,7 @@ func (u *User) EncryptPassword() (err error) {
 	return err
 }
 
+// CheckPassword check validation of user's password
 func (u *User) CheckPassword(pwd string) error {
 	return bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(pwd))
 }

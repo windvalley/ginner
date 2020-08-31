@@ -18,18 +18,18 @@ import (
 //value := res.Data().(yourType)
 var Cache = cache2go.Cache("gocache")
 
-const DemoKey = "demo"
+const demoKey = "demo"
 
-func UpdateCacheKey() {
-	if _, err := Cache.Delete(DemoKey); err != nil {
+func updateCacheKey() {
+	if _, err := Cache.Delete(demoKey); err != nil {
 		logger.Log.Warnf(
 			"cron: delete key %s, warning: Gocache has no %s key",
-			DemoKey,
-			DemoKey,
+			demoKey,
+			demoKey,
 		)
 	}
 
-	Cache.Add(DemoKey, 0, "your specific object")
+	Cache.Add(demoKey, 0, "your specific object")
 
-	logger.Log.Debugf("cron: %s is updated", DemoKey)
+	logger.Log.Debugf("cron: %s is updated", demoKey)
 }

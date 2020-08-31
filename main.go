@@ -58,5 +58,5 @@ func main() {
 	//kafka.InitKafkaConsumer()
 	//kafka.InitKafkaProducer()
 
-	router.RouterGroup()
+	router.Group()
 }

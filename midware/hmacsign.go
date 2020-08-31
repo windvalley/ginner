@@ -8,6 +8,7 @@ import (
 	"use-gin/handler"
 )
 
+// HmacMd5Sign HMAC MD5 signature
 func HmacMd5Sign() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		debugMsg, err := auth.VerifySign(c, "hmac_md5")
@@ -29,6 +30,7 @@ func HmacMd5Sign() gin.HandlerFunc {
 	}
 }
 
+// HmacSha1Sign HMAC SHA1 signature
 func HmacSha1Sign() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		debugMsg, err := auth.VerifySign(c, "hmac_sha1")
@@ -50,6 +52,7 @@ func HmacSha1Sign() gin.HandlerFunc {
 	}
 }
 
+// HmacSha256Sign HMAC SHA256 signature
 func HmacSha256Sign() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		debugMsg, err := auth.VerifySign(c, "hmac_sha256")

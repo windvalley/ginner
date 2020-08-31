@@ -9,8 +9,10 @@ import (
 	"use-gin/config"
 )
 
+// Redis instance of redis pool
 var Redis *redis.Pool
 
+// Init redis pool initialization
 func Init() {
 	password := config.Conf().Redis.Password
 	Redis = &redis.Pool{
@@ -44,6 +46,7 @@ func Init() {
 	}
 }
 
+// Set set key/value
 func Set(key string, data interface{}, time int) error {
 	conn := Redis.Get()
 	defer conn.Close()
@@ -66,6 +69,7 @@ func Set(key string, data interface{}, time int) error {
 	return nil
 }
 
+// Exists if the key exists
 func Exists(key string) bool {
 	conn := Redis.Get()
 	defer conn.Close()
@@ -78,6 +82,7 @@ func Exists(key string) bool {
 	return exists
 }
 
+// Get get the value of a key
 func Get(key string) ([]byte, error) {
 	conn := Redis.Get()
 	defer conn.Close()
@@ -90,6 +95,7 @@ func Get(key string) ([]byte, error) {
 	return reply, nil
 }
 
+// Delete delete key/value
 func Delete(key string) (bool, error) {
 	conn := Redis.Get()
 	defer conn.Close()
@@ -97,6 +103,7 @@ func Delete(key string) (bool, error) {
 	return redis.Bool(conn.Do("DEL", key))
 }
 
+// BatchDelete delete some key/values by fuzzy matching
 func BatchDelete(key string) error {
 	conn := Redis.Get()
 	defer conn.Close()

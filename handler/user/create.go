@@ -12,6 +12,7 @@ type createResponse struct {
 	Username string `json:"username"`
 }
 
+// Create user register
 func Create(c *gin.Context) {
 	var r user
 	if err := c.Bind(&r); err != nil {

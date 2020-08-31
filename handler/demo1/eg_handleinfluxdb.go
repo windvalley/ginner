@@ -10,15 +10,16 @@ import (
 	"github.com/influxdata/influxdb/models"
 )
 
-const SQL_PART_END = "fill(0) tz('Asia/Shanghai')"
+const cSQLPartEnd = "fill(0) tz('Asia/Shanghai')"
 
+// HandleInfluxdbDemo a demo of handle influxdb
 func HandleInfluxdbDemo(c *gin.Context) {
 
 	// your specific logic
 
 }
 
-func WriteInfluxdb() error {
+func writeInfluxdb() error {
 	bp, err := influxdb.NewBatchPoints()
 	if err != nil {
 		return err
@@ -40,8 +41,8 @@ func WriteInfluxdb() error {
 	return nil
 }
 
-func ReadInfluxdb() (*models.Row, error) {
-	sql := fmt.Sprintf("select * from ... %s", SQL_PART_END)
+func readInfluxdb() (*models.Row, error) {
+	sql := fmt.Sprintf("select * from ... %s", cSQLPartEnd)
 
 	res, err := influxdb.Query(sql)
 	if err != nil {

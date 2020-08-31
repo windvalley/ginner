@@ -10,6 +10,7 @@ import (
 	"hash"
 )
 
+// Hmac HMAC signature
 func Hmac(deaName, src, key string) (string, error) {
 	var hm hash.Hash
 

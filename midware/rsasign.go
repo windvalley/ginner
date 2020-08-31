@@ -8,6 +8,7 @@ import (
 	"use-gin/handler"
 )
 
+// RSASign Asymmetric encryption algorithm signature
 func RSASign() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		debugMsg, err := auth.VerifySign(c, "rsa")

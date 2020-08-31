@@ -8,11 +8,12 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
+// Claims payload infos
 type Claims struct {
 	jwt.StandardClaims
 }
 
-// Parameter key can be understood as username or appkey.
+// GenerateJWT Parameter key can be understood as username or appkey.
 func GenerateJWT(key, secret string, jwtLifetime int64) (string, error) {
 	nowTime := time.Now()
 	expireTime := nowTime.Add(time.Duration(jwtLifetime) * time.Second)
@@ -31,6 +32,7 @@ func GenerateJWT(key, secret string, jwtLifetime int64) (string, error) {
 	return token, err
 }
 
+// ParseJWT get *Claims from jwt token
 func ParseJWT(token, secret string) (*Claims, error) {
 	jwtSecret := []byte(secret)
 
@@ -53,6 +55,7 @@ func ParseJWT(token, secret string) (*Claims, error) {
 	return nil, errors.New("token invalid")
 }
 
+// GetPayload get payload from the second segment of jwt token
 func GetPayload(seg string) (*jwt.StandardClaims, error) {
 	claims := &jwt.StandardClaims{}
 
@@ -68,8 +71,9 @@ func GetPayload(seg string) (*jwt.StandardClaims, error) {
 	return claims, nil
 }
 
+// GetSecretOfAppkey get appSecret by appKey
 func GetSecretOfAppkey(appKey string) (string, bool) {
-	userInfo, ok := UserInfos[appKey]
+	userInfo, ok := userInfos[appKey]
 	if !ok {
 		return "", false
 	}

@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 )
 
+// Md5sum get value of md5sum
 func Md5sum(value string) string {
 	m := md5.New()
 	m.Write([]byte(value))

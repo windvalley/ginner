@@ -8,6 +8,7 @@ import (
 	"use-gin/handler"
 )
 
+// Md5Sign MD5 combined encryption signature
 func Md5Sign() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		debugMsg, err := auth.VerifySign(c, "md5")

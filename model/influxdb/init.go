@@ -9,8 +9,10 @@ import (
 	"use-gin/logger"
 )
 
+// Client client instance of influxdb
 var Client client.Client
 
+// Init influxdb initialization
 func Init() {
 	var err error
 	Client, err = client.NewHTTPClient(client.HTTPConfig{
@@ -23,10 +25,12 @@ func Init() {
 	}
 }
 
+// Close close connections of influxdb
 func Close() {
 	Client.Close()
 }
 
+// NewPoint get *client.Point
 func NewPoint(
 	tags map[string]string,
 	fields map[string]interface{},
@@ -46,6 +50,7 @@ func NewPoint(
 	return pt, nil
 }
 
+// NewBatchPoints get client.BatchPoints
 func NewBatchPoints() (client.BatchPoints, error) {
 	bp, err := client.NewBatchPoints(client.BatchPointsConfig{
 		Database:  config.Conf().Influxdb.DBName,
@@ -59,6 +64,7 @@ func NewBatchPoints() (client.BatchPoints, error) {
 	return bp, nil
 }
 
+// Write write data into influxdb
 //    e.g.
 // bp, err := influxdb.NewBatchPoints()
 //if err != nil {
@@ -83,6 +89,7 @@ func Write(bp client.BatchPoints) error {
 	return nil
 }
 
+// Query get data from influxdb
 //     e.g.
 //res, err := influxdb.Query(sql)
 //if err != nil {

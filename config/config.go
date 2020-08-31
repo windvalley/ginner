@@ -2,30 +2,31 @@ package config
 
 import "time"
 
+// GlobalConfig map conf/config.toml
 type GlobalConfig struct {
 	AppName      string `toml:"app_name"`
 	ServerPort   string `toml:"server_port"`
 	Runmode      string
-	Log          Log
-	Mail         Mail
-	Auth         Auth
-	MySQL        MySQL
-	PostgreSQL   PostgreSQL
-	Kafka        Kafka
-	Influxdb     Influxdb
-	Redis        Redis
-	RedisCluster RedisCluster `toml:"redis_cluster"`
-	ACL          ACL
+	Log          log
+	Mail         mail
+	Auth         auth
+	MySQL        mysql
+	PostgreSQL   postgreSQL
+	Kafka        kafka
+	Influxdb     influxdb
+	Redis        redis
+	RedisCluster redisCluster `toml:"redis_cluster"`
+	ACL          acl
 }
 
-type Log struct {
+type log struct {
 	Dirname       string
 	RotationHours int    `toml:"rotation_hours"`
 	SaveDays      int    `toml:"save_days"`
 	LogFormat     string `toml:"log_format"`
 }
 
-type Mail struct {
+type mail struct {
 	SMTPHost string `toml:"smtp_host"`
 	Port     int
 	User     string
@@ -33,14 +34,14 @@ type Mail struct {
 	MailTo   []string `toml:"mail_to"`
 }
 
-type Auth struct {
+type auth struct {
 	JWTSecret       string `toml:"jwt_secret"`
 	JWTLifetime     int64  `toml:"jwt_lifetime"`
 	JWTMaxLifetime  int64  `toml:"jwt_max_lifetime"`
 	APISignLifetime int64  `toml:"apisign_lifetime"`
 }
 
-type MySQL struct {
+type mysql struct {
 	DBType   string
 	Address  string
 	DBName   string
@@ -48,7 +49,7 @@ type MySQL struct {
 	Password string
 }
 
-type PostgreSQL struct {
+type postgreSQL struct {
 	DBType   string
 	Address  string
 	DBName   string
@@ -56,14 +57,14 @@ type PostgreSQL struct {
 	Password string
 }
 
-type Kafka struct {
+type kafka struct {
 	Brokers       []string
 	ProducerTopic string `toml:"producer_topic"`
 	ConsumerTopic string `toml:"consumer_topic"`
 	ConsumerGroup string `toml:"consumer_group"`
 }
 
-type Influxdb struct {
+type influxdb struct {
 	Address     string
 	Username    string
 	Password    string
@@ -71,7 +72,7 @@ type Influxdb struct {
 	Measurement string
 }
 
-type Redis struct {
+type redis struct {
 	Address     string
 	DB          int
 	Password    string
@@ -80,14 +81,14 @@ type Redis struct {
 	IdleTimeout time.Duration
 }
 
-type RedisCluster struct {
+type redisCluster struct {
 	Nodes       []string
 	Secret      string
 	PoolSize    int
 	PoolTimeout time.Duration
 }
 
-type ACL struct {
+type acl struct {
 	AllowURL []string `toml:"allow_url"`
 	AllowIP  []string `toml:"allow_ip"`
 }

@@ -15,8 +15,10 @@ import (
 	"use-gin/config"
 )
 
+// Log logger instance
 var Log = logrus.New()
 
+// Init logger initialization
 func Init() {
 	logDir, err := createLogdir()
 	if err != nil {

@@ -7,7 +7,7 @@ import (
 	"encoding/base64"
 )
 
-// aes-128-cbc
+// AESEncrypt aes-128-cbc
 func AESEncrypt(src, key string) (string, error) {
 	srcBytes, keyBytes := []byte(src), []byte(key)
 
@@ -27,6 +27,7 @@ func AESEncrypt(src, key string) (string, error) {
 	return signature, nil
 }
 
+// AESDecrypt AES decrypt by signature and key
 func AESDecrypt(signature, key string) (string, error) {
 	keyBytes := []byte(key)
 	signatureBytes, err := base64.URLEncoding.DecodeString(signature)
@@ -49,6 +50,7 @@ func AESDecrypt(signature, key string) (string, error) {
 	return string(srcBytes), nil
 }
 
+// PKCS7UnPadding for unpadding
 func PKCS7UnPadding(src []byte) []byte {
 	length := len(src)
 	unpadding := int(src[length-1])
@@ -56,6 +58,7 @@ func PKCS7UnPadding(src []byte) []byte {
 	return src[:length-unpadding]
 }
 
+// PKCS7Padding for padding
 func PKCS7Padding(src []byte, blockSize int) []byte {
 	padding := blockSize - len(src)%blockSize
 	padtext := bytes.Repeat([]byte{byte(padding)}, padding)

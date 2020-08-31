@@ -7,6 +7,7 @@ import (
 	"use-gin/logger"
 )
 
+// RequestID trace request
 func RequestID() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		requestID := c.Request.Header.Get("X-Request-Id")

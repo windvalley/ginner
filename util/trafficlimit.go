@@ -6,6 +6,7 @@ import (
 	"golang.org/x/time/rate"
 )
 
+// IPRateLimiter client ip access rate limiter
 type IPRateLimiter struct {
 	ips map[string]*rate.Limiter
 	mu  *sync.RWMutex
@@ -13,6 +14,7 @@ type IPRateLimiter struct {
 	b   int
 }
 
+// NewIPRateLimiter get *IPRateLimiter
 func NewIPRateLimiter(r rate.Limit, b int) *IPRateLimiter {
 	i := &IPRateLimiter{
 		ips: make(map[string]*rate.Limiter),
@@ -24,6 +26,7 @@ func NewIPRateLimiter(r rate.Limit, b int) *IPRateLimiter {
 	return i
 }
 
+// AddIP add client ip to *rate.Limiter
 func (i *IPRateLimiter) AddIP(ip string) *rate.Limiter {
 	i.mu.Lock()
 	defer i.mu.Unlock()
@@ -35,6 +38,7 @@ func (i *IPRateLimiter) AddIP(ip string) *rate.Limiter {
 	return limiter
 }
 
+// GetLimiter get *rate.Limiter
 func (i *IPRateLimiter) GetLimiter(ip string) *rate.Limiter {
 	i.mu.Lock()
 	limiter, exists := i.ips[ip]

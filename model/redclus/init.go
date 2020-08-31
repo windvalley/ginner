@@ -6,8 +6,10 @@ import (
 	"use-gin/config"
 )
 
+// Redis client instance of redis cluster
 var Redis *redis.ClusterClient
 
+// Init redis cluster initialization
 func Init() {
 	Redis = redis.NewClusterClient(&redis.ClusterOptions{
 		Addrs:       config.Conf().RedisCluster.Nodes,

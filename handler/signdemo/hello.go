@@ -6,6 +6,7 @@ import (
 	"use-gin/handler"
 )
 
+// Hello a handler demo
 func Hello(c *gin.Context) {
 	handler.SendResponse(c, nil, "hello world!")
 }

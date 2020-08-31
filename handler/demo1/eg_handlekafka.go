@@ -17,13 +17,13 @@ import (
 
 const consumeTaskTimeout = 6 * time.Minute
 
-type ProduceTask struct {
+type produceTask struct {
 	ID       string
 	StrDemo1 string `json:"str_demo1"`
 	StrDemo2 string `json:"str_demo2"`
 }
 
-type ConsumeTask struct {
+type consumeTask struct {
 	ID       string
 	StrDemo1 string `json:"str_demo1"`
 	StrDemo2 string `json:"str_demo2"`
@@ -49,7 +49,7 @@ func (h consumeHandler) ConsumeClaim(
 			}
 		}()
 
-		var ct ConsumeTask
+		var ct consumeTask
 		if err := ffjson.Unmarshal(v.Value, &ct); err != nil {
 			logger.Log.Errorf("kafka message unmarshal: %s, error: %v", v, err)
 			continue
@@ -71,9 +71,10 @@ func (h consumeHandler) ConsumeClaim(
 	return nil
 }
 
+// HandleKafkaDemo a demo of handle kafka
 func HandleKafkaDemo(c *gin.Context) {
 	// producer
-	produceTask := ProduceTask{}
+	produceTask := produceTask{}
 	if err := addTaskToTopic(produceTask); err != nil {
 		err1 := errcode.New(errcode.InternalServerError, err)
 		handler.SendResponse(c, err1, nil)
@@ -96,7 +97,7 @@ func HandleKafkaDemo(c *gin.Context) {
 	)
 }
 
-func addTaskToTopic(task ProduceTask) error {
+func addTaskToTopic(task produceTask) error {
 	reqStr, err := ffjson.Marshal(task)
 	if err != nil {
 		logger.Log.Errorf("task serialization error: %v", err)

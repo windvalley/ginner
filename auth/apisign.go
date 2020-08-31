@@ -17,17 +17,18 @@ import (
 	"use-gin/handler"
 )
 
-type PublicParamsDebug struct {
+type publicParamsDebug struct {
 	KeyID string `form:"KeyID" binding:"required"`
 }
 
-type PublicParams struct {
-	PublicParamsDebug
+type publicParams struct {
+	publicParamsDebug
 	Timestamp time.Time `form:"Timestamp" binding:"required" time_format:"unix"`
 	Nonce     int       `form:"Nonce" binding:"required"`
 	Signature string    `form:"Signature" binding:"required"`
 }
 
+// VerifySign verify if the signature of client is valid
 func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
 	debug := c.Query("debug")
 
@@ -39,8 +40,8 @@ func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
 	}
 	allParamsMap := c.Request.Form
 
-	var paramsDebug PublicParamsDebug
-	var params PublicParams
+	var paramsDebug publicParamsDebug
+	var params publicParams
 
 	keyID := ""
 	if debug == "1" {
@@ -65,9 +66,9 @@ func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
 		keyID = params.KeyID
 	}
 
-	userInfo, ok := UserInfos[keyID]
+	userInfo, ok := userInfos[keyID]
 	if !ok {
-		return nil, errors.New(fmt.Sprintf("KeyID '%s' not found", keyID))
+		return nil, fmt.Errorf("KeyID '%s' not found", keyID)
 	}
 
 	keySecret, err := getKeySecret(keyID, signType, userInfo)

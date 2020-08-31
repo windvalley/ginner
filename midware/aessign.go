@@ -8,6 +8,7 @@ import (
 	"use-gin/handler"
 )
 
+// AESSign Advanced Encryption Standard Signature
 func AESSign() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		debugMsg, err := auth.VerifySign(c, "aes")

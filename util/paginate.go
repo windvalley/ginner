@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// The request url must has page and page_size parameter,
+// Paginate The request url must has page and page_size parameter,
 // and if not have this two parameters, the server will return all records.
 func Paginate(c *gin.Context) (int, int, int, int) {
 	page, pageSize := 0, 0

@@ -1,5 +1,6 @@
 package template
 
+// AlertMail one of templates by alarming mails
 var AlertMail = `<html>
  <head>
   <meta charset="utf-8" />

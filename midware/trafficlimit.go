@@ -1,7 +1,6 @@
 package midware
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
@@ -11,7 +10,7 @@ import (
 	"use-gin/util"
 )
 
-// A client(ip) will be dennied when it's access rate is over busrtSize/second.
+// TrafficLimit  A client(ip) will be dennied when it's access rate is over busrtSize/second.
 func TrafficLimit(burstSize int) gin.HandlerFunc {
 	var limiter = util.NewIPRateLimiter(1, burstSize)
 
@@ -23,8 +22,7 @@ func TrafficLimit(burstSize int) gin.HandlerFunc {
 			return
 		}
 
-		err := errors.New(fmt.Sprintf(
-			"%s request over %d, dennied", clientIP, burstSize))
+		err := fmt.Errorf("%s request over %d, dennied", clientIP, burstSize)
 		err1 := errcode.New(errcode.TooManyRequestError, err)
 		handler.SendResponse(c, err1, nil)
 

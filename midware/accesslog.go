@@ -27,6 +27,7 @@ func (w bodyLogWriter) WriteString(s string) (int, error) {
 	return w.ResponseWriter.WriteString(s)
 }
 
+// AccessLogger write access log
 func AccessLogger() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		bodyLogWriter := &bodyLogWriter{

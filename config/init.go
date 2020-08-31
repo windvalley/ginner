@@ -15,19 +15,21 @@ var (
 	lock = new(sync.RWMutex)
 )
 
+// ParseConfig parse config from path string
 func ParseConfig(f string) {
 	if _, err := toml.DecodeFile(f, &conf); err != nil {
 		panic(err)
 	}
 }
 
+// Conf get config instance
 func Conf() *GlobalConfig {
 	lock.RLock()
 	defer lock.RUnlock()
 	return conf
 }
 
-// If load config from CLI params failed,
+// Init If load config from CLI params failed,
 // then load config from system environment variable RUNENV,
 // and the value of RUNENV can only be dev or prod.
 func Init() {
@@ -40,7 +42,7 @@ func Init() {
 	LoadFromENV()
 }
 
-// load config from command line parameters.
+// LoadFromCLIParams load config from command line parameters.
 func LoadFromCLIParams() {
 	cfg := getConfigFromCLI()
 	if *cfg == "" {
@@ -53,7 +55,7 @@ func LoadFromCLIParams() {
 	ParseConfig(*cfg)
 }
 
-// load from system environment variable RUNENV: prod/dev
+// LoadFromENV load from system environment variable RUNENV: prod/dev
 func LoadFromENV() {
 	abPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {

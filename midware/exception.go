@@ -15,6 +15,7 @@ import (
 	"use-gin/util"
 )
 
+// Exception catch panic Globally
 func Exception() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer func() {

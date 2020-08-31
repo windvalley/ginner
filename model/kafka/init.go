@@ -11,11 +11,14 @@ import (
 )
 
 var (
+	// Consumer consumer client instance of kafka
 	Consumer sarama.ConsumerGroup
+	// Producer producer client instance of kafka
 	Producer sarama.AsyncProducer
 )
 
-func InitKafkaConsumer() {
+// InitConsumer kafka consumer initialization
+func InitConsumer() {
 	var err error
 	config := sarama.NewConfig()
 	config.Net.KeepAlive = 10 * time.Second
@@ -33,7 +36,8 @@ func InitKafkaConsumer() {
 	}
 }
 
-func InitKafkaProducer() {
+// InitProducer kafka producer initialization
+func InitProducer() {
 	var err error
 	config := sarama.NewConfig()
 	config.Net.KeepAlive = 10 * time.Second
@@ -60,6 +64,7 @@ func InitKafkaProducer() {
 	}(Producer)
 }
 
+// ConsumeTopics start to consume the topics
 func ConsumeTopics(
 	ctx context.Context,
 	cancel func(),

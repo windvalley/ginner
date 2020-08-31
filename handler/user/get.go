@@ -8,6 +8,7 @@ import (
 	"use-gin/model/rdb"
 )
 
+// GetUser get user by path params "username"
 func GetUser(c *gin.Context) {
 	username := c.Param("username")
 

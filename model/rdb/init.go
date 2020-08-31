@@ -4,9 +4,10 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/gorm"
+	// import mysql driver
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
 
+	//_ "github.com/jinzhu/gorm/dialects/postgres"
 	// _ "github.com/jinzhu/gorm/dialects/sqlite"
 	// _ "github.com/jinzhu/gorm/dialects/mssql"
 
@@ -14,14 +15,16 @@ import (
 	"use-gin/logger"
 )
 
-// if have any other databases, just put it in this struct
+// Databases if have any other databases, just put it in this struct
 type Databases struct {
 	MySQL      *gorm.DB
 	PostgreSQL *gorm.DB
 }
 
+// DBs client instance of dbs
 var DBs *Databases
 
+// Init DBs initialization
 func Init() {
 	DBs = &Databases{
 		MySQL: GetMySQL(),
@@ -29,11 +32,13 @@ func Init() {
 	}
 }
 
+// Close close dbs connection
 func Close() {
 	DBs.MySQL.Close()
 	//DBs.PostgreSQL.Close()
 }
 
+// GetMySQL get db instance of mysql
 func GetMySQL() *gorm.DB {
 	dbtype := config.Conf().MySQL.DBType
 	address := config.Conf().MySQL.Address
@@ -44,6 +49,7 @@ func GetMySQL() *gorm.DB {
 	return Connect(dbtype, user, password, address, dbname)
 }
 
+// GetPostgreSQL get db instance of postgresql
 func GetPostgreSQL() *gorm.DB {
 	dbtype := config.Conf().PostgreSQL.DBType
 	address := config.Conf().PostgreSQL.Address
@@ -54,6 +60,7 @@ func GetPostgreSQL() *gorm.DB {
 	return Connect(dbtype, user, password, address, dbname)
 }
 
+// Connect relation db connect
 func Connect(dbtype, username, password, address, dbname string) *gorm.DB {
 	db, err := gorm.Open(dbtype,
 		fmt.Sprintf("%s:%s@(%s)/%s?charset=utf8&parseTime=True&loc=Local",

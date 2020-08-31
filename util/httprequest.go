@@ -13,7 +13,8 @@ import (
 	"github.com/pquerna/ffjson/ffjson"
 )
 
-func HttpRequest(
+// HTTPRequest get body of response that io.ReadCloser type
+func HTTPRequest(
 	method, url string,
 	postData interface{},
 ) (io.ReadCloser, error) {
@@ -36,8 +37,8 @@ func HttpRequest(
 	return res.Body, nil
 }
 
-// PostWithUrlencoded
-//     e.g. payload := url.Values{}
+// PostWithUrlencoded post with body of form-urlencoded, and get response body.
+//    e.g. payload := url.Values{}
 // payload.Set("key", value1)
 // payload.Add("key", value2)
 func PostWithUrlencoded(api string, payload url.Values) (io.ReadCloser, error) {
@@ -63,7 +64,7 @@ func PostWithUrlencoded(api string, payload url.Values) (io.ReadCloser, error) {
 	return res.Body, err
 }
 
-// PostWithFormdata
+// PostWithFormdata post with body of form-data, and get reponse body.
 //     e.g. postData := map[string]string{"key":"value"}
 func PostWithFormdata(
 	url string,
@@ -90,6 +91,7 @@ func PostWithFormdata(
 	return res.Body, err
 }
 
+// GetBodyStringData transfer io.ReadCloser to string.
 func GetBodyStringData(resBody io.ReadCloser) (string, error) {
 	defer resBody.Close()
 	data, err := ioutil.ReadAll(resBody)

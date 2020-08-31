@@ -14,8 +14,8 @@ type response struct {
 	JWT string
 }
 
-/* supports request ways by curl:
-
+// Login supports request ways by curl:
+/*
 curl -XGET "localhost:8000/login?username=windvalley&password=12345678" -v
 
 // Content-Type: multipart/form-data; boundary=------------------------fba2e35622281fd3
@@ -30,7 +30,6 @@ curl -XPOST localhost:8000/login -d "username=windvalley&password=12345678" -v
 curl -XPOST localhost:8000/login --form "username=windvalley" --form "password=12345678" -v
 
 curl -XPOST localhost:8000/login -d '{"username":"windvalley","password":"12345678"}' -H"Content-Type:application/json" -v
-
 */
 func Login(c *gin.Context) {
 	var u user
