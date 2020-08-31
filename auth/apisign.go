@@ -55,8 +55,6 @@ func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
 		keyID = paramsDebug.KeyID
 	} else {
 		if err := c.ShouldBind(&params); err != nil {
-			fmt.Println(err)
-
 			err1 := errcode.New(errcode.ValidationError, err)
 			err1.Add(err)
 			handler.SendResponse(c, err1, nil)
@@ -72,16 +70,9 @@ func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
 		return nil, errors.New(fmt.Sprintf("KeyID '%s' not found", keyID))
 	}
 
-	keySecret := ""
-	switch keySecret {
-	case "md5":
-		keySecret = userInfo.MD5
-	case "aes":
-		keySecret = userInfo.AES
-	case "rsa":
-		keySecret = userInfo.RSA.Public
-	case "hmac_md5", "hmac_sha1", "hmac_sha256":
-		keySecret = userInfo.Hmac
+	keySecret, err := getKeySecret(keyID, signType, userInfo)
+	if err != nil {
+		return nil, err
 	}
 
 	curTimestamp := time.Now().Unix()
@@ -119,47 +110,70 @@ func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
 
 	strForSign := createStrForSign(c, allParamsMap)
 
+	err = verifySiganature(strForSign, signType, keySecret, params.Signature, userInfo)
+
+	return nil, err
+}
+
+func verifySiganature(strForSign, signType, keySecret, requestSignature string,
+	userInfo userInfo) error {
 	switch signType {
 	case "md5":
 		signature, err := generateSign(strForSign, keySecret, signType)
 		if err != nil {
-			return nil, err
+			return err
 		}
-		if params.Signature != signature {
-			return nil, errors.New("Signature invalid")
+		if requestSignature != signature {
+			return errors.New("Signature invalid")
 		}
 	case "aes":
-		srcStr, err := AESDecrypt(params.Signature, keySecret)
+		srcStr, err := AESDecrypt(requestSignature, keySecret)
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		if srcStr != strForSign {
-			return nil, errors.New("Signature invalid")
+			return errors.New("Signature invalid")
 		}
 	case "rsa":
-		srcStr, err := DecryptByPrivate(params.Signature, userInfo.RSA.Private)
+		srcStr, err := DecryptByPrivate(requestSignature, userInfo.RSA.Private)
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		if srcStr != strForSign {
-			return nil, errors.New("Signature invalid")
+			return errors.New("Signature invalid")
 		}
 	case "hmac_md5", "hmac_sha1", "hmac_sha256":
 		signature, err := generateSign(strForSign, keySecret, signType)
 		if err != nil {
-			return nil, err
+			return err
 		}
 
-		if params.Signature != signature {
-			return nil, errors.New("Signature invalid")
+		if requestSignature != signature {
+			return errors.New("Signature invalid")
 		}
 	default:
-		return nil, errors.New("Signature encrypt type invalid")
+		return errors.New("Signature encrypt type invalid")
 	}
 
-	return nil, nil
+	return nil
+}
+
+func getKeySecret(keyID, signType string, userInfo userInfo) (string, error) {
+	keySecret := ""
+	switch signType {
+	case "md5":
+		keySecret = userInfo.MD5
+	case "aes":
+		keySecret = userInfo.AES
+	case "rsa":
+		keySecret = userInfo.RSA.Public
+	case "hmac_md5", "hmac_sha1", "hmac_sha256":
+		keySecret = userInfo.Hmac
+	}
+
+	return keySecret, nil
 }
 
 func createStrForSign(c *gin.Context, reqParamsMap url.Values) string {
