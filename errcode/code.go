@@ -38,51 +38,59 @@ var (
 
 	// follows are error responses of client-side
 
+	// ValidationError params, queries, form datas validation
 	ValidationError = &ErrCode{
 		Status:  http.StatusBadRequest,
 		Code:    "ValidationError",
 		Message: "%v",
 	}
 
+	// UserNotFoundError user not found
 	UserNotFoundError = &ErrCode{
 		Status:  http.StatusBadRequest,
 		Code:    "UserNotFound",
 		Message: "The user is not found.",
 	}
 
+	// PasswordIncorrectError password of user is wrong
 	PasswordIncorrectError = &ErrCode{
 		Status:  http.StatusBadRequest,
 		Code:    "PasswordIncorrect",
 		Message: "The password is incorrect.",
 	}
 
+	// TokenInvalidError The token carried by the request is invalid.
 	TokenInvalidError = &ErrCode{
 		Status:  http.StatusUnauthorized,
 		Code:    "TokenInvalid",
 		Message: "%v",
 	}
 
+	// APISignError The signature carried by the request is invalid.
 	APISignError = &ErrCode{
 		Status:  http.StatusUnauthorized,
 		Code:    "SignatureInvalid",
 		Message: "%v",
 	}
 
+	// AccessForbiddentError The client ip or the server api is disallowed to access.
 	AccessForbiddenError = &ErrCode{
 		Status:  http.StatusForbidden,
 		Code:    "AccessForbidden",
 		Message: "%s",
 	}
 
+	// RecordNotFoundError The data of user request not exists.
 	RecordNotFoundError = &ErrCode{
 		Status:  http.StatusBadRequest,
 		Code:    "RecordNotFound",
 		Message: "Record not found.",
 	}
 
+	// TooManyRequestError The client ip access frequency exceeds limit.
 	TooManyRequestError = &ErrCode{
 		Status:  http.StatusTooManyRequests,
 		Code:    "TooManyRequest",
-		Message: "too many request.",
+		Message: "Too many request.",
 	}
 )

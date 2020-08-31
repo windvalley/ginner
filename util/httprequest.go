@@ -64,7 +64,7 @@ func PostWithUrlencoded(api string, payload url.Values) (io.ReadCloser, error) {
 	return res.Body, err
 }
 
-// PostWithFormdata post with body of form-data, and get reponse body.
+// PostWithFormdata post with body of form-data, and get response body.
 //     e.g. postData := map[string]string{"key":"value"}
 func PostWithFormdata(
 	url string,
