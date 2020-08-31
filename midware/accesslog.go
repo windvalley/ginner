@@ -66,10 +66,15 @@ func AccessLogger() gin.HandlerFunc {
 			requestID = ""
 		}
 
+		requestURI := c.Request.URL.Path
+		if c.Request.URL.RawQuery != "" {
+			requestURI = c.Request.URL.Path + "?" + c.Request.URL.RawQuery
+		}
+
 		logger.Log.WithFields(logrus.Fields{
 			"client_ip":       c.ClientIP(),
 			"request_method":  c.Request.Method,
-			"request_uri":     c.Request.URL.Path,
+			"request_uri":     requestURI,
 			"http_status":     c.Writer.Status(),
 			"latency_time":    latencyTime,
 			"request_proto":   c.Request.Proto,
