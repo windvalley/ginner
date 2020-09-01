@@ -14,6 +14,7 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 
 	"use-gin/config"
+	_ "use-gin/docs" // for swagger
 	"use-gin/logger"
 	"use-gin/midware"
 )
@@ -65,7 +66,8 @@ func Group() {
 		// and we can open profile001.svg on browser by double clicking it.
 		pprof.Register(router)
 
-		// NOTE: swag init first
+		// NOTE: execute `swag init` in project root dir after updating docs.
+		// path: /doc/index.html
 		router.GET("/doc/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 

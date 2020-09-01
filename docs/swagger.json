@@ -1,0 +1,19 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Using Go Gin to develop high quality applications(Web API) efficiently.",
+        "title": "Use-Gin API",
+        "contact": {
+            "name": "Windvalley",
+            "email": "i@sre.im"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://github.com/windvalley/use-gin/blob/master/LICENSE"
+        },
+        "version": "0.1.0"
+    },
+    "host": "use-gin.sre.im:8000",
+    "basePath": "/api",
+    "paths": {}
+}

@@ -1,0 +1,14 @@
+basePath: /api
+host: use-gin.sre.im:8000
+info:
+  contact:
+    email: i@sre.im
+    name: Windvalley
+  description: Using Go Gin to develop high quality applications(Web API) efficiently.
+  license:
+    name: MIT
+    url: https://github.com/windvalley/use-gin/blob/master/LICENSE
+  title: Use-Gin API
+  version: 0.1.0
+paths: {}
+swagger: "2.0"
