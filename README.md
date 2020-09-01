@@ -36,10 +36,12 @@ Using Go `Gin` to develop high quality applications(Web API) efficiently.
     - [x] X-Request-Id
     - [x] Accesslog
     - [x] Global catch panic
-    - [x] IP Limiter
+    - [x] Limiter
+        - [x] Request rate limiter based on client ip
+        - [x] Global request limiter
     - [x] ACL
-        - [x] IP allow list
-        - [x] Server API allow list
+        - [x] IP allowlist
+        - [x] Server API allowlist
 - [x] Databases
     - [x] Relation Database
         - [x] MySQL

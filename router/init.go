@@ -41,6 +41,9 @@ func Group() {
 	router.Use(midware.AccessLogger())
 	router.Use(midware.ACL())
 	router.Use(midware.CORS())
+	router.Use(midware.GlobalTrafficLimiter(100000))
+	// requests/second per client IP
+	router.Use(midware.UserTrafficLimiter(100))
 
 	router.NoRoute(func(c *gin.Context) {
 		c.String(

@@ -31,9 +31,8 @@ func urls(router *gin.Engine) {
 
 	// user manage demo
 	g1 := router.Group("/v1/users")
-	g1.POST("", user.Create)          // user register request can not use jwt
-	g1.Use(midware.JWT())             // use jwt
-	g1.Use(midware.TrafficLimit(100)) // limit 100 requests/second per source IP
+	g1.POST("", user.Create) // user register request can not use jwt
+	g1.Use(midware.JWT())    // use jwt
 	{
 		g1.GET("/:username", user.GetUser)
 	}
