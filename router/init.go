@@ -55,9 +55,9 @@ func Group() {
 	})
 
 	if runmode == "debug" {
-		// Usage:
-		// Follow command will be duration 30s,
-		// and we can request the url that we want to pprof during this time.
+		// pprof usage:
+		// Follow command will be duration for 30 seconds by default,
+		// and we can benchmark the url that we want to pprof during this time.
 		// go tool pprof localhost:8000/debug/pprof/profile
 		// (pprof) help
 		// (pprof) top 20
