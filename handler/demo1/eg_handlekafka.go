@@ -51,7 +51,7 @@ func (h consumeHandler) ConsumeClaim(
 
 		var ct consumeTask
 		if err := ffjson.Unmarshal(v.Value, &ct); err != nil {
-			logger.Log.Errorf("kafka message unmarshal: %s, error: %v", v, err)
+			logger.Log.Errorf("kafka message unmarshal: %v, error: %v", v, err)
 			continue
 		}
 		logger.Log.Infof(
