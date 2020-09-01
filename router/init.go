@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	"github.com/fvbock/endless"
+	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
@@ -53,6 +54,17 @@ func Group() {
 	})
 
 	if runmode == "debug" {
+		// Usage:
+		// Follow command will be duration 30s,
+		// and we can request the url that we want to pprof during this time.
+		// go tool pprof localhost:8000/debug/pprof/profile
+		// (pprof) help
+		// (pprof) top 20
+		// (pprof) svg
+		// Subcommand svg generated report in profile001.svg in current dir,
+		// and we can open profile001.svg on browser by double clicking it.
+		pprof.Register(router)
+
 		// NOTE: swag init first
 		router.GET("/doc/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
@@ -65,10 +77,12 @@ func Group() {
 	//}
 
 	// graceful restart or shutdown server
-	server := endless.NewServer(config.Conf().ServerPort, router)
+	serverPort := config.Conf().ServerPort
+	server := endless.NewServer(serverPort, router)
 	server.BeforeBegin = func(add string) {
 		pid := syscall.Getpid()
 		logger.Log.Infof("current pid is %d", pid)
+		logger.Log.Infof("server port is %s", serverPort)
 		if err := createPidFile(pid); err != nil {
 			logger.Log.Fatalf("create pid file failed: %v", err)
 		}
