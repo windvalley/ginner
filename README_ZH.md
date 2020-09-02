@@ -67,6 +67,12 @@
 
 ## 项目部署
 
+首先将当前项目名称`use-gin`, 改成你自己的项目名称:
+```bash
+# 执行完该脚本后, 当前Go项目的package名称将变更为your-project-name
+./change_project_name.sh your-project-name
+```
+
 ### 常规方式
 ```bash
 ./build.sh
@@ -81,13 +87,13 @@ export RUNENV=prod
 
 ### 容器方式
 ```bash
-docker build -t use-gin .
+docker build -t your-project-name .
 
 # dev
-docker container run --name use-gin -p80:8000 -d use-gin
+docker run --name your-project-name -p80:8000 -d your-project-name
 
 # production
-docker container run --name use-gin -p80:8000 -d -e RUNENV=prod use-gin
+docker run --name your-project-name -p80:8000 -d -e RUNENV=prod your-project-name
 ```
 
 ## 授权许可

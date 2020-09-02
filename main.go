@@ -55,8 +55,8 @@ func main() {
 	//defer influxdb.Close()
 
 	// kafka
-	//kafka.InitKafkaConsumer()
-	//kafka.InitKafkaProducer()
+	//kafka.InitConsumer()
+	//kafka.InitProducer()
 
 	router.Group()
 }

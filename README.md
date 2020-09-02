@@ -69,6 +69,12 @@ Using Go `Gin` to develop high quality applications(Web API) efficiently.
 
 ## Deployment
 
+Change project name first:
+```bash
+# This will be change use-gin(current package name) to your own name.
+./change_project_name.sh your-project-name
+```
+
 ### Normal
 ```bash
 ./build.sh
@@ -83,13 +89,13 @@ export RUNENV=prod
 
 ### Docker
 ```bash
-docker build -t use-gin .
+docker build -t your-project-name .
 
 # dev
-docker container run --name use-gin -p80:8000 -d use-gin
+docker run --name your-project-name -p80:8000 -d your-project-name
 
 # production
-docker container run --name use-gin -p80:8000 -d -e RUNENV=prod use-gin
+docker run --name your-project-name -p80:8000 -d -e RUNENV=prod your-project-name
 ```
 
 ## License
