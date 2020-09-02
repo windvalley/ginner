@@ -32,6 +32,7 @@ Using Go `Gin` to develop high quality applications(Web API) efficiently.
         - [x] Md5
         - [x] AES
         - [x] RSA
+    - [x] Basic Auth
     - [x] CORS
     - [x] X-Request-Id
     - [x] Accesslog
@@ -61,9 +62,9 @@ Using Go `Gin` to develop high quality applications(Web API) efficiently.
 - [x] Crontab: cron
 - [x] Go Cache: cache2go
 - [x] Utils: util
-    - [x] processlock, for avoiding errors caused by repeated execution
+    - [x] processlock: avoiding errors caused by repeated execution
     - [x] gomail
-    - [x] pagination
+    - [x] paginate
     - [x] httprequest
 
 ## Deployment
