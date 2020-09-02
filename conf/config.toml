@@ -25,19 +25,24 @@ jwt_max_lifetime = 600  # for jwt token that user generate
 # seconds, for api signature, considering the time gap between client and server
 apisign_lifetime = 600
 
-[mysql]
-dbtype = "mysql"  # mysql/mssql/postgres/sqlite3
-address = "127.0.0.1:3306"
-dbname = "demo"  # create the database manually
-user = "sre"
-password = "sre.im"
+[rdbs]
+    [rdbs.mysql]
+    dbtype = "mysql"
+    address = "localhost:3306"
+    dbname = "demo"  # NOTE: create the database manually
+    user = "sre"
+    password = "sre.im"
+    max_idle_conns = 10
+    max_open_conns = 100
 
-[postgresql]
-dbtype = "postgres"
-address = "127.0.0.1:5432"
-dbname = "demo"
-user = "sre"
-password = "sre.im"
+    [rdbs.postgresql]
+    dbtype = "postgres"
+    address = "127.0.0.1:5432"
+    dbname = "demo"
+    user = "sre"
+    password = "sre.im"
+    max_idle_conns = 10
+    max_open_conns = 100
 
 [kafka]
 brokers = [

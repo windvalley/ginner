@@ -10,8 +10,7 @@ type GlobalConfig struct {
 	Log          log
 	Mail         mail
 	Auth         auth
-	MySQL        mysql
-	PostgreSQL   postgreSQL
+	RDBs         map[string]rdb
 	Kafka        kafka
 	Influxdb     influxdb
 	Redis        redis
@@ -41,20 +40,14 @@ type auth struct {
 	APISignLifetime int64  `toml:"apisign_lifetime"`
 }
 
-type mysql struct {
-	DBType   string
-	Address  string
-	DBName   string
-	User     string
-	Password string
-}
-
-type postgreSQL struct {
-	DBType   string
-	Address  string
-	DBName   string
-	User     string
-	Password string
+type rdb struct {
+	DBType       string
+	Address      string
+	DBName       string
+	User         string
+	Password     string
+	MaxIdleConns int `toml:"max_idle_conns"`
+	MaxOpenConns int `toml:"max_open_conns"`
 }
 
 type kafka struct {

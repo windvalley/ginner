@@ -40,28 +40,35 @@ func Close() {
 
 // GetMySQL get db instance of mysql
 func GetMySQL() *gorm.DB {
-	dbtype := config.Conf().MySQL.DBType
-	address := config.Conf().MySQL.Address
-	dbname := config.Conf().MySQL.DBName
-	user := config.Conf().MySQL.User
-	password := config.Conf().MySQL.Password
+	dbtype := config.Conf().RDBs["mysql"].DBType
+	address := config.Conf().RDBs["mysql"].Address
+	dbname := config.Conf().RDBs["mysql"].DBName
+	user := config.Conf().RDBs["mysql"].User
+	password := config.Conf().RDBs["mysql"].Password
+	maxIdleConns := config.Conf().RDBs["mysql"].MaxIdleConns
+	maxOpenConns := config.Conf().RDBs["mysql"].MaxOpenConns
 
-	return Connect(dbtype, user, password, address, dbname)
+	return Connect(dbtype, user, password, address, dbname,
+		maxIdleConns, maxOpenConns)
 }
 
 // GetPostgreSQL get db instance of postgresql
 func GetPostgreSQL() *gorm.DB {
-	dbtype := config.Conf().PostgreSQL.DBType
-	address := config.Conf().PostgreSQL.Address
-	dbname := config.Conf().PostgreSQL.DBName
-	user := config.Conf().PostgreSQL.User
-	password := config.Conf().PostgreSQL.Password
+	dbtype := config.Conf().RDBs["postgresql"].DBType
+	address := config.Conf().RDBs["postgresql"].Address
+	dbname := config.Conf().RDBs["postgresql"].DBName
+	user := config.Conf().RDBs["postgresql"].User
+	password := config.Conf().RDBs["postgresql"].Password
+	maxIdleConns := config.Conf().RDBs["postgresql"].MaxIdleConns
+	maxOpenConns := config.Conf().RDBs["postgresql"].MaxOpenConns
 
-	return Connect(dbtype, user, password, address, dbname)
+	return Connect(dbtype, user, password, address, dbname,
+		maxIdleConns, maxOpenConns)
 }
 
 // Connect relation db connect
-func Connect(dbtype, username, password, address, dbname string) *gorm.DB {
+func Connect(dbtype, username, password, address, dbname string,
+	maxIdleConns, maxOpenConns int) *gorm.DB {
 	db, err := gorm.Open(dbtype,
 		fmt.Sprintf("%s:%s@(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 			username,
@@ -77,8 +84,8 @@ func Connect(dbtype, username, password, address, dbname string) *gorm.DB {
 		db.LogMode(true)
 	}
 	db.SingularTable(true)
-	db.DB().SetMaxIdleConns(10)
-	db.DB().SetMaxOpenConns(100)
+	db.DB().SetMaxIdleConns(maxIdleConns)
+	db.DB().SetMaxOpenConns(maxIdleConns)
 
 	return db
 }
