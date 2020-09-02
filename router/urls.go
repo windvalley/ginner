@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"use-gin/handler/demo1"
+	"use-gin/handler/demo"
 	"use-gin/handler/signdemo"
 	"use-gin/handler/user"
 	"use-gin/midware"
@@ -17,7 +17,7 @@ func urls(router *gin.Engine) {
 	// i.e.: request path: /s/js/xxx.js vs real path: html/statics/js/xxx.js
 	router.Static("s", "html/statics")
 
-	// for monitor the server
+	// For monitor the server
 	router.GET("/status", func(c *gin.Context) {
 		c.String(http.StatusOK, "ok")
 	})
@@ -25,11 +25,11 @@ func urls(router *gin.Engine) {
 		c.String(http.StatusOK, "pong")
 	})
 
-	// get jwt token
+	// Login, and get jwt token
 	router.POST("/login", user.Login)
 	router.GET("/login", user.Login)
 
-	// user manage demo
+	// User manage demo
 	g1 := router.Group("/v1/users")
 	g1.POST("", user.Create) // user register request can not use jwt
 	g1.Use(midware.JWT())    // use jwt
@@ -37,7 +37,7 @@ func urls(router *gin.Engine) {
 		g1.GET("/:username", user.GetUser)
 	}
 
-	// api signature demo
+	// API signature demo
 	g2 := router.Group("/v1/signdemo")
 	//g2.Use(midware.Md5Sign())
 	//g2.Use(midware.AESSign())
@@ -45,7 +45,6 @@ func urls(router *gin.Engine) {
 	//g2.Use(midware.HmacMd5Sign())
 	//g2.Use(midware.HmacSha1Sign())
 	//g2.Use(midware.HmacSha256Sign())
-
 	// NOTE: need to issue appKey and appSecret to users in advance
 	g2.Use(midware.JWT())
 	{
@@ -53,12 +52,22 @@ func urls(router *gin.Engine) {
 		g2.POST("/hello", signdemo.Hello)
 	}
 
-	// another demo
-	g3 := router.Group("/v1/demo1")
-	g3.Use(midware.JWT())
+	// Basic auth demo
+	g3 := router.Group("/v1")
+	// If necessary, we could get username in handler function by follows code line:
+	// user := c.MustGet(gin.AuthUserKey).(string)
+	g3.Use(gin.BasicAuth(gin.Accounts{
+		"foo":   "bar",
+		"admin": "123456",
+	}))
 	{
-		g3.GET("/eg-handlekafka", demo1.HandleKafkaDemo)
-		g3.POST("/eg-handleinfluxdb", demo1.HandleInfluxdbDemo)
-		g3.GET("/hello", demo1.HelloWorld)
+		g3.GET("/hello", demo.HelloWorld)
+	}
+
+	// handle dbs demo
+	g4 := router.Group("/v1")
+	{
+		g4.GET("/eg-handlekafka", demo.HandleKafkaDemo)
+		g4.POST("/eg-handleinfluxdb", demo.HandleInfluxdbDemo)
 	}
 }

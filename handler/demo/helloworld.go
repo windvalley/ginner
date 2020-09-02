@@ -1,4 +1,4 @@
-package demo1
+package demo
 
 import (
 	"github.com/gin-gonic/gin"
@@ -8,7 +8,9 @@ import (
 
 // HelloWorld a handler demo
 func HelloWorld(c *gin.Context) {
-	handler.SendResponse(c, nil, "Hello world!")
+	user := c.MustGet(gin.AuthUserKey).(string)
+
+	handler.SendResponse(c, nil, user+", Hello world!")
 	//err := errcode.New(errcode.ArgsValueError, errors.New("a system error"))
 	//handler.SendResponse(c, err, nil)
 }
