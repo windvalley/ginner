@@ -5,7 +5,7 @@
 # or execute `export RUNENV=prod` first in production environment.
 #
 # Or execute as:
-# RUNENV=<dev|prod> ./service.sh <start|stop|restart|status>
+# RUNENV=<dev|prod> ./service.sh <start|stop|reload|restart|status>
 
 
 [[ -z "$1" ]] || [[ "$#" != 1 ]] && {
@@ -20,35 +20,47 @@ PID=$(cat $PID_FILE 2>/dev/null)
 
 
 status(){
-    ps -ef | grep -v grep | awk '{print $2}' | grep -wq $PID &&
+    # shellcheck disable=SC2009
+    ps -ef | grep -v grep | awk '{print $2}' | grep -wq "$PID" &&
         echo "$BIN_NAME is running, pid $PID" ||
            echo "$BIN_NAME was stopped"
 }
 
+start(){
+    status | grep -q running && {
+        echo "error: $BIN_NAME is already running, do not start again."
+        exit 1
+    }
+    $PROJECT_PATH/$BIN_NAME &
+}
+
+stop(){
+    status | grep -q stopped && {
+        echo "error: $BIN_NAME was already stopped, no need to stop again."
+        exit 1
+    }
+    kill -SIGTERM "$PID" && echo "success: graceful stopped"
+}
+
+reload(){
+    status | grep -q stopped && {
+        echo "error: no $BIN_NAME process found, please start first."
+        exit 1
+    }
+    kill -SIGHUP "$PID" && echo "success: graceful reload"
+}
+
+
 case $1 in
-    start)
-        status | grep -q running && {
-            echo "error: $BIN_NAME is already running, do not start again."
-            exit 1
-        }
-        $PROJECT_PATH/$BIN_NAME &
+    start) start
         ;;
-    stop)
-        status | grep -q stopped && {
-            echo "error: $BIN_NAME was already stopped, no need to stop again."
-            exit 1
-        }
-        kill -SIGTERM $PID && echo "success: graceful stopped"
+    stop) stop
         ;;
-    restart)
-        status | grep -q stopped && {
-            echo "error: no $BIN_NAME process found, please start first."
-            exit 1
-        }
-        kill -SIGHUP $PID && echo "success: graceful restart"
+    reload) reload
         ;;
-    status)
-        status
+    restart) stop && start
+        ;;
+    status) status
         ;;
 esac
 
