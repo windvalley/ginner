@@ -54,7 +54,7 @@ func (h consumeHandler) ConsumeClaim(
 			logger.Log.Errorf("kafka message unmarshal: %v, error: %v", v, err)
 			continue
 		}
-		logger.Log.Infof(
+		logger.Log.Debugf(
 			"received from %s: %+v",
 			cfg.Conf().Kafka.ConsumerTopic,
 			ct,
@@ -109,7 +109,7 @@ func addTaskToTopic(task produceTask) error {
 		Topic: topic,
 		Value: sarama.StringEncoder(reqStr),
 	}
-	logger.Log.Infof("put task into topic %s, task: %s", topic, reqStr)
+	logger.Log.Debugf("put task into topic %s, task: %s", topic, reqStr)
 
 	kafka.Producer.Input() <- msg
 	return nil

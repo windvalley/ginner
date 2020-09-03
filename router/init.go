@@ -83,8 +83,8 @@ func Group() {
 	server := endless.NewServer(serverPort, router)
 	server.BeforeBegin = func(add string) {
 		pid := syscall.Getpid()
-		logger.Log.Infof("current pid is %d", pid)
-		logger.Log.Infof("server port is %s", serverPort)
+		logger.Log.Debugf("current pid is %d", pid)
+		logger.Log.Debugf("server port is %s", serverPort)
 		if err := createPidFile(pid); err != nil {
 			logger.Log.Fatalf("create pid file failed: %v", err)
 		}
