@@ -8,16 +8,18 @@
 # RUNENV=<dev|prod> ./service.sh <start|stop|reload|restart|status>
 
 
-[[ -z "$1" ]] || [[ "$#" != 1 ]] && {
-    echo "Usage: $0 <start|stop|restart|status>"
-}
-
-
 PROJECT_PATH="./"
 BIN_NAME="use-gin"
 PID_FILE=$PROJECT_PATH/logs/${BIN_NAME}.pid
 PID=$(cat $PID_FILE 2>/dev/null)
 
+
+usage(){
+    [[ -z "$1" ]] || [[ "$#" != 1 ]] && {
+        echo "Usage: $0 <start|stop|reload|restart|status>"
+        exit 1
+    }
+}
 
 status(){
     # shellcheck disable=SC2009
@@ -50,19 +52,24 @@ reload(){
     kill -SIGHUP "$PID" && echo "success: graceful reload"
 }
 
+main(){
+    usage "$@"
 
-case $1 in
-    start) start
-        ;;
-    stop) stop
-        ;;
-    reload) reload
-        ;;
-    restart) stop && start
-        ;;
-    status) status
-        ;;
-esac
+    case $1 in
+        start) start
+            ;;
+        stop) stop
+            ;;
+        reload) reload
+            ;;
+        restart) stop && start
+            ;;
+        status) status
+            ;;
+        *) usage
+            ;;
+    esac
+}
 
 
-exit 0
+main "$@"
