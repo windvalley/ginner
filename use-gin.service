@@ -1,0 +1,16 @@
+[Unit]
+Description=Use Gin
+Documentation=
+After=network.target
+Wants=
+
+[Service]
+Type=simple
+EnvironmentFile=/your-project-path/conf/systemd.ENV
+ExecStart=/your-project-path/use-gin
+KillMode=process
+Restart=on-failure
+RestartSec=1s
+
+[Install]
+WantedBy=multi-user.target

@@ -16,5 +16,8 @@ find . -type f -name "*.go" -o -name "go.mod" |
 
 gsed -i "/^BIN_NAME=/s/${CURRENT_PROJECT_NAME}/${NEW_PROJECT_NAME}/" ./service.sh
 gsed -i "s/${CURRENT_PROJECT_NAME}/${NEW_PROJECT_NAME}/g" \
-    ./Dockerfile ./conf/*.toml .gitignore supervisord.conf
+    ./Dockerfile ./conf/*.toml .gitignore supervisord.conf \
+    "${CURRENT_PROJECT_NAME}".service
+
+mv "${CURRENT_PROJECT_NAME}".service "${NEW_PROJECT_NAME}".service
 

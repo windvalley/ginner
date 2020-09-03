@@ -5,3 +5,4 @@ logs/
 use-gin
 use-gin_darwin_amd64
 use-gin_linux_amd64
+rsync_repo.sh
