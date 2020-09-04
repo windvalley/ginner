@@ -62,7 +62,7 @@ main(){
             ;;
         reload) reload
             ;;
-        restart) stop && start
+        restart) stop && sleep 2 && start
             ;;
         status) status
             ;;
