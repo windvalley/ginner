@@ -7,7 +7,7 @@ COPY . /src
 RUN go build -o use-gin
 
 
-FROM alpine
+FROM alpine:3
 
 ENV RUNENV dev
 WORKDIR /app
