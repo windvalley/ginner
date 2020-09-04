@@ -80,19 +80,34 @@ func Group() {
 
 	// graceful restart or shutdown server
 	serverPort := config.Conf().ServerPort
-	server := endless.NewServer(serverPort, router)
-	server.BeforeBegin = func(add string) {
-		pid := syscall.Getpid()
-		logger.Log.Debugf("current pid is %d", pid)
-		logger.Log.Debugf("server port is %s", serverPort)
-		if err := createPidFile(pid); err != nil {
-			logger.Log.Fatalf("create pid file failed: %v", err)
-		}
+	if config.Conf().EnableHTTPS {
+		serverPort = config.Conf().HTTPS.ServerPort
 	}
 
-	err := server.ListenAndServe()
-	if err != nil {
-		logger.Log.Warnf("%+v", err)
+	server := endless.NewServer(serverPort, router)
+	server.BeforeBegin = func(add string) {
+		beforeServerStart(serverPort)
+	}
+
+	if config.Conf().EnableHTTPS {
+		beforeServerStart(serverPort)
+		if err := server.ListenAndServeTLS(
+			config.Conf().HTTPS.Cert, config.Conf().HTTPS.Key); err != nil {
+			logger.Log.Warn(err)
+		}
+	} else {
+		if err := server.ListenAndServe(); err != nil {
+			logger.Log.Warn(err)
+		}
+	}
+}
+
+func beforeServerStart(serverPort string) {
+	pid := syscall.Getpid()
+	logger.Log.Debugf("current pid is %d", pid)
+	logger.Log.Debugf("server port is %s", serverPort)
+	if err := createPidFile(pid); err != nil {
+		logger.Log.Fatalf("create pid file failed: %v", err)
 	}
 }
 

@@ -6,7 +6,9 @@ import "time"
 type GlobalConfig struct {
 	AppName      string `toml:"app_name"`
 	ServerPort   string `toml:"server_port"`
+	EnableHTTPS  bool   `toml:"enable_https"`
 	Runmode      string
+	HTTPS        https
 	Log          log
 	Mail         mail
 	Auth         auth
@@ -16,6 +18,12 @@ type GlobalConfig struct {
 	Redis        redis
 	RedisCluster redisCluster `toml:"redis_cluster"`
 	ACL          acl
+}
+
+type https struct {
+	ServerPort string `toml:"server_port"`
+	Cert       string
+	Key        string
 }
 
 type log struct {

@@ -1,6 +1,13 @@
 app_name = "use-gin"
 server_port = ":8000"
-runmode = "release" # debug/release/test
+# If true, the server will be listening on https.server_port
+enable_https = true
+runmode = "debug" # debug/release/test
+
+[https]
+server_port = ":8443"
+cert = "conf/ssl/cert.pem"
+key = "conf/ssl/key.pem"
 
 [log]
 dirname = "logs"
@@ -68,6 +75,16 @@ password = ""
 max_idle = 30
 max_active = 30
 idle_timeout = 180
+
+[redis_cluster]
+nodes = [
+    "10.10.10.1:7001",
+    "10.10.10.2:7001",
+    "10.10.10.3:7001"
+]
+secret = ""
+pool_size = 20
+pool_timeout = 60
 
 # disable this feature when the item value is []
 [acl]
