@@ -1,4 +1,4 @@
-# Use Gin [![rcard](https://goreportcard.com/badge/github.com/windvalley/use-gin)](https://goreportcard.com/report/github.com/windvalley/use-gin) [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://godoc.org/github.com/windvalley/use-gin) [![License](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](LICENSE)
+# Use Gin [![rcard](https://goreportcard.com/badge/github.com/windvalley/use-gin)](https://goreportcard.com/report/github.com/windvalley/use-gin) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/38d3eff769c14fecb01e91160e143727)](https://www.codacy.com/manual/windvalley/use-gin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=windvalley/use-gin&amp;utm_campaign=Badge_Grade) [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://godoc.org/github.com/windvalley/use-gin) [![License](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](LICENSE)
 
 Using Go `Gin` to develop high quality applications(Web API) efficiently.
 
