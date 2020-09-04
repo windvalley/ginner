@@ -1,6 +1,7 @@
 package util
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/json"
 	"io"
@@ -9,6 +10,12 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"use-gin/logger"
+
+	"golang.org/x/net/html/charset"
+	"golang.org/x/text/encoding"
+	"golang.org/x/text/encoding/unicode"
+	"golang.org/x/text/transform"
 
 	"github.com/pquerna/ffjson/ffjson"
 )
@@ -125,4 +132,23 @@ func GetBodyStructData(
 	}
 
 	return structData, nil
+}
+
+// GetUTF8Reader transform others encoding reader to utf8 reader.
+func GetUTF8Reader(resBody io.ReadCloser) io.Reader {
+	bodyReader := bufio.NewReader(resBody)
+	e := determineEncoding(bodyReader)
+	utf8Reader := transform.NewReader(bodyReader, e.NewDecoder())
+	return utf8Reader
+}
+
+func determineEncoding(r *bufio.Reader) encoding.Encoding {
+	bytes, err := r.Peek(1024)
+	if err != nil {
+		logger.Log.Warnf("determine encoding error: %v", err)
+		return unicode.UTF8
+	}
+
+	e, _, _ := charset.DetermineEncoding(bytes, "")
+	return e
 }
