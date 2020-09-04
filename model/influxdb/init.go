@@ -83,10 +83,8 @@ func NewBatchPoints() (client.BatchPoints, error) {
 //}
 //return nil
 func Write(bp client.BatchPoints) error {
-	if err := Client.Write(bp); err != nil {
-		return err
-	}
-	return nil
+	err := Client.Write(bp)
+	return err
 }
 
 // Query get data from influxdb

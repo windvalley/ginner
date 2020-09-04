@@ -35,10 +35,8 @@ func writeInfluxdb() error {
 	}
 	bp.AddPoint(pt)
 
-	if err := influxdb.Write(bp); err != nil {
-		return err
-	}
-	return nil
+	err = influxdb.Write(bp)
+	return err
 }
 
 func readInfluxdb() (*models.Row, error) {

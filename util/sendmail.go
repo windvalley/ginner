@@ -33,9 +33,6 @@ func SendMail(mailTo []string, subject string, body string) error {
 		config.Conf().Mail.Password,
 	)
 
-	if err := d.DialAndSend(m); err != nil {
-		return err
-	}
-
-	return nil
+	err := d.DialAndSend(m)
+	return err
 }
