@@ -20,16 +20,10 @@ var (
 // InitConsumer kafka consumer initialization
 func InitConsumer() {
 	var err error
-	config := sarama.NewConfig()
-	config.Net.KeepAlive = 10 * time.Second
-	config.Producer.Return.Successes = true
-	config.Producer.Timeout = 20 * time.Second
-	config.Version = sarama.V2_0_0_0
-
 	Consumer, err = sarama.NewConsumerGroup(
 		cfg.Conf().Kafka.Brokers,
 		cfg.Conf().Kafka.ConsumerGroup,
-		config,
+		getConfig(),
 	)
 	if err != nil {
 		panic(err)
@@ -39,12 +33,10 @@ func InitConsumer() {
 // InitProducer kafka producer initialization
 func InitProducer() {
 	var err error
-	config := sarama.NewConfig()
-	config.Net.KeepAlive = 10 * time.Second
-	config.Producer.Return.Successes = true
-	config.Producer.Timeout = 20 * time.Second
-
-	Producer, err = sarama.NewAsyncProducer(cfg.Conf().Kafka.Brokers, config)
+	Producer, err = sarama.NewAsyncProducer(
+		cfg.Conf().Kafka.Brokers,
+		getConfig(),
+	)
 	if err != nil {
 		panic(err)
 	}
@@ -62,6 +54,15 @@ func InitProducer() {
 			}
 		}
 	}(Producer)
+}
+
+func getConfig() *sarama.Config {
+	config := sarama.NewConfig()
+	config.Net.KeepAlive = 10 * time.Second
+	config.Producer.Return.Successes = true
+	config.Producer.Timeout = 20 * time.Second
+	config.Version = sarama.V2_0_0_0
+	return config
 }
 
 // ConsumeTopics start to consume the topics
