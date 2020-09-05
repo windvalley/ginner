@@ -44,7 +44,7 @@ func AccessLogger() gin.HandlerFunc {
 
 		var responseCode string
 		var responseMsg string
-		var responseData interface{}
+		//var responseData interface{}
 
 		if responseBody != "" {
 			res := &handler.Response{}
@@ -52,7 +52,7 @@ func AccessLogger() gin.HandlerFunc {
 			if err == nil {
 				responseCode = res.Code
 				responseMsg = res.Message
-				responseData = res.Data
+				//responseData = res.Data
 			}
 		}
 
@@ -84,8 +84,8 @@ func AccessLogger() gin.HandlerFunc {
 			"request_id":      requestID,
 			"response_code":   responseCode,
 			"response_msg":    responseMsg,
-			"response_data":   responseData,
-			"reqponse_ua":     c.Request.UserAgent(),
+			//"response_data":   responseData,
+			"reqponse_ua": c.Request.UserAgent(),
 		}).Info("accesslog")
 	}
 }

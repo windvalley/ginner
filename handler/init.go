@@ -46,8 +46,8 @@ func SendResponse(c *gin.Context, err error, data interface{}) {
 			"request_id":      requestID,
 			"response_code":   code,
 			"response_msg":    message,
-			"response_data":   data,
-			"reqponse_ua":     c.Request.UserAgent(),
+			//"response_data":   data,
+			"reqponse_ua": c.Request.UserAgent(),
 		}).Error(sysErrMsg)
 	}
 }
