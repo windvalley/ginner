@@ -6,7 +6,6 @@ import "time"
 type GlobalConfig struct {
 	AppName      string `toml:"app_name"`
 	ServerPort   string `toml:"server_port"`
-	EnableHTTPS  bool   `toml:"enable_https"`
 	Runmode      string
 	HTTPS        https
 	Log          log
@@ -21,9 +20,9 @@ type GlobalConfig struct {
 }
 
 type https struct {
-	ServerPort string `toml:"server_port"`
-	Cert       string
-	Key        string
+	Enable bool
+	Cert   string
+	Key    string
 }
 
 type log struct {

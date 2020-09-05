@@ -73,23 +73,14 @@ func Group() {
 
 	urls(router)
 
-	// normal start server
-	//if err := router.Run(config.Conf().ServerPort); err != nil {
-	//logger.Log.Errorf("router started failed: %+v", err)
-	//}
-
 	// graceful restart or shutdown server
 	serverPort := config.Conf().ServerPort
-	if config.Conf().EnableHTTPS {
-		serverPort = config.Conf().HTTPS.ServerPort
-	}
-
 	server := endless.NewServer(serverPort, router)
 	server.BeforeBegin = func(add string) {
 		beforeServerStart(serverPort)
 	}
 
-	if config.Conf().EnableHTTPS {
+	if config.Conf().HTTPS.Enable {
 		beforeServerStart(serverPort)
 		if err := server.ListenAndServeTLS(
 			config.Conf().HTTPS.Cert, config.Conf().HTTPS.Key); err != nil {

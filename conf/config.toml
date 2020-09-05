@@ -1,11 +1,9 @@
 app_name = "use-gin"
-server_port = ":8000"
-# If true, the server will be listening on https.server_port
-enable_https = true
+server_port = ":8443"
 runmode = "debug" # debug/release/test
 
 [https]
-server_port = ":8443"
+enable = true
 cert = "conf/ssl/cert.pem"
 key = "conf/ssl/key.pem"
 
