@@ -83,23 +83,37 @@
 ```bash
 ./build.sh
 
-# dev
+# 开发环境
 export RUNENV=dev
-# production
+# 生产环境
 export RUNENV=prod
 
+# 启动服务
 ./service.sh start
+
+# 重启服务
+./service.sh restart
+
+# 优雅重启服务
+./service.sh reload
+
+# 优雅关闭服务
+./service.sh stop
+
+# 查看当前服务运行状态
+./service.sh status
 ```
 
 ### 容器方式
 
 ```bash
+# 创建项目的容器镜像
 docker build -t your-project-name .
 
-# dev
+# 开发环境下运行容器
 docker run --name your-project-name -p80:8000 -d your-project-name
 
-# production
+# 生产环境下运行容器
 docker run --name your-project-name -p80:8000 -d -e RUNENV=prod your-project-name
 ```
 
@@ -128,7 +142,7 @@ sudo systemctl start your-project-name
 # 重启服务
 sudo systemctl restart your-project-name
 
-# 关闭服务
+# 优雅关闭服务
 sudo systemctl stop your-project-name
 
 # 查看当前服务运行状态
@@ -142,13 +156,13 @@ sudo systemctl status your-project-name -l
 ```bash
 sudo cp supervisord.conf /etc/
 
-# 重启supervisord, 加载新配置
+# 重启supervisord来加载新配置
 sudo supervisorctl reload
 
 # 启动服务
 sudo supervisorctl start your-project-name
 
-# 停止服务
+# 优雅关闭服务
 sudo supervisorctl stop your-project-name
 
 # 重启服务

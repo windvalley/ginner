@@ -90,12 +90,26 @@ export RUNENV=dev
 # production
 export RUNENV=prod
 
+# start
 ./service.sh start
+
+# restart
+./service.sh restart
+
+# graceful reload
+./service.sh reload
+
+# graceful stop
+./service.sh stop
+
+# check status
+./service.sh status
 ```
 
 ### Docker
 
 ```bash
+# build image
 docker build -t your-project-name .
 
 # dev
@@ -146,7 +160,7 @@ sudo supervisorctl reload
 # start
 sudo supervisorctl start your-project-name
 
-# stop
+# graceful stop
 sudo supervisorctl stop your-project-name
 
 # restart
