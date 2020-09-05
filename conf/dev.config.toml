@@ -59,6 +59,7 @@ brokers = [
 producer_topic = ""
 consumer_topic = ""
 consumer_group = ""
+keepalive = 10
 
 [influxdb]
 address = "http://127.0.0.1:8086"

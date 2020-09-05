@@ -30,6 +30,7 @@ jwt_max_lifetime = 600  # for jwt token that user generate
 # seconds, for api signature, considering the time gap between client and server
 apisign_lifetime = 600
 
+# dbtype could be mysql/mssql/postgres/sqlite3
 [rdbs]
     [rdbs.mysql]
     dbtype = "mysql"
@@ -58,6 +59,7 @@ brokers = [
 producer_topic = ""
 consumer_topic = ""
 consumer_group = ""
+keepalive = 10
 
 [influxdb]
 address = "http://127.0.0.1:8086"

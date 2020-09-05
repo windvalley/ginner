@@ -62,6 +62,7 @@ type kafka struct {
 	ProducerTopic string `toml:"producer_topic"`
 	ConsumerTopic string `toml:"consumer_topic"`
 	ConsumerGroup string `toml:"consumer_group"`
+	Keepalive     time.Duration
 }
 
 type influxdb struct {

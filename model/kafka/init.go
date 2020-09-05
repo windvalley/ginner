@@ -58,9 +58,8 @@ func InitProducer() {
 
 func getConfig() *sarama.Config {
 	config := sarama.NewConfig()
-	config.Net.KeepAlive = 10 * time.Second
+	config.Net.KeepAlive = cfg.Conf().Kafka.Keepalive * time.Second
 	config.Producer.Return.Successes = true
-	config.Producer.Timeout = 20 * time.Second
 	config.Version = sarama.V2_0_0_0
 	return config
 }
