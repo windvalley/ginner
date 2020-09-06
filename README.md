@@ -48,6 +48,8 @@ Using Go `Gin` to develop high quality applications(Web API) efficiently.
     - [x] MssSQL
     - [x] PostgreSQL
     - [x] Sqlite
+  - [x] NoSQL
+    - [x] MongoDB
   - [x] Cache
     - [x] Redis
     - [x] RedisCluster

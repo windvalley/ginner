@@ -46,6 +46,8 @@
     - [x] `MssSQL`
     - [x] `PostgreSQL`
     - [x] `Sqlite`
+  - [x] NoSQL
+    - [x] `MongoDB`
   - [x] 缓存
     - [x] `Redis`
     - [x] `RedisCluster`
