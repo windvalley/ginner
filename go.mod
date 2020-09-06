@@ -24,8 +24,8 @@ require (
 	github.com/lib/pq v1.2.0 // indirect
 	github.com/muesli/cache2go v0.0.0-20200423001931-a100c5aac93f
 	github.com/onsi/ginkgo v1.14.0 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pquerna/ffjson v0.0.0-20190930134022-aa0246cd15f7
+	github.com/qiniu/qmgo v0.7.0
 	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/satori/go.uuid v1.2.1-0.20181028125025-b2ce2384e17b
@@ -34,10 +34,11 @@ require (
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.5.1
 	github.com/tebeka/strftime v0.1.5 // indirect
+	go.mongodb.org/mongo-driver v1.4.0
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 	golang.org/x/net v0.0.0-20200822124328-c89045814202
 	golang.org/x/sys v0.0.0-20200905004654-be1d3432aa8f // indirect
-	golang.org/x/text v0.3.2
+	golang.org/x/text v0.3.3
 	golang.org/x/time v0.0.0-20190308202827-9d24e82272b4
 	golang.org/x/tools v0.0.0-20200904185747-39188db58858 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect

@@ -12,6 +12,7 @@ type GlobalConfig struct {
 	Mail         mail
 	Auth         auth
 	RDBs         map[string]rdb
+	Mongo        mongo
 	Kafka        kafka
 	Influxdb     influxdb
 	Redis        redis
@@ -55,6 +56,13 @@ type rdb struct {
 	Password     string
 	MaxIdleConns int `toml:"max_idle_conns"`
 	MaxOpenConns int `toml:"max_open_conns"`
+}
+
+type mongo struct {
+	Address  string
+	DBName   string
+	Username string
+	Password string
 }
 
 type kafka struct {

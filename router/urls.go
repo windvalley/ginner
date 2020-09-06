@@ -69,5 +69,6 @@ func urls(router *gin.Engine) {
 	{
 		g4.GET("/eg-handlekafka", demo.HandleKafkaDemo)
 		g4.POST("/eg-handleinfluxdb", demo.HandleInfluxdbDemo)
+		g4.GET("/eg-handlemongodb", demo.HandleMongodbDemo)
 	}
 }

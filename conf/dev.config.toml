@@ -50,6 +50,12 @@ apisign_lifetime = 600
     max_idle_conns = 10
     max_open_conns = 100
 
+[mongo]
+address = "localhost:27017"
+dbname = "demo"
+username = ""
+password = ""
+
 [kafka]
 brokers = [
     "kafka01.sre.im:9092",

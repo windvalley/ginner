@@ -4,6 +4,7 @@ import (
 	"use-gin/config"
 	"use-gin/cron"
 	"use-gin/logger"
+	"use-gin/model/mongodb"
 	"use-gin/model/rdb"
 	"use-gin/model/redclus"
 	"use-gin/model/redis"
@@ -49,6 +50,9 @@ func main() {
 		&rdb.User{},
 	)
 	defer rdb.Close()
+
+	mongodb.Init()
+	defer mongodb.Close()
 
 	// influxdb
 	//influxdb.Init()
