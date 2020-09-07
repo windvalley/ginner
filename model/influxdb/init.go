@@ -21,7 +21,7 @@ func Init() {
 		Password: config.Conf().Influxdb.DBName,
 	})
 	if err != nil {
-		logger.Log.Errorf("connect influxdb error: %v", err)
+		logger.Log.Fatalf("connect influxdb failed: %v", err)
 	}
 }
 
