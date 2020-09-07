@@ -20,8 +20,8 @@ func RequestID() gin.HandlerFunc {
 			requestID = u4.String()
 		}
 
-		// NOTE: handler function can be get X-Request-Id by c.Get("X-Request-Id")
-		c.Set("X-Request-Id", requestID)
+		// NOTE: handler function can be get X-Request-Id by c.Get("requestID")
+		c.Set("requestID", requestID)
 
 		c.Writer.Header().Set("X-Request-Id", requestID)
 		c.Next()

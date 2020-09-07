@@ -2,6 +2,7 @@ package demo
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/Shopify/sarama"
@@ -41,21 +42,28 @@ func (h consumeHandler) ConsumeClaim(
 	_ sarama.ConsumerGroupSession,
 	claim sarama.ConsumerGroupClaim,
 ) error {
+	requestID, ok := h.c.Get("requestID")
+	if !ok {
+		requestID = "null"
+	}
+
 	for v := range claim.Messages() {
 		// do not crash when received the invalid topic messages.
 		defer func() {
 			if err := recover(); err != nil {
-				logger.Log.Errorf("meet up panic: %v", err)
+				logger.Log.Errorf("request_id: %s, meet up panic: %v", requestID, err)
 			}
 		}()
 
 		var ct consumeTask
 		if err := ffjson.Unmarshal(v.Value, &ct); err != nil {
-			logger.Log.Errorf("kafka message unmarshal: %v, error: %v", v, err)
+			logger.Log.Errorf(
+				"request_id: %s, kafka message unmarshal: %v, error: %v", requestID, v, err)
 			continue
 		}
 		logger.Log.Debugf(
-			"received from %s: %+v",
+			"request_id: %s, received from %s: %+v",
+			requestID,
 			cfg.Conf().Kafka.ConsumerTopic,
 			ct,
 		)
@@ -75,7 +83,7 @@ func (h consumeHandler) ConsumeClaim(
 func HandleKafkaDemo(c *gin.Context) {
 	// producer
 	produceTask := produceTask{}
-	if err := addTaskToTopic(produceTask); err != nil {
+	if err := addTaskToTopic(c, produceTask); err != nil {
 		err1 := errcode.New(errcode.InternalServerError, err)
 		handler.SendResponse(c, err1, nil)
 		return
@@ -97,11 +105,15 @@ func HandleKafkaDemo(c *gin.Context) {
 	)
 }
 
-func addTaskToTopic(task produceTask) error {
+func addTaskToTopic(c *gin.Context, task produceTask) error {
+	requestID, ok := c.Get("requestID")
+	if !ok {
+		requestID = "null"
+	}
+
 	reqStr, err := ffjson.Marshal(task)
 	if err != nil {
-		logger.Log.Errorf("task serialization error: %v", err)
-		return err
+		return fmt.Errorf("task serialization error: %v", err)
 	}
 
 	topic := cfg.Conf().Kafka.ProducerTopic
@@ -109,7 +121,8 @@ func addTaskToTopic(task produceTask) error {
 		Topic: topic,
 		Value: sarama.StringEncoder(reqStr),
 	}
-	logger.Log.Debugf("put task into topic %s, task: %s", topic, reqStr)
+	logger.Log.Debugf(
+		"request_id: %s, put task into topic %s, task: %s", requestID, topic, reqStr)
 
 	kafka.Producer.Input() <- msg
 	return nil
