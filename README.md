@@ -10,16 +10,16 @@ Using Go `Gin` to develop high quality applications(Web API) efficiently.
 - [x] Configuration
   - [x] toml
   - [x] Load config from command line parameters
-  - [x] Load from system environment variable RUNENV: `prod/dev`
-  - [x] If load config from CLI params failed, then load config from system environment variable RUNENV
+  - [x] Load config from system environment variable
+  - [x] If load config from CLI params failed, then load config from system environment variable
 - [x] Logger
-  - [x] Create `access.log` and `error.log`
-  - [x] Define log dir name, log save days, log rotate interval, log format(json/txt)
+  - [x] Separation of error log and access log
+  - [x] Customize log dirname, log save days, log rotate interval, log format(json/txt)
   - [x] When runmode is debug, log can also be output to screen
-- [x] Error code system, for central managing the error response messages
+- [x] Error code system: for central managing the error response messages
 - [x] Swagger
   - [x] Auto enable swagger when runmode is debug
-- [x] Middleware
+- [x] Middlewares
   - [x] JWT Authentication
     - [x] Login: get JWT token by username and password
     - [x] API Signature Authentication: user need to apply `appKey` and `appSecret` in advance
@@ -32,13 +32,13 @@ Using Go `Gin` to develop high quality applications(Web API) efficiently.
     - [x] RSA
   - [x] Basic Auth
   - [x] CORS
-  - [x] X-Request-Id
-  - [x] Accesslog
+  - [x] RequestID(TraceID)
+  - [x] Access log
   - [x] Global catch panic
   - [x] Pprof
   - [x] Limiter
     - [x] Request rate limiter based on client ip
-    - [x] Global request limiter
+    - [x] Global request rate limiter
   - [x] ACL
     - [x] IP allowlist
     - [x] Server API allowlist
@@ -60,12 +60,12 @@ Using Go `Gin` to develop high quality applications(Web API) efficiently.
 - [x] Subproject demo
   - [x] cmd/daemonprocess
 - [x] Crontab: cron
-- [x] Go Cache: cache2go
-- [x] Util
+- [x] Go cache: cache2go
+- [x] Utils
   - [x] processlock: avoiding errors caused by repeated execution
   - [x] gomail
   - [x] paginate
-  - [x] httprequest
+  - [x] http request
 - [x] Graceful restart or stop
 - [x] Deployment
   - [x] Dockerfile

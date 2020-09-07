@@ -30,7 +30,7 @@
     - [x] `RSA`非对称加密
   - [x] `Basic Auth`
   - [x] 跨域资源共享(`CORS`)
-  - [x] 请求唯一`ID`记录
+  - [x] 请求链路跟踪(`RequestID`)
   - [x] 访问日志
   - [x] 全局异常(`panic`)捕获
   - [x] `API`性能分析
