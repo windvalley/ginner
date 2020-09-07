@@ -26,7 +26,7 @@ func InitConsumer() {
 		getConfig(),
 	)
 	if err != nil {
-		panic(err)
+		logger.Log.Fatalf("init kafka consumer failed: %v", err)
 	}
 }
 
@@ -38,7 +38,7 @@ func InitProducer() {
 		getConfig(),
 	)
 	if err != nil {
-		panic(err)
+		logger.Log.Fatalf("init kafka producer failed: %v", err)
 	}
 
 	go func(Producer sarama.AsyncProducer) {
@@ -48,7 +48,7 @@ func InitProducer() {
 			select {
 			case err := <-errors:
 				if err != nil {
-					logger.Log.Errorf("kafka run failed:%#v", err)
+					logger.Log.Errorf("kafka producer error: %v", err)
 				}
 			case <-success:
 			}
@@ -80,8 +80,7 @@ func ConsumeTopics(
 			logger.Log.Errorf("task %v timeout", handler)
 			cancel()
 		default:
-			if err := Consumer.Consume(
-				ctx, topics, handler); err != nil {
+			if err := Consumer.Consume(ctx, topics, handler); err != nil {
 				logger.Log.Errorf("consume error: %v", err)
 			}
 		}
