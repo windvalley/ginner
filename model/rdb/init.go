@@ -30,6 +30,8 @@ func Init() {
 		MySQL: GetMySQL(),
 		//PostgreSQL: GetPostgreSQL(),
 	}
+
+	autoMigrateTables()
 }
 
 // Close close dbs connection

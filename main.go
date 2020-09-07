@@ -1,12 +1,14 @@
 package main
 
 import (
+	//"use-gin/model/influxdb"
+	//"use-gin/model/kafka"
+
 	"use-gin/config"
 	"use-gin/cron"
 	"use-gin/logger"
 	"use-gin/model/mongodb"
 	"use-gin/model/rdb"
-	"use-gin/model/redclus"
 	"use-gin/model/redis"
 	"use-gin/router"
 )
@@ -29,9 +31,9 @@ func init() {
 
 	cron.Init()
 
+	// cache
 	redis.Init()
-
-	redclus.Init()
+	//redclus.Init()
 }
 
 // @title Use-Gin API
@@ -46,11 +48,9 @@ func init() {
 func main() {
 	// relation db
 	rdb.Init()
-	rdb.DBs.MySQL.AutoMigrate(
-		&rdb.User{},
-	)
 	defer rdb.Close()
 
+	// mongodb
 	mongodb.Init()
 	defer mongodb.Close()
 
