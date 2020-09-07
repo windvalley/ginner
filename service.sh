@@ -22,6 +22,11 @@ usage(){
 }
 
 status(){
+    [[ -z "$PID" ]] && {
+        echo "$BIN_NAME was stopped"
+        return
+    }
+
     # shellcheck disable=SC2009
     ps -ef | grep -v grep | awk '{print $2}' | grep -wq "$PID" &&
         echo "$BIN_NAME is running, pid $PID" ||
