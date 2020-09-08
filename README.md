@@ -67,6 +67,7 @@ Using Go `Gin` to develop high quality applications(Web API) efficiently.
   - [x] paginate
   - [x] http request
 - [x] Graceful restart or stop
+- [x] SSL Support
 - [x] Deployment
   - [x] Dockerfile
   - [x] Simple manage script: service.sh
@@ -78,6 +79,9 @@ Using Go `Gin` to develop high quality applications(Web API) efficiently.
 Change project name first:
 
 ```bash
+git clone git@github.com:windvalley/use-gin.git
+cd use-gin
+
 # This will be change use-gin(current package name) to your own name.
 ./change_project_name.sh your-project-name
 ```

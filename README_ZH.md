@@ -65,6 +65,7 @@
   - [x] 分页`paginate`
   - [x] 请求客户端`httprequest`
 - [x] 支持优雅地重启和停止
+- [x] 支持开启`HTTPS`
 - [x] 项目部署
   - [x] 云原生支持, 提供`Dockerfile`
   - [x] 简单的服务管理脚本: `service.sh`
@@ -76,6 +77,9 @@
 首先将当前项目名称`use-gin`, 改成你自己的项目名称:
 
 ```bash
+git clone git@github.com:windvalley/use-gin.git
+cd use-gin
+
 # 执行完该脚本后, 当前Go项目的package名称将变更为your-project-name
 ./change_project_name.sh your-project-name
 ```
