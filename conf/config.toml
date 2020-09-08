@@ -71,8 +71,8 @@ keepalive = 10
 address = "http://127.0.0.1:8086"
 username = ""
 password = ""
-dbname = ""
-measurement = ""
+dbname = "demo"
+measurement = "test"
 
 [redis]
 address = "127.0.0.1:6379"

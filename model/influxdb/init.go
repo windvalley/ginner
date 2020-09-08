@@ -9,16 +9,15 @@ import (
 	"use-gin/logger"
 )
 
-// Client client instance of influxdb
-var Client client.Client
+var cli client.Client
 
 // Init influxdb initialization
 func Init() {
 	var err error
-	Client, err = client.NewHTTPClient(client.HTTPConfig{
+	cli, err = client.NewHTTPClient(client.HTTPConfig{
 		Addr:     config.Conf().Influxdb.Address,
 		Username: config.Conf().Influxdb.Username,
-		Password: config.Conf().Influxdb.DBName,
+		Password: config.Conf().Influxdb.Password,
 	})
 	if err != nil {
 		logger.Log.Fatalf("connect influxdb failed: %v", err)
@@ -27,7 +26,9 @@ func Init() {
 
 // Close close connections of influxdb
 func Close() {
-	Client.Close()
+	if err := cli.Close(); err != nil {
+		logger.Log.Errorf("close influxdb client error: %v", err)
+	}
 }
 
 // NewPoint get *client.Point
@@ -42,12 +43,8 @@ func NewPoint(
 		fields,
 		time,
 	)
-	if err != nil {
-		logger.Log.Errorf("influxdb client NewPoint error: %v", err)
-		return nil, err
-	}
 
-	return pt, nil
+	return pt, err
 }
 
 // NewBatchPoints get client.BatchPoints
@@ -56,12 +53,8 @@ func NewBatchPoints() (client.BatchPoints, error) {
 		Database:  config.Conf().Influxdb.DBName,
 		Precision: "s",
 	})
-	if err != nil {
-		logger.Log.Errorf("influxdb client NewBatchPoints error: %v", err)
-		return nil, err
-	}
 
-	return bp, nil
+	return bp, err
 }
 
 // Write write data into influxdb
@@ -83,7 +76,7 @@ func NewBatchPoints() (client.BatchPoints, error) {
 //}
 //return nil
 func Write(bp client.BatchPoints) error {
-	err := Client.Write(bp)
+	err := cli.Write(bp)
 	return err
 }
 
@@ -98,13 +91,13 @@ func Write(bp client.BatchPoints) error {
 //return nil, err
 //}
 //return res[0].Series[0], nil
-func Query(cmd string) ([]client.Result, error) {
+func Query(sql string) ([]client.Result, error) {
 	q := client.Query{
-		Command:  cmd,
+		Command:  sql,
 		Database: config.Conf().Influxdb.DBName,
 	}
 
-	response, err := Client.Query(q)
+	response, err := cli.Query(q)
 	if err != nil {
 		return nil, err
 	}
