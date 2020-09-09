@@ -66,6 +66,7 @@ Using Go `Gin` to develop high quality applications(Web API) efficiently.
   - [x] gomail
   - [x] paginate
   - [x] http request
+  - [x] live reloading the server in development stage
 - [x] Graceful restart or stop
 - [x] SSL Support
 - [x] Deployment

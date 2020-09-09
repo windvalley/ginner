@@ -17,6 +17,7 @@ import (
 	_ "use-gin/docs" // for swagger
 	"use-gin/logger"
 	"use-gin/midware"
+	"use-gin/util"
 )
 
 // Group router group
@@ -69,6 +70,14 @@ func Group() {
 		// NOTE: execute `swag init` in project root dir after updating docs.
 		// path: /doc/index.html
 		router.GET("/doc/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+		// Live reloading the server in development stage for coding in high efficiency.
+		// NOTE: Do not run server in this way: `go run main.go`,
+		// and the correct way: `go build -o appname && RUNENV=dev ./appname`,
+		// or `go build && export RUNENV=dev && ./service.sh start`
+		go util.LiveReloadServer("./", true, []string{
+			"logs",
+		})
 	}
 
 	urls(router)

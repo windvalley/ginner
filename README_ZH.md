@@ -64,6 +64,7 @@
   - [x] 发送邮件`gomail`
   - [x] 分页`paginate`
   - [x] 请求客户端`httprequest`
+  - [x] 内置的实时`reload`工具, 用于开发阶段, 提升开发效率
 - [x] 支持优雅地重启和停止
 - [x] 支持开启`HTTPS`
 - [x] 项目部署
