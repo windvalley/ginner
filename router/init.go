@@ -79,7 +79,7 @@ func Group() {
 		// NOTE: Do not run server in this way: `go run main.go`,
 		// and the correct way: `go build -o appname && RUNENV=dev ./appname`,
 		// or `go build && export RUNENV=dev && ./service.sh start`
-		go util.LiveReloadServer("./", true, []string{
+		go util.LiveReloadServer([]string{
 			"logs",
 		})
 	}

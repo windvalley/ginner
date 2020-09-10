@@ -13,9 +13,11 @@ import (
 )
 
 // LiveReloadServer Auto build and graceful restart the server while file changed,
-// and mainly for development stage.
-func LiveReloadServer(rootPath string, monitorAllFiles bool, excludeDirs []string) {
+// and this feature is mainly for development stage.
+func LiveReloadServer(excludeDirs []string) {
 	startTime := time.Now()
+	rootPath := "."
+	monitorAllFiles := true
 
 	for {
 		filepath.Walk(rootPath, func(path string, info os.FileInfo, err error) error {
