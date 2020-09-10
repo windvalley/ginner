@@ -44,26 +44,21 @@ func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
 	var params publicParams
 
 	keyID := ""
+	var err error
 	if debug == "1" {
-		if err := c.ShouldBind(&paramsDebug); err != nil {
-			err1 := errcode.New(errcode.ValidationError, err)
-			err1.Add(err)
-			handler.SendResponse(c, err1, nil)
-
-			c.Abort()
-			return nil, nil
-		}
+		err = c.ShouldBind(&paramsDebug)
 		keyID = paramsDebug.KeyID
 	} else {
-		if err := c.ShouldBind(&params); err != nil {
-			err1 := errcode.New(errcode.ValidationError, err)
-			err1.Add(err)
-			handler.SendResponse(c, err1, nil)
-
-			c.Abort()
-			return nil, nil
-		}
+		err = c.ShouldBind(&params)
 		keyID = params.KeyID
+	}
+	if err != nil {
+		err1 := errcode.New(errcode.ValidationError, nil)
+		err1.Add(err)
+		handler.SendResponse(c, err1, nil)
+
+		c.Abort()
+		return nil, nil
 	}
 
 	userInfo, ok := userInfos[keyID]

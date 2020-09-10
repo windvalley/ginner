@@ -96,21 +96,14 @@ func Group() {
 		beforeServerStart(serverPort, runmode)
 	}
 
-	// https
+	var err error
 	if config.Conf().HTTPS.Enable {
 		beforeServerStart(serverPort, runmode)
-		if err := server.ListenAndServeTLS(
-			config.Conf().HTTPS.Cert, config.Conf().HTTPS.Key); err != nil {
-			if runmode == "debug" {
-				fmt.Printf("%s %v\n", color.FgYellow.Render("[Endless-warning]"), err)
-			} else {
-				logger.Log.Warn(err)
-			}
-		}
+		err = server.ListenAndServeTLS(config.Conf().HTTPS.Cert, config.Conf().HTTPS.Key)
+	} else {
+		err = server.ListenAndServe()
 	}
-
-	// http
-	if err := server.ListenAndServe(); err != nil {
+	if err != nil {
 		if runmode == "debug" {
 			fmt.Printf("%s %v\n", color.FgYellow.Render("[Endless-warning]"), err)
 		} else {
