@@ -2,10 +2,11 @@ package util
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strconv"
+	"syscall"
 	"time"
 	"use-gin/logger"
 )
@@ -16,8 +17,8 @@ var (
 	colorReset = string([]byte{27, 91, 48, 109})
 )
 
-// LiveReloadServer Auto build and graceful restart the server while file changed.
-// Mainly for development stage.
+// LiveReloadServer Auto build and graceful restart the server while file changed,
+// and mainly for development stage.
 func LiveReloadServer(rootPath string, monitorAllFiles bool, excludeDirs []string) {
 	startTime := time.Now()
 
@@ -39,21 +40,23 @@ func LiveReloadServer(rootPath string, monitorAllFiles bool, excludeDirs []strin
 			}
 
 			if (monitorAllFiles || filepath.Ext(path) == ".go") && info.ModTime().After(startTime) {
-				scanCallback(path)
+				buildAndReload(path)
 				startTime = time.Now()
 				return errors.New("done")
 			}
 
 			return nil
 		})
+
 		time.Sleep(500 * time.Millisecond)
 	}
 }
 
-func scanCallback(path string) {
+func buildAndReload(path string) {
 	pid := os.Getpid()
+
 	logger.Log.Warnf(
-		"%s[LiveReloadServer]%s %s%s%s has been changed, and start to reload the server(%d)...",
+		"%s[LiveReloadServer]%s %s%s%s has been changed, and begin to reload the server(%d)...",
 		colorGreen,
 		colorReset,
 		colorRed,
@@ -62,46 +65,34 @@ func scanCallback(path string) {
 		pid,
 	)
 
-	gobuild := exec.Command("/usr/local/bin/go", "build")
-	if err := gobuild.Start(); err != nil {
-		logger.Log.Errorf(
-			"%s[LiveReloadServer]%s go build start failed: %v",
-			colorGreen,
-			colorReset,
-			err,
-		)
-		return
-	}
-	if err := gobuild.Wait(); err != nil {
-		logger.Log.Errorf(
-			"%s[LiveReloadServer]%s go build wait failed: %v",
-			colorGreen,
-			colorReset,
-			err,
-		)
-
+	if err := gobuild(); err != nil {
+		logger.Log.Errorf("%s[LiveReloadServer]%s %v", colorGreen, colorReset, err)
 		return
 	}
 
-	reload := exec.Command("kill", "-SIGHUP", strconv.Itoa(pid))
-	if err := reload.Start(); err != nil {
-		logger.Log.Errorf(
-			"%s[LiveReloadServer]%s kill -SIGHUP %d start failed: %v",
-			colorGreen,
-			colorReset,
-			pid,
-			err,
-		)
-		return
+	if err := reloadServer(pid); err != nil {
+		logger.Log.Errorf("%s[LiveReloadServer]%s %v", colorGreen, colorReset, err)
 	}
-	if err := reload.Wait(); err != nil {
-		logger.Log.Errorf(
-			"%s[LiveReloadServer]%s kill -SIGHUP %d wait failed: %v",
-			colorGreen,
-			colorReset,
-			pid,
-			err,
-		)
-		return
+}
+
+func gobuild() error {
+	cmd := exec.Command("go", "build")
+
+	if err := cmd.Start(); err != nil {
+		return fmt.Errorf("go build command start error: %v", err)
 	}
+
+	if err := cmd.Wait(); err != nil {
+		return fmt.Errorf("go build command wait error: %v", err)
+	}
+
+	return nil
+}
+
+func reloadServer(pid int) error {
+	if err := syscall.Kill(pid, syscall.SIGHUP); err != nil {
+		return fmt.Errorf("reload server(%d) error: %v", pid, err)
+	}
+
+	return nil
 }
