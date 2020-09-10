@@ -39,12 +39,12 @@ func urls(router *gin.Engine) {
 
 	// API signature demo
 	g2 := router.Group("/v1/signdemo")
-	//g2.Use(midware.Md5Sign())
-	//g2.Use(midware.AESSign())
-	//g2.Use(midware.RSASign())
-	//g2.Use(midware.HmacMd5Sign())
-	//g2.Use(midware.HmacSha1Sign())
-	//g2.Use(midware.HmacSha256Sign())
+	//g2.Use(midware.APISign(midware.SignTypeMd5))
+	//g2.Use(midware.APISign(midware.SignTypeAES))
+	//g2.Use(midware.APISign(midware.SignTypeRSA))
+	//g2.Use(midware.APISign(midware.SignTypeHmacMd5))
+	//g2.Use(midware.APISign(midware.SignTypeHmacSHA1))
+	//g2.Use(midware.APISign(midware.SignTypeHmacSHA256))
 	// NOTE: need to issue appKey and appSecret to users in advance
 	g2.Use(midware.JWT())
 	{
