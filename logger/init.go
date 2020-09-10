@@ -18,6 +18,8 @@ import (
 // Log logger instance
 var Log = logrus.New()
 
+const timeFormat = "2006-01-02 15:04:05"
+
 // Init logger initialization
 func Init() {
 	logDir, err := createLogdir()
@@ -30,13 +32,13 @@ func Init() {
 	accessLog := path.Join(logDir, "access.log")
 	accesslogWriter, err := getLogWriter(accessLog)
 	if err != nil {
-		panic(fmt.Sprintf("log rotate failed: %v", err))
+		panic(err)
 	}
 
 	errorLog := path.Join(logDir, "error.log")
 	errorlogWriter, err := getLogWriter(errorLog)
 	if err != nil {
-		panic(fmt.Sprintf("log rotate failed: %v", err))
+		panic(err)
 	}
 
 	writeMap := lfshook.WriterMap{
@@ -49,12 +51,12 @@ func Init() {
 	}
 
 	lfHook := lfshook.NewHook(writeMap, &logrus.JSONFormatter{
-		TimestampFormat: "2006-01-02 15:04:05",
+		TimestampFormat: timeFormat,
 	})
 
 	if config.Conf().Log.LogFormat == "txt" {
 		lfHook = lfshook.NewHook(writeMap, &logrus.TextFormatter{
-			TimestampFormat: "2006-01-02 15:04:05",
+			TimestampFormat: timeFormat,
 		})
 	}
 
@@ -79,7 +81,7 @@ func InitCMDLog() {
 	logfile := logDir + "/" + filename + ".log"
 	logWriter, err := getLogWriter(logfile)
 	if err != nil {
-		panic(fmt.Sprintf("log rotate failed: %v", err))
+		panic(err)
 	}
 
 	writeMap := lfshook.WriterMap{
@@ -92,7 +94,7 @@ func InitCMDLog() {
 	}
 
 	lfHook := lfshook.NewHook(writeMap, &logrus.JSONFormatter{
-		TimestampFormat: "2006-01-02 15:04:05",
+		TimestampFormat: timeFormat,
 	})
 	Log.AddHook(lfHook)
 	//Log.Out = ioutil.Discard

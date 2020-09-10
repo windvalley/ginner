@@ -27,8 +27,8 @@ var DBs *Databases
 // Init DBs initialization
 func Init() {
 	DBs = &Databases{
-		MySQL: GetMySQL(),
-		//PostgreSQL: GetPostgreSQL(),
+		MySQL: GetDBConn("mysql"),
+		//PostgreSQL: GetDBConn("postgresql),
 	}
 
 	autoMigrateTables()
@@ -40,29 +40,15 @@ func Close() {
 	//DBs.PostgreSQL.Close()
 }
 
-// GetMySQL get db instance of mysql
-func GetMySQL() *gorm.DB {
-	dbtype := config.Conf().RDBs["mysql"].DBType
-	address := config.Conf().RDBs["mysql"].Address
-	dbname := config.Conf().RDBs["mysql"].DBName
-	user := config.Conf().RDBs["mysql"].User
-	password := config.Conf().RDBs["mysql"].Password
-	maxIdleConns := config.Conf().RDBs["mysql"].MaxIdleConns
-	maxOpenConns := config.Conf().RDBs["mysql"].MaxOpenConns
-
-	return Connect(dbtype, user, password, address, dbname,
-		maxIdleConns, maxOpenConns)
-}
-
-// GetPostgreSQL get db instance of postgresql
-func GetPostgreSQL() *gorm.DB {
-	dbtype := config.Conf().RDBs["postgresql"].DBType
-	address := config.Conf().RDBs["postgresql"].Address
-	dbname := config.Conf().RDBs["postgresql"].DBName
-	user := config.Conf().RDBs["postgresql"].User
-	password := config.Conf().RDBs["postgresql"].Password
-	maxIdleConns := config.Conf().RDBs["postgresql"].MaxIdleConns
-	maxOpenConns := config.Conf().RDBs["postgresql"].MaxOpenConns
+// GetDBConn get a db instance of relation databases
+func GetDBConn(db string) *gorm.DB {
+	dbtype := config.Conf().RDBs[db].DBType
+	address := config.Conf().RDBs[db].Address
+	dbname := config.Conf().RDBs[db].DBName
+	user := config.Conf().RDBs[db].User
+	password := config.Conf().RDBs[db].Password
+	maxIdleConns := config.Conf().RDBs[db].MaxIdleConns
+	maxOpenConns := config.Conf().RDBs[db].MaxOpenConns
 
 	return Connect(dbtype, user, password, address, dbname,
 		maxIdleConns, maxOpenConns)

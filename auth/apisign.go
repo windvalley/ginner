@@ -113,15 +113,9 @@ func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
 
 func verifySiganature(strForSign, signType, keySecret, requestSignature string,
 	userInfo userInfo) error {
+	signInvalidError := errors.New("Signature invalid")
+
 	switch signType {
-	case "md5":
-		signature, err := generateSign(strForSign, keySecret, signType)
-		if err != nil {
-			return err
-		}
-		if requestSignature != signature {
-			return errors.New("Signature invalid")
-		}
 	case "aes":
 		srcStr, err := AESDecrypt(requestSignature, keySecret)
 		if err != nil {
@@ -129,7 +123,7 @@ func verifySiganature(strForSign, signType, keySecret, requestSignature string,
 		}
 
 		if srcStr != strForSign {
-			return errors.New("Signature invalid")
+			return signInvalidError
 		}
 	case "rsa":
 		srcStr, err := DecryptByPrivate(requestSignature, userInfo.RSA.Private)
@@ -138,16 +132,16 @@ func verifySiganature(strForSign, signType, keySecret, requestSignature string,
 		}
 
 		if srcStr != strForSign {
-			return errors.New("Signature invalid")
+			return signInvalidError
 		}
-	case "hmac_md5", "hmac_sha1", "hmac_sha256":
+	case "md5", "hmac_md5", "hmac_sha1", "hmac_sha256":
 		signature, err := generateSign(strForSign, keySecret, signType)
 		if err != nil {
 			return err
 		}
 
 		if requestSignature != signature {
-			return errors.New("Signature invalid")
+			return signInvalidError
 		}
 	default:
 		return errors.New("Signature encrypt type invalid")
