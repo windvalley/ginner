@@ -43,7 +43,7 @@ Using Go `Gin` to develop high quality applications(Web API) efficiently.
     - [x] IP allowlist
     - [x] Server API allowlist
 - [x] Databases
-  - [x] Relation Database
+  - [x] Relation Database(GORM)
     - [x] MySQL
     - [x] MssSQL
     - [x] PostgreSQL
@@ -68,6 +68,7 @@ Using Go `Gin` to develop high quality applications(Web API) efficiently.
   - [x] http request
   - [x] live reloading the server in development stage
 - [x] Graceful restart or stop
+- [x] Server health check when server started
 - [x] SSL Support
 - [x] Deployment
   - [x] Dockerfile
