@@ -22,7 +22,7 @@ const demoKey = "demo"
 
 func updateCacheKey() {
 	if _, err := Cache.Delete(demoKey); err != nil {
-		logger.Log.Warnf(
+		logger.Log.Debugf(
 			"cron: delete key %s, warning: Gocache has no %s key",
 			demoKey,
 			demoKey,
