@@ -1,6 +1,6 @@
 app_name = "use-gin"
 server_port = ":8443"
-runmode = "debug" # debug/release/test
+runmode = "release" # debug/release/test
 
 [https]
 enable = true
@@ -36,8 +36,8 @@ apisign_lifetime = 600
     dbtype = "mysql"
     address = "localhost:3306"
     dbname = "demo"  # NOTE: create the database manually
-    user = "sre"
-    password = "sre.im"
+    user = "root"
+    password = "123456"
     max_idle_conns = 10
     max_open_conns = 100
 

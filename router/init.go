@@ -1,15 +1,19 @@
 package router
 
 import (
+	"crypto/tls"
+	"fmt"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
 	"syscall"
+	"time"
 
 	"github.com/fvbock/endless"
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
+	"github.com/gookit/color"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 
@@ -82,32 +86,51 @@ func Group() {
 
 	urls(router)
 
+	// Check whether the service has been started successfully
+	go pingServer()
+
 	// graceful restart or shutdown server
 	serverPort := config.Conf().ServerPort
 	server := endless.NewServer(serverPort, router)
 	server.BeforeBegin = func(add string) {
-		beforeServerStart(serverPort)
+		beforeServerStart(serverPort, runmode)
 	}
 
+	// https
 	if config.Conf().HTTPS.Enable {
-		beforeServerStart(serverPort)
+		beforeServerStart(serverPort, runmode)
 		if err := server.ListenAndServeTLS(
 			config.Conf().HTTPS.Cert, config.Conf().HTTPS.Key); err != nil {
-			logger.Log.Warn(err)
+			if runmode == "debug" {
+				fmt.Printf("%s %v\n", color.FgYellow.Render("[Endless-warning]"), err)
+			} else {
+				logger.Log.Warn(err)
+			}
 		}
-	} else {
-		if err := server.ListenAndServe(); err != nil {
+	}
+
+	// http
+	if err := server.ListenAndServe(); err != nil {
+		if runmode == "debug" {
+			fmt.Printf("%s %v\n", color.FgYellow.Render("[Endless-warning]"), err)
+		} else {
 			logger.Log.Warn(err)
 		}
 	}
 }
 
-func beforeServerStart(serverPort string) {
+func beforeServerStart(serverPort, runmode string) {
 	pid := syscall.Getpid()
-	logger.Log.Debugf("current pid is %d", pid)
-	logger.Log.Debugf("server port is %s", serverPort)
+
+	if runmode == "debug" {
+		fmt.Printf("%s current pid is %s\n",
+			color.FgCyan.Render("[Endless-debug]"), color.FgGreen.Render(pid))
+		fmt.Printf("%s server port is %s\n",
+			color.FgCyan.Render("[Endless-debug]"), color.FgGreen.Render(serverPort))
+	}
+
 	if err := createPidFile(pid); err != nil {
-		logger.Log.Fatalf("create pid file failed: %v", err)
+		logger.Log.Fatalf("[Endless-fatal] create pid file failed: %v", err)
 	}
 }
 
@@ -131,4 +154,35 @@ func createPidFile(pid int) error {
 		return err
 	}
 	return nil
+}
+
+func pingServer() {
+	pid := syscall.Getpid()
+
+	schema := "http://"
+	if config.Conf().HTTPS.Enable {
+		schema = "https://"
+	}
+
+	pingURL := schema + "127.0.0.1" + config.Conf().ServerPort + "/ping"
+
+	http.DefaultClient.Transport = &http.Transport{
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: true,
+		},
+	}
+
+	logger.Log.Debugf("checking url: %s", pingURL)
+
+	for i := 0; i < 6; i++ {
+		resp, err := http.Get(pingURL)
+		if err == nil && resp.StatusCode == 200 {
+			logger.Log.Debugf("server(%d) started", pid)
+			return
+		}
+
+		time.Sleep(time.Second)
+	}
+
+	logger.Log.Fatalf("server(%d) start failed", pid)
 }
