@@ -8,13 +8,8 @@ import (
 	"path/filepath"
 	"syscall"
 	"time"
-	"use-gin/logger"
-)
 
-var (
-	colorGreen = string([]byte{27, 91, 57, 55, 59, 51, 50, 59, 49, 109})
-	colorRed   = string([]byte{27, 91, 57, 55, 59, 51, 49, 59, 49, 109})
-	colorReset = string([]byte{27, 91, 48, 109})
+	"github.com/gookit/color"
 )
 
 // LiveReloadServer Auto build and graceful restart the server while file changed,
@@ -55,23 +50,23 @@ func LiveReloadServer(rootPath string, monitorAllFiles bool, excludeDirs []strin
 func buildAndReload(path string) {
 	pid := os.Getpid()
 
-	logger.Log.Warnf(
-		"%s[LiveReloadServer]%s %s%s%s has been changed, and begin to reload the server(%d)...",
-		colorGreen,
-		colorReset,
-		colorRed,
-		path,
-		colorReset,
+	red := color.FgRed.Render
+	green := color.FgGreen.Render
+
+	fmt.Printf(
+		"%s %s has been changed, and begin to reload the server(%d)...\n",
+		green("[LiveReloadServer-debug]"),
+		red(path),
 		pid,
 	)
 
 	if err := gobuild(); err != nil {
-		logger.Log.Errorf("%s[LiveReloadServer]%s %v", colorGreen, colorReset, err)
+		fmt.Printf("%s %v\n", red("[LiveReloadServer-error]"), err)
 		return
 	}
 
 	if err := reloadServer(pid); err != nil {
-		logger.Log.Errorf("%s[LiveReloadServer]%s %v", colorGreen, colorReset, err)
+		fmt.Printf("%s %v\n", red("[LiveReloadServer-error]"), err)
 	}
 }
 

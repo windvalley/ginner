@@ -15,6 +15,7 @@ require (
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/gomodule/redigo v2.0.1-0.20180401191855-9352ab68be13+incompatible
+	github.com/gookit/color v1.2.9
 	github.com/influxdata/influxdb v1.8.2
 	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 // indirect
 	github.com/jinzhu/gorm v1.9.16
