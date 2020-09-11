@@ -49,7 +49,7 @@ func urls(router *gin.Engine) {
 	g2.Use(midware.JWT())
 	{
 		g2.GET("/hello", signdemo.Hello)
-		g2.POST("/hello", signdemo.Hello)
+		//g2.POST("/hello", signdemo.Hello)
 	}
 
 	// Basic auth demo
@@ -61,7 +61,7 @@ func urls(router *gin.Engine) {
 		"admin": "123456",
 	}))
 	{
-		g3.GET("/hello", demo.HelloWorld)
+		g3.GET("/helloworld", demo.HelloWorld)
 	}
 
 	// handle dbs demo
