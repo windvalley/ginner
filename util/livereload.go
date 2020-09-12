@@ -17,18 +17,11 @@ import (
 func LiveReloadServer(excludeDirs []string) {
 	startTime := time.Now()
 	rootPath := "."
-	monitorAllFiles := true
 
 	for {
 		filepath.Walk(rootPath, func(path string, info os.FileInfo, err error) error {
-			if path == ".git" && info.IsDir() {
+			if isSkipPath(path, info, excludeDirs) {
 				return filepath.SkipDir
-			}
-
-			for _, x := range excludeDirs {
-				if x == path {
-					return filepath.SkipDir
-				}
 			}
 
 			// ignore hidden files
@@ -36,7 +29,7 @@ func LiveReloadServer(excludeDirs []string) {
 				return nil
 			}
 
-			if (monitorAllFiles || filepath.Ext(path) == ".go") && info.ModTime().After(startTime) {
+			if info.ModTime().After(startTime) {
 				buildAndReload(path)
 				startTime = time.Now()
 				return errors.New("done")
@@ -47,6 +40,20 @@ func LiveReloadServer(excludeDirs []string) {
 
 		time.Sleep(500 * time.Millisecond)
 	}
+}
+
+func isSkipPath(path string, info os.FileInfo, excludeDirs []string) bool {
+	if path == ".git" && info.IsDir() {
+		return true
+	}
+
+	for _, x := range excludeDirs {
+		if x == path {
+			return true
+		}
+	}
+
+	return false
 }
 
 func buildAndReload(path string) {
