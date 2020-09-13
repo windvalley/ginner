@@ -1,9 +1,12 @@
 ---
 name: Shell
+
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
+    branches: [master]
+
 jobs:
   shellcheck:
     name: Shellcheck
