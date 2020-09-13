@@ -1,6 +1,7 @@
 package midware
 
 import (
+	"errors"
 	"strings"
 	"time"
 
@@ -19,31 +20,10 @@ func JWT() gin.HandlerFunc {
 	jwtSecret := config.Conf().Auth.JWTSecret
 
 	return func(c *gin.Context) {
-		jwtToken := c.Query("jwt")
-
-		if jwtToken == "" {
-			jwtToken = c.Query("token")
-		}
-
-		if jwtToken == "" {
-			authHeader := c.GetHeader("Authorization")
-			if authHeader != "" {
-				values := strings.Split(authHeader, " ")
-				if len(values) != 2 || values[0] != "Bearer" {
-					err1 := errcode.New(errcode.TokenInvalidError, nil)
-					err1.Add("Request header 'Authorization' format invalid.")
-					handler.SendResponse(c, err1, nil)
-
-					c.Abort()
-					return
-				}
-				jwtToken = values[1]
-			}
-		}
-
-		if jwtToken == "" {
+		jwtToken, err := getTokenFromRequest(c)
+		if err != nil {
 			err1 := errcode.New(errcode.TokenInvalidError, nil)
-			err1.Add("no JWT(Json Web Token) found.")
+			err1.Add(err)
 			handler.SendResponse(c, err1, nil)
 
 			c.Abort()
@@ -54,7 +34,7 @@ func JWT() gin.HandlerFunc {
 		payload, err := auth.GetPayload(payloadSegment)
 		if err != nil {
 			err1 := errcode.New(errcode.TokenInvalidError, err)
-			err1.Add("JWT validation failed.")
+			err1.Add("JWT validation failed")
 			handler.SendResponse(c, err1, nil)
 
 			c.Abort()
@@ -80,15 +60,15 @@ func JWT() gin.HandlerFunc {
 			switch err.(*jwt.ValidationError).Errors {
 			case jwt.ValidationErrorExpired:
 				err1 := errcode.New(errcode.TokenInvalidError, err)
-				err1.Add("JWT expired.")
+				err1.Add("JWT expired")
 				handler.SendResponse(c, err1, nil)
 			case jwt.ValidationErrorSignatureInvalid:
 				err1 := errcode.New(errcode.TokenInvalidError, err)
-				err1.Add("JWT signature validation failed.")
+				err1.Add("JWT signature validation failed")
 				handler.SendResponse(c, err1, nil)
 			default:
 				err1 := errcode.New(errcode.TokenInvalidError, err)
-				err1.Add("JWT validation failed.")
+				err1.Add("JWT validation failed")
 				handler.SendResponse(c, err1, nil)
 			}
 
@@ -101,4 +81,27 @@ func JWT() gin.HandlerFunc {
 
 		c.Next()
 	}
+}
+
+func getTokenFromRequest(c *gin.Context) (string, error) {
+	jwtToken := c.Query("jwt")
+
+	if jwtToken == "" {
+		jwtToken = c.Query("token")
+	}
+
+	if jwtToken == "" {
+		authHeader := c.GetHeader("Authorization")
+		if authHeader == "" {
+			return "", errors.New("no JWT(Json Web Token) found")
+		}
+
+		values := strings.Split(authHeader, " ")
+		if len(values) != 2 || values[0] != "Bearer" {
+			return "", errors.New("Request header 'Authorization' format invalid")
+		}
+		jwtToken = values[1]
+	}
+
+	return jwtToken, nil
 }
