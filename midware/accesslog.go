@@ -3,6 +3,7 @@ package midware
 import (
 	"bytes"
 	"encoding/json"
+	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -10,6 +11,7 @@ import (
 
 	"use-gin/handler"
 	"use-gin/logger"
+	"use-gin/model/rdb"
 )
 
 type bodyLogWriter struct {
@@ -27,7 +29,7 @@ func (w bodyLogWriter) WriteString(s string) (int, error) {
 	return w.ResponseWriter.WriteString(s)
 }
 
-// AccessLogger write access log
+// AccessLogger write access log to log file and write user operation log to db.
 func AccessLogger() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		bodyLogWriter := &bodyLogWriter{
@@ -44,7 +46,7 @@ func AccessLogger() gin.HandlerFunc {
 
 		var responseCode string
 		var responseMsg string
-		//var responseData interface{}
+		var responseData interface{}
 
 		if responseBody != "" {
 			res := &handler.Response{}
@@ -52,7 +54,7 @@ func AccessLogger() gin.HandlerFunc {
 			if err == nil {
 				responseCode = res.Code
 				responseMsg = res.Message
-				//responseData = res.Data
+				responseData = res.Data
 			}
 		}
 
@@ -72,20 +74,58 @@ func AccessLogger() gin.HandlerFunc {
 			requestURI = c.Request.URL.Path + "?" + c.Request.URL.RawQuery
 		}
 
+		username, ok := c.Get("key")
+		if !ok {
+			username = "guest"
+		}
+
+		clientIP := c.ClientIP()
+		httpStatusCode := c.Writer.Status()
+		requestReferer := c.Request.Referer()
+		requestBodyData := c.Request.PostForm.Encode()
+		requestUA := c.Request.UserAgent()
+
 		logger.Log.WithFields(logrus.Fields{
-			"client_ip":       c.ClientIP(),
+			"username":        username,
+			"client_ip":       clientIP,
 			"request_method":  c.Request.Method,
 			"request_uri":     requestURI,
-			"http_status":     c.Writer.Status(),
+			"http_status":     httpStatusCode,
 			"latency_time":    latencyTime,
 			"request_proto":   c.Request.Proto,
-			"request_referer": c.Request.Referer(),
-			"request_body":    c.Request.PostForm.Encode(),
+			"request_referer": requestReferer,
+			"request_body":    requestBodyData,
 			"request_id":      requestID,
+			"request_ua":      requestUA,
 			"response_code":   responseCode,
 			"response_msg":    responseMsg,
-			//"response_data":   responseData,
-			"reqponse_ua": c.Request.UserAgent(),
 		}).Info("accesslog")
+
+		if c.Request.Method == http.MethodGet || c.Request.Method == http.MethodOptions {
+			return
+		}
+
+		resData, err := json.Marshal(responseData)
+		if err != nil {
+			resData = []byte("")
+		}
+
+		userOperationLog := &rdb.UserOperationLog{
+			Username:   username.(string),
+			ClientIP:   clientIP,
+			ReqMethod:  c.Request.Method,
+			ReqPath:    requestURI,
+			ReqBody:    requestBodyData,
+			ReqReferer: requestReferer,
+			UserAgent:  requestUA,
+			ReqTime:    startTime,
+			ReqLatency: latencyTime,
+			HTTPStatus: httpStatusCode,
+			ResCode:    responseCode,
+			ResMessage: responseMsg,
+			ResData:    string(resData),
+		}
+
+		go userOperationLog.Create()
 	}
 }
