@@ -12,6 +12,7 @@ import (
 	"use-gin/handler"
 	"use-gin/logger"
 	"use-gin/model/rdb"
+	"use-gin/util"
 )
 
 type bodyLogWriter struct {
@@ -43,41 +44,17 @@ func AccessLogger() gin.HandlerFunc {
 		c.Next()
 
 		responseBody := bodyLogWriter.body.String()
-
-		var responseCode string
-		var responseMsg string
-		var responseData interface{}
-
-		if responseBody != "" {
-			res := &handler.Response{}
-			err := json.Unmarshal([]byte(responseBody), &res)
-			if err == nil {
-				responseCode = res.Code
-				responseMsg = res.Message
-				responseData = res.Data
-			}
-		}
+		responseCode, responseMsg, responseData := parseResponseBody(responseBody)
 
 		latencyTime := time.Since(startTime).Seconds()
 
-		if c.Request.Method == "POST" {
+		if c.Request.Method == http.MethodPost {
 			_ = c.Request.ParseForm()
 		}
 
-		requestID, ok := c.Get("X-Request-Id")
-		if !ok {
-			requestID = ""
-		}
-
-		requestURI := c.Request.URL.Path
-		if c.Request.URL.RawQuery != "" {
-			requestURI = c.Request.URL.Path + "?" + c.Request.URL.RawQuery
-		}
-
-		username, ok := c.Get("key")
-		if !ok {
-			username = "guest"
-		}
+		requestID := util.GetRequestID(c)
+		requestURI := util.GetRequestURI(c)
+		username := util.GetUsername(c)
 
 		clientIP := c.ClientIP()
 		httpStatusCode := c.Writer.Status()
@@ -101,7 +78,7 @@ func AccessLogger() gin.HandlerFunc {
 			"response_msg":    responseMsg,
 		}).Info("accesslog")
 
-		if c.Request.Method == http.MethodGet || c.Request.Method == http.MethodOptions {
+		if !doUserAudit(c) {
 			return
 		}
 
@@ -111,7 +88,7 @@ func AccessLogger() gin.HandlerFunc {
 		}
 
 		userOperationLog := &rdb.UserOperationLog{
-			Username:   username.(string),
+			Username:   username,
 			ClientIP:   clientIP,
 			ReqMethod:  c.Request.Method,
 			ReqPath:    requestURI,
@@ -128,4 +105,30 @@ func AccessLogger() gin.HandlerFunc {
 
 		go userOperationLog.Create()
 	}
+}
+
+func parseResponseBody(responseBody string) (
+	responseCode, responseMsg string, responseData interface{}) {
+	if responseBody != "" {
+		res := &handler.Response{}
+		err := json.Unmarshal([]byte(responseBody), &res)
+		if err != nil {
+			return "", "", nil
+		}
+
+		responseCode = res.Code
+		responseMsg = res.Message
+		responseData = res.Data
+	}
+
+	return "", "", nil
+}
+
+func doUserAudit(c *gin.Context) bool {
+	if c.Request.Method == http.MethodGet ||
+		c.Request.Method == http.MethodOptions {
+		return false
+	}
+
+	return true
 }
