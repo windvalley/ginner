@@ -28,13 +28,19 @@ func SendResponse(c *gin.Context, err error, data interface{}) {
 	})
 
 	// error.log
-	if status != http.StatusOK {
+	if status != http.StatusOK && status != http.StatusCreated {
 		requestID, ok := c.Get("X-Request-Id")
 		if !ok {
 			requestID = ""
 		}
 
+		username, ok := c.Get("key")
+		if !ok {
+			username = "guest"
+		}
+
 		logger.Log.WithFields(logrus.Fields{
+			"username":        username,
 			"client_ip":       c.ClientIP(),
 			"request_method":  c.Request.Method,
 			"request_uri":     c.Request.URL.Path,
@@ -44,10 +50,9 @@ func SendResponse(c *gin.Context, err error, data interface{}) {
 			"request_referer": c.Request.Referer(),
 			"request_body":    c.Request.PostForm.Encode(),
 			"request_id":      requestID,
+			"request_ua":      c.Request.UserAgent(),
 			"response_code":   code,
 			"response_msg":    message,
-			//"response_data":   data,
-			"reqponse_ua": c.Request.UserAgent(),
 		}).Error(sysErrMsg)
 	}
 }

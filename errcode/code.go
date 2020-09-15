@@ -10,6 +10,13 @@ var (
 		Message: "OK",
 	}
 
+	// Created record created
+	Created = &ErrCode{
+		Status:  http.StatusCreated,
+		Code:    "OK",
+		Message: "created",
+	}
+
 	// follows are error responses of server-side
 
 	// InternalServerError unknown errors of inside server

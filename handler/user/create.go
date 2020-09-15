@@ -41,5 +41,6 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	handler.SendResponse(c, nil, &createResponse{r.Username})
+	created := errcode.New(errcode.Created, nil)
+	handler.SendResponse(c, created, &createResponse{r.Username})
 }
