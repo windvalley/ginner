@@ -116,22 +116,15 @@ func GetBodyStringData(resBody io.ReadCloser) (string, error) {
 //	Data   interface{}       `json:"data"`
 //}
 //response := new(Response)
-//data, err := util.GetBodyStructData(res, response)
-//if err != nil {
-//return err
-//}
-//v := data.(*Response)
+//err := util.GetBodyStructData(res, response)
+//fmt.Println(response.Code, response.Msg, response.Data)
 func GetBodyStructData(
 	resBody io.ReadCloser,
 	structData interface{},
-) (interface{}, error) {
-	defer resBody.Close()
+) error {
 	decoder := ffjson.NewDecoder()
-	if err := decoder.DecodeReader(resBody, &structData); err != nil {
-		return nil, err
-	}
-
-	return structData, nil
+	err := decoder.DecodeReader(resBody, &structData)
+	return err
 }
 
 // GetUTF8Reader transform others encoding reader to utf8 reader.
