@@ -31,10 +31,12 @@ func urls(router *gin.Engine) {
 
 	// User manage demo
 	g1 := router.Group("/v1/users")
-	g1.POST("", user.Create) // user register request can not use jwt
-	g1.Use(midware.JWT())    // use jwt
+	g1.POST("", user.Create)    // user register request can not use jwt
+	g1.Use(midware.JWT())       // use jwt
+	g1.Use(midware.UserAudit()) // enable user audit
 	{
 		g1.GET("/:username", user.GetUser)
+		g1.POST("/:username", user.GetUser)
 	}
 
 	// API signature demo

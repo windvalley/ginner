@@ -1,6 +1,10 @@
 package util
 
-import "github.com/gin-gonic/gin"
+import (
+	"use-gin/config"
+
+	"github.com/gin-gonic/gin"
+)
 
 // GetRequestID get X-Request-Id
 func GetRequestID(c *gin.Context) string {
@@ -26,7 +30,7 @@ func GetRequestURI(c *gin.Context) string {
 func GetUsername(c *gin.Context) string {
 	username, ok := c.Get("key")
 	if !ok {
-		username = "guest"
+		username = config.UsernameGuest
 	}
 
 	return username.(string)

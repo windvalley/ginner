@@ -8,6 +8,7 @@ import (
 
 	"use-gin/errcode"
 	"use-gin/logger"
+	"use-gin/util"
 )
 
 // Response response with json format
@@ -27,17 +28,10 @@ func SendResponse(c *gin.Context, err error, data interface{}) {
 		Data:    data,
 	})
 
-	// error.log
+	// write to error.log
 	if status != http.StatusOK && status != http.StatusCreated {
-		requestID, ok := c.Get("X-Request-Id")
-		if !ok {
-			requestID = ""
-		}
-
-		username, ok := c.Get("key")
-		if !ok {
-			username = "guest"
-		}
+		requestID := util.GetRequestID(c)
+		username := util.GetUsername(c)
 
 		logger.Log.WithFields(logrus.Fields{
 			"username":        username,

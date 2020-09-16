@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
+	"use-gin/config"
 	"use-gin/handler"
 	"use-gin/logger"
 	"use-gin/model/rdb"
@@ -78,7 +79,7 @@ func AccessLogger() gin.HandlerFunc {
 			"response_msg":    responseMsg,
 		}).Info("accesslog")
 
-		if !doUserAudit(c) {
+		if !doUserAudit(c, username) {
 			return
 		}
 
@@ -124,8 +125,13 @@ func parseResponseBody(responseBody string) (
 	return "", "", nil
 }
 
-func doUserAudit(c *gin.Context) bool {
-	if c.Request.Method == http.MethodGet ||
+func doUserAudit(c *gin.Context, username string) bool {
+	isUserAudit, ok := c.Get(config.UserAuditEnableKey)
+	if !ok || isUserAudit != true {
+		return false
+	}
+
+	if username == config.UsernameGuest || c.Request.Method == http.MethodGet ||
 		c.Request.Method == http.MethodOptions {
 		return false
 	}
