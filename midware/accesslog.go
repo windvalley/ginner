@@ -120,6 +120,7 @@ func parseResponseBody(responseBody string) (
 		responseCode = res.Code
 		responseMsg = res.Message
 		responseData = res.Data
+		return
 	}
 
 	return "", "", nil

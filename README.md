@@ -34,6 +34,7 @@ Using Go `Gin` to develop high quality applications(Web API) efficiently.
   - [x] CORS
   - [x] RequestID(TraceID)
   - [x] Access log
+  - [x] User operation audit
   - [x] Global panic catch and alert
   - [x] Pprof
   - [x] Limiter
@@ -70,7 +71,6 @@ Using Go `Gin` to develop high quality applications(Web API) efficiently.
 - [x] Graceful restart or stop server
 - [x] Server health check when started
 - [x] SSL support
-- [x] User operation audit
 - [x] Deployment
   - [x] Dockerfile
   - [x] Simple manage script: service.sh
