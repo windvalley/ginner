@@ -1,4 +1,4 @@
-package demo
+package apiv1
 
 import (
 	"context"
@@ -7,12 +7,12 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 
+	"use-gin/api"
 	"use-gin/db/mongodb"
 	"use-gin/errcode"
-	"use-gin/handler"
 )
 
-type userInfo struct {
+type userInfoDemo struct {
 	Name   string `bson:"name"`
 	Age    uint16 `bson:"age"`
 	Weight uint32 `bson:"weight"`
@@ -28,7 +28,7 @@ func HandleMongodbDemo(c *gin.Context) {
 	col.EnsureIndexes(ctx, []string{}, []string{"age", "name,weight"})
 
 	// insert one document
-	user := userInfo{
+	user := userInfoDemo{
 		Name:   "xm",
 		Age:    7,
 		Weight: 40,
@@ -36,7 +36,7 @@ func HandleMongodbDemo(c *gin.Context) {
 	result, err := col.InsertOne(context.Background(), user)
 	if err != nil {
 		err1 := errcode.New(errcode.InternalServerError, err)
-		handler.SendResponse(c, err1, result)
+		api.SendResponse(c, err1, result)
 		return
 	}
 
@@ -45,21 +45,21 @@ func HandleMongodbDemo(c *gin.Context) {
 	err = col.Find(ctx, bson.M{"name": user.Name}).One(&one)
 	if err == mongo.ErrNoDocuments {
 		err1 := errcode.New(errcode.RecordNotFoundError, err)
-		handler.SendResponse(c, err1, nil)
+		api.SendResponse(c, err1, nil)
 		return
 	}
 	if err != nil {
 		err1 := errcode.New(errcode.InternalServerError, err)
-		handler.SendResponse(c, err1, nil)
+		api.SendResponse(c, err1, nil)
 		return
 	}
-	handler.SendResponse(c, nil, one)
+	api.SendResponse(c, nil, one)
 
 	// delete one ducument
 	//err = col.Remove(ctx, bson.M{"age": 7})
 	//if err != nil {
 	//err1 := errcode.New(errcode.InternalServerError, err)
-	//handler.SendResponse(c, err1, nil)
+	//api.SendResponse(c, err1, nil)
 	//return
 	//}
 
@@ -75,7 +75,7 @@ func HandleMongodbDemo(c *gin.Context) {
 	//result2, err := col.InsertMany(ctx, userInfos)
 	//if err != nil {
 	//err1 := errcode.New(errcode.InternalServerError, err)
-	//handler.SendResponse(c, err1, result2)
+	//api.SendResponse(c, err1, result2)
 	//return
 	//}
 
@@ -83,7 +83,7 @@ func HandleMongodbDemo(c *gin.Context) {
 	//batch := []userInfo{}
 	//col.Find(ctx, bson.M{"age": 6}).Sort("weight").Limit(7).All(&batch)
 
-	//handler.SendResponse(c, nil, batch)
+	//api.SendResponse(c, nil, batch)
 
 	// count
 	//count, err := col.Find(ctx, bson.M{"age": 6}).Count()

@@ -19,11 +19,11 @@ var (
 
 	// follows are error responses of server-side
 
-	// InternalServerError unknown errors of inside server
+	// InternalServerError unknown error inside server
 	InternalServerError = &ErrCode{
 		Status:  http.StatusInternalServerError,
-		Code:    "InternalError",
-		Message: "Internal server error",
+		Code:    "UnkownError",
+		Message: "Internal server error.",
 	}
 
 	// ServerPanicError panic error
@@ -40,6 +40,13 @@ var (
 	DBError = &ErrCode{
 		Status:  http.StatusInternalServerError,
 		Code:    "DBError",
+		Message: "%v",
+	}
+
+	// CustomServerError custom your own error
+	CustomServerError = &ErrCode{
+		Status:  http.StatusInternalServerError,
+		Code:    "InternalError",
 		Message: "%v",
 	}
 

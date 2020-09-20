@@ -1,4 +1,4 @@
-package demo
+package apiv1
 
 import (
 	"context"
@@ -9,10 +9,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/pquerna/ffjson/ffjson"
 
+	"use-gin/api"
 	cfg "use-gin/config"
 	"use-gin/db/kafka"
 	"use-gin/errcode"
-	"use-gin/handler"
 	"use-gin/logger"
 )
 
@@ -85,10 +85,10 @@ func HandleKafkaDemo(c *gin.Context) {
 	produceTask := produceTask{}
 	if err := addTaskToTopic(c, produceTask); err != nil {
 		err1 := errcode.New(errcode.InternalServerError, err)
-		handler.SendResponse(c, err1, nil)
+		api.SendResponse(c, err1, nil)
 		return
 	}
-	handler.SendResponse(c, nil, nil)
+	api.SendResponse(c, nil, nil)
 
 	// consumer
 	taskID := produceTask.ID

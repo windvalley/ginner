@@ -1,4 +1,4 @@
-package demo
+package apiv1
 
 import (
 	"errors"

@@ -5,9 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"use-gin/handler/demo"
-	"use-gin/handler/signdemo"
-	"use-gin/handler/user"
+	"use-gin/api/apiv1"
 	"use-gin/midware"
 )
 
@@ -26,21 +24,21 @@ func urls(router *gin.Engine) {
 	})
 
 	// Login, and get jwt token
-	router.POST("/login", user.Login)
-	router.GET("/login", user.Login)
+	router.POST("/login", apiv1.Login)
+	router.GET("/login", apiv1.Login)
 
 	// User manage demo
 	g1 := router.Group("/v1/users")
-	g1.POST("", user.Create)    // user register request can not use jwt
-	g1.Use(midware.JWT())       // use jwt
-	g1.Use(midware.UserAudit()) // enable user audit
+	g1.POST("", apiv1.CreateUser) // user register request can not use jwt
+	g1.Use(midware.JWT())         // use jwt
+	g1.Use(midware.UserAudit())   // enable user audit
 	{
-		g1.GET("/:username", user.GetUser)
-		g1.POST("/:username", user.GetUser)
+		g1.GET("/:username", apiv1.GetUser)
+		g1.POST("/:username", apiv1.GetUser)
 	}
 
 	// API signature demo
-	g2 := router.Group("/v1/signdemo")
+	g2 := router.Group("/v1/sign-demo")
 	//g2.Use(midware.APISign(midware.SignTypeMd5))
 	//g2.Use(midware.APISign(midware.SignTypeAES))
 	//g2.Use(midware.APISign(midware.SignTypeRSA))
@@ -50,12 +48,11 @@ func urls(router *gin.Engine) {
 	// NOTE: need to issue appKey and appSecret to users in advance
 	g2.Use(midware.JWT())
 	{
-		g2.GET("/hello", signdemo.Hello)
-		//g2.POST("/hello", signdemo.Hello)
+		g2.GET("", apiv1.SignatureDemo)
 	}
 
 	// Basic auth demo
-	g3 := router.Group("/v1")
+	g3 := router.Group("/v1/basic-auth-demo")
 	// If necessary, we could get username in handler function by follows code line:
 	// user := c.MustGet(gin.AuthUserKey).(string)
 	g3.Use(gin.BasicAuth(gin.Accounts{
@@ -63,14 +60,14 @@ func urls(router *gin.Engine) {
 		"admin": "123456",
 	}))
 	{
-		g3.GET("/helloworld", demo.HelloWorld)
+		g3.GET("", apiv1.BasicAuthDemo)
 	}
 
 	// handle dbs demo
-	g4 := router.Group("/v1")
+	g4 := router.Group("/v1/handle-dbs-demo")
 	{
-		g4.GET("/eg-handlekafka", demo.HandleKafkaDemo)
-		g4.POST("/eg-handleinfluxdb", demo.HandleInfluxdbDemo)
-		g4.GET("/eg-handlemongodb", demo.HandleMongodbDemo)
+		g4.GET("/kafka", apiv1.HandleKafkaDemo)
+		g4.POST("/influxdb", apiv1.HandleInfluxdbDemo)
+		g4.GET("/mongodb", apiv1.HandleMongodbDemo)
 	}
 }

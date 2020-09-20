@@ -12,9 +12,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"use-gin/api"
 	"use-gin/config"
 	"use-gin/errcode"
-	"use-gin/handler"
 )
 
 type publicParamsDebug struct {
@@ -34,7 +34,7 @@ func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
 
 	if err := c.Request.ParseForm(); err != nil {
 		err1 := errcode.New(errcode.InternalServerError, err)
-		handler.SendResponse(c, err1, nil)
+		api.SendResponse(c, err1, nil)
 		c.Abort()
 		return nil, nil
 	}
@@ -55,7 +55,7 @@ func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
 	if err != nil {
 		err1 := errcode.New(errcode.ValidationError, nil)
 		err1.Add(err)
-		handler.SendResponse(c, err1, nil)
+		api.SendResponse(c, err1, nil)
 
 		c.Abort()
 		return nil, nil

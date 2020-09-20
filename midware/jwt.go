@@ -8,10 +8,10 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 
+	"use-gin/api"
 	"use-gin/auth"
 	"use-gin/config"
 	"use-gin/errcode"
-	"use-gin/handler"
 )
 
 // JWT Json Web Token, and used for /login and api signature.
@@ -24,7 +24,7 @@ func JWT() gin.HandlerFunc {
 		if err != nil {
 			err1 := errcode.New(errcode.TokenInvalidError, nil)
 			err1.Add(err)
-			handler.SendResponse(c, err1, nil)
+			api.SendResponse(c, err1, nil)
 
 			c.Abort()
 			return
@@ -35,7 +35,7 @@ func JWT() gin.HandlerFunc {
 		if err != nil {
 			err1 := errcode.New(errcode.TokenInvalidError, err)
 			err1.Add("JWT validation failed")
-			handler.SendResponse(c, err1, nil)
+			api.SendResponse(c, err1, nil)
 
 			c.Abort()
 			return
@@ -48,7 +48,7 @@ func JWT() gin.HandlerFunc {
 			if payload.ExpiresAt-time.Now().Unix() > jwtMaxLifetime {
 				err := errcode.New(errcode.TokenInvalidError, nil)
 				err.Add("'exp': 'exceeds maximum allowed expiration'")
-				handler.SendResponse(c, err, nil)
+				api.SendResponse(c, err, nil)
 
 				c.Abort()
 				return
@@ -61,15 +61,15 @@ func JWT() gin.HandlerFunc {
 			case jwt.ValidationErrorExpired:
 				err1 := errcode.New(errcode.TokenInvalidError, err)
 				err1.Add("JWT expired")
-				handler.SendResponse(c, err1, nil)
+				api.SendResponse(c, err1, nil)
 			case jwt.ValidationErrorSignatureInvalid:
 				err1 := errcode.New(errcode.TokenInvalidError, err)
 				err1.Add("JWT signature validation failed")
-				handler.SendResponse(c, err1, nil)
+				api.SendResponse(c, err1, nil)
 			default:
 				err1 := errcode.New(errcode.TokenInvalidError, err)
 				err1.Add("JWT validation failed")
-				handler.SendResponse(c, err1, nil)
+				api.SendResponse(c, err1, nil)
 			}
 
 			c.Abort()

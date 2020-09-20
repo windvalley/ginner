@@ -3,9 +3,9 @@ package midware
 import (
 	"github.com/gin-gonic/gin"
 
+	"use-gin/api"
 	"use-gin/config"
 	"use-gin/errcode"
-	"use-gin/handler"
 )
 
 // ACL access limited
@@ -28,7 +28,7 @@ func ACL() gin.HandlerFunc {
 		if !allowURLMap[requestPath] && len(allowURLMap) != 0 {
 			err := errcode.New(errcode.AccessForbiddenError, nil)
 			err.Add(requestPath + " is not allowed")
-			handler.SendResponse(c, err, nil)
+			api.SendResponse(c, err, nil)
 
 			c.Abort()
 			return
@@ -37,7 +37,7 @@ func ACL() gin.HandlerFunc {
 		if !allowIPMap[ip] && len(allowIPMap) != 0 {
 			err := errcode.New(errcode.AccessForbiddenError, nil)
 			err.Add(ip + " is not allowed")
-			handler.SendResponse(c, err, nil)
+			api.SendResponse(c, err, nil)
 
 			c.Abort()
 			return

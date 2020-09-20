@@ -9,8 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
+	"use-gin/api"
 	"use-gin/config"
-	"use-gin/handler"
 	"use-gin/logger"
 	"use-gin/model"
 	"use-gin/util"
@@ -111,7 +111,7 @@ func AccessLogger() gin.HandlerFunc {
 func parseResponseBody(responseBody string) (
 	responseCode, responseMsg string, responseData interface{}) {
 	if responseBody != "" {
-		res := &handler.Response{}
+		res := &api.Response{}
 		err := json.Unmarshal([]byte(responseBody), &res)
 		if err != nil {
 			return "", "", nil

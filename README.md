@@ -35,7 +35,7 @@ Using Go `Gin` to develop high quality applications(Web API) efficiently.
   - [x] RequestID(TraceID)
   - [x] Access log
   - [x] User operation audit
-  - [x] Global panic catch and alert
+  - [x] Global panic catch and recover
   - [x] Pprof
   - [x] Limiter
     - [x] Request rate limiter based on client ip

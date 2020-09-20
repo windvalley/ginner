@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/time/rate"
 
+	"use-gin/api"
 	"use-gin/errcode"
-	"use-gin/handler"
 	"use-gin/util"
 )
 
@@ -25,7 +25,7 @@ func UserTrafficLimiter(burstSize int) gin.HandlerFunc {
 
 		err := fmt.Errorf("%s requests over %d/second, dennied", clientIP, burstSize)
 		err1 := errcode.New(errcode.TooManyRequestError, err)
-		handler.SendResponse(c, err1, nil)
+		api.SendResponse(c, err1, nil)
 
 		c.Abort()
 		return
@@ -43,7 +43,7 @@ func GlobalTrafficLimiter(burstSize int) gin.HandlerFunc {
 
 		err := fmt.Errorf("global requests rate over %d/second, dennied", burstSize)
 		err1 := errcode.New(errcode.TooManyRequestError, err)
-		handler.SendResponse(c, err1, nil)
+		api.SendResponse(c, err1, nil)
 
 		c.Abort()
 		return

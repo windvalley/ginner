@@ -43,7 +43,8 @@ func Group() {
 	if runmode == "debug" {
 		router.Use(gin.Logger())
 	}
-	router.Use(gin.Recovery())
+	//router.Use(gin.Recovery())
+	router.Use(midware.Recover())
 	router.Use(midware.RequestID())
 	router.Use(midware.AccessLogger())
 	router.Use(midware.ACL())
