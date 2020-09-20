@@ -11,6 +11,7 @@ import (
 	"use-gin/db/redis"
 	"use-gin/logger"
 	"use-gin/router"
+	"use-gin/util"
 )
 
 func init() {
@@ -49,6 +50,9 @@ func main() {
 	// relation db
 	rdb.Init()
 	defer rdb.Close()
+
+	// migrate relation db tables
+	util.MigrateRDBTables()
 
 	// mongodb
 	mongodb.Init()

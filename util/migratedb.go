@@ -5,8 +5,8 @@ import (
 	"use-gin/model"
 )
 
-// MigrateDBTables migrate relation db's schemas and keep schemas up to date
-func MigrateDBTables() {
+// MigrateRDBTables migrate relation db's schemas and keep schemas up to date
+func MigrateRDBTables() {
 	rdb.DBs.MySQL.AutoMigrate(
 		&model.User{},
 		&model.UserOperationLog{},
