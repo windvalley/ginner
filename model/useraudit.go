@@ -1,6 +1,9 @@
-package rdb
+package model
 
-import "time"
+import (
+	"time"
+	"use-gin/db/rdb"
+)
 
 // UserOperationLog user operation audit
 type UserOperationLog struct {
@@ -22,5 +25,5 @@ type UserOperationLog struct {
 
 // Create insert a record
 func (u *UserOperationLog) Create() error {
-	return DBs.MySQL.Create(&u).Error
+	return rdb.DBs.MySQL.Create(&u).Error
 }

@@ -5,14 +5,14 @@ import (
 
 	"use-gin/errcode"
 	"use-gin/handler"
-	"use-gin/model/rdb"
+	"use-gin/model"
 )
 
 // GetUser get user by path params "username"
 func GetUser(c *gin.Context) {
 	username := c.Param("username")
 
-	user, err := rdb.GetUser(username)
+	user, err := model.GetUser(username)
 	if err != nil && err.Error() == "record not found" {
 		handler.SendResponse(c, errcode.RecordNotFoundError, nil)
 		return

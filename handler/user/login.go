@@ -7,7 +7,7 @@ import (
 	"use-gin/config"
 	"use-gin/errcode"
 	"use-gin/handler"
-	"use-gin/model/rdb"
+	"use-gin/model"
 )
 
 type response struct {
@@ -40,7 +40,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	d, err := rdb.GetUser(u.Username)
+	d, err := model.GetUser(u.Username)
 	if err != nil {
 		err1 := errcode.New(errcode.UserNotFoundError, err)
 		handler.SendResponse(c, err1, nil)

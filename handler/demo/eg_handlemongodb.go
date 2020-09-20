@@ -7,9 +7,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 
+	"use-gin/db/mongodb"
 	"use-gin/errcode"
 	"use-gin/handler"
-	"use-gin/model/mongodb"
 )
 
 type userInfo struct {

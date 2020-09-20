@@ -1,9 +1,11 @@
-package rdb
+package model
 
 import (
 	"fmt"
 
 	"golang.org/x/crypto/bcrypt"
+
+	"use-gin/db/rdb"
 )
 
 // User user table
@@ -15,26 +17,26 @@ type User struct {
 
 // Create insert a record
 func (u *User) Create() error {
-	return DBs.MySQL.Create(&u).Error
+	return rdb.DBs.MySQL.Create(&u).Error
 }
 
 // GetUser get user by username
 func GetUser(username string) (*User, error) {
 	u := &User{}
-	d := DBs.MySQL.Where("username = ?", username).First(&u)
+	d := rdb.DBs.MySQL.Where("username = ?", username).First(&u)
 	return u, d.Error
 }
 
 // Update update an user record
 func (u *User) Update() error {
-	return DBs.MySQL.Save(u).Error
+	return rdb.DBs.MySQL.Save(u).Error
 }
 
 // DeleteUser delete an user by user id
 func DeleteUser(id uint) error {
 	user := User{}
 	user.ID = id
-	return DBs.MySQL.Delete(&user).Error
+	return rdb.DBs.MySQL.Delete(&user).Error
 }
 
 // ListUser list users by username, offset, limit
@@ -42,11 +44,11 @@ func ListUser(username string, offset, limit int) ([]*User, uint, error) {
 	users := make([]*User, 0)
 	var count uint
 	where := fmt.Sprintf("username like '%s%%'", username)
-	if err := DBs.MySQL.Model(&User{}).Where(where).Count(&count).Error; err != nil {
+	if err := rdb.DBs.MySQL.Model(&User{}).Where(where).Count(&count).Error; err != nil {
 		return users, count, err
 	}
 
-	if err := DBs.MySQL.Where(where).Offset(offset).Limit(limit).Order(
+	if err := rdb.DBs.MySQL.Where(where).Offset(offset).Limit(limit).Order(
 		"id desc").Find(&users).Error; err != nil {
 		return users, count, err
 	}

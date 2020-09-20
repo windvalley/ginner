@@ -12,7 +12,7 @@ import (
 	"use-gin/config"
 	"use-gin/handler"
 	"use-gin/logger"
-	"use-gin/model/rdb"
+	"use-gin/model"
 	"use-gin/util"
 )
 
@@ -88,7 +88,7 @@ func AccessLogger() gin.HandlerFunc {
 			resData = []byte("")
 		}
 
-		userOperationLog := &rdb.UserOperationLog{
+		userOperationLog := &model.UserOperationLog{
 			Username:   username,
 			ClientIP:   clientIP,
 			ReqMethod:  c.Request.Method,

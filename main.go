@@ -6,10 +6,10 @@ import (
 
 	"use-gin/config"
 	"use-gin/cron"
+	"use-gin/db/mongodb"
+	"use-gin/db/rdb"
+	"use-gin/db/redis"
 	"use-gin/logger"
-	"use-gin/model/mongodb"
-	"use-gin/model/rdb"
-	"use-gin/model/redis"
 	"use-gin/router"
 )
 

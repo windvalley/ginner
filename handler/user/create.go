@@ -5,7 +5,7 @@ import (
 
 	"use-gin/errcode"
 	"use-gin/handler"
-	"use-gin/model/rdb"
+	"use-gin/model"
 )
 
 type createResponse struct {
@@ -22,7 +22,7 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	u := &rdb.User{
+	u := &model.User{
 		Username: r.Username,
 		Password: r.Password,
 	}

@@ -10,10 +10,10 @@ import (
 	"github.com/pquerna/ffjson/ffjson"
 
 	cfg "use-gin/config"
+	"use-gin/db/kafka"
 	"use-gin/errcode"
 	"use-gin/handler"
 	"use-gin/logger"
-	"use-gin/model/kafka"
 )
 
 const consumeTaskTimeout = 6 * time.Minute

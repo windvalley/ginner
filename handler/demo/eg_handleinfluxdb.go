@@ -4,10 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"time"
-	"use-gin/model/influxdb"
 
 	"github.com/gin-gonic/gin"
 	"github.com/influxdata/influxdb/models"
+
+	"use-gin/db/influxdb"
 )
 
 const cSQLPartEnd = "fill(0) tz('Asia/Shanghai')"

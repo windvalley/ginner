@@ -8,8 +8,8 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
 	//_ "github.com/jinzhu/gorm/dialects/postgres"
-	// _ "github.com/jinzhu/gorm/dialects/sqlite"
-	// _ "github.com/jinzhu/gorm/dialects/mssql"
+	//_ "github.com/jinzhu/gorm/dialects/sqlite"
+	//_ "github.com/jinzhu/gorm/dialects/mssql"
 
 	"use-gin/config"
 	"use-gin/logger"
@@ -30,8 +30,6 @@ func Init() {
 		MySQL: GetDBConn("mysql"),
 		//PostgreSQL: GetDBConn("postgresql),
 	}
-
-	autoMigrateTables()
 }
 
 // Close close dbs connection
