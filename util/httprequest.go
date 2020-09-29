@@ -10,14 +10,14 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-	"ginner/logger"
 
+	"github.com/pquerna/ffjson/ffjson"
 	"golang.org/x/net/html/charset"
 	"golang.org/x/text/encoding"
 	"golang.org/x/text/encoding/unicode"
 	"golang.org/x/text/transform"
 
-	"github.com/pquerna/ffjson/ffjson"
+	"ginner/logger"
 )
 
 // HTTPRequest get body of response that io.ReadCloser type
