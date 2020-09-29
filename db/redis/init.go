@@ -6,7 +6,7 @@ import (
 
 	"github.com/gomodule/redigo/redis"
 
-	"use-gin/config"
+	"ginner/config"
 )
 
 // Redis instance of redis pool

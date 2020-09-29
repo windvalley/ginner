@@ -12,7 +12,7 @@ import (
 	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"
 
-	"use-gin/config"
+	"ginner/config"
 )
 
 // Log logger instance

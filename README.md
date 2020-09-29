@@ -1,4 +1,4 @@
-# Use Gin [![rcard](https://goreportcard.com/badge/github.com/windvalley/use-gin)](https://goreportcard.com/report/github.com/windvalley/use-gin) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/38d3eff769c14fecb01e91160e143727)](https://www.codacy.com/manual/windvalley/use-gin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=windvalley/use-gin&amp;utm_campaign=Badge_Grade) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=windvalley_use-gin&metric=alert_status)](https://sonarcloud.io/dashboard?id=windvalley_use-gin) ![Go](https://github.com/windvalley/use-gin/workflows/Go/badge.svg) [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://godoc.org/github.com/windvalley/use-gin) [![License](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](LICENSE)
+# Ginner [![rcard](https://goreportcard.com/badge/github.com/windvalley/ginner)](https://goreportcard.com/report/github.com/windvalley/ginner) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/38d3eff769c14fecb01e91160e143727)](https://www.codacy.com/manual/windvalley/ginner?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=windvalley/ginner&amp;utm_campaign=Badge_Grade) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=windvalley_ginner&metric=alert_status)](https://sonarcloud.io/dashboard?id=windvalley_ginner) ![Go](https://github.com/windvalley/ginner/workflows/Go/badge.svg) [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://godoc.org/github.com/windvalley/ginner) [![License](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](LICENSE)
 
 Using Go `Gin` to develop high quality applications(Web API) efficiently.
 
@@ -82,10 +82,10 @@ Using Go `Gin` to develop high quality applications(Web API) efficiently.
 Change project name first:
 
 ```bash
-git clone git@github.com:windvalley/use-gin.git
-cd use-gin
+git clone git@github.com:windvalley/ginner.git
+cd ginner
 
-# This will be change use-gin(current package name) to your own name.
+# This will be change ginner(current package name) to your own name.
 ./change_project_name.sh your-project-name
 ```
 

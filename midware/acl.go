@@ -3,9 +3,9 @@ package midware
 import (
 	"github.com/gin-gonic/gin"
 
-	"use-gin/api"
-	"use-gin/config"
-	"use-gin/errcode"
+	"ginner/api"
+	"ginner/config"
+	"ginner/errcode"
 )
 
 // ACL access limited

@@ -3,9 +3,9 @@ package midware
 import (
 	"github.com/gin-gonic/gin"
 
-	"use-gin/api"
-	"use-gin/auth"
-	"use-gin/errcode"
+	"ginner/api"
+	"ginner/auth"
+	"ginner/errcode"
 )
 
 const (

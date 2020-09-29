@@ -7,9 +7,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 
-	"use-gin/api"
-	"use-gin/db/mongodb"
-	"use-gin/errcode"
+	"ginner/api"
+	"ginner/db/mongodb"
+	"ginner/errcode"
 )
 
 type userInfoDemo struct {

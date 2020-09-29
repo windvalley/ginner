@@ -6,9 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/time/rate"
 
-	"use-gin/api"
-	"use-gin/errcode"
-	"use-gin/util"
+	"ginner/api"
+	"ginner/errcode"
+	"ginner/util"
 )
 
 // UserTrafficLimiter A client(ip) will be dennied when it's access rate is over busrtSize/second.

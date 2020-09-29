@@ -1,4 +1,4 @@
-app_name = "use-gin"
+app_name = "ginner"
 server_port = ":8443"
 runmode = "release" # debug/release/test
 

@@ -3,10 +3,10 @@ package user
 import (
 	"github.com/jinzhu/gorm"
 
-	"use-gin/auth"
-	"use-gin/config"
-	"use-gin/errcode"
-	"use-gin/model"
+	"ginner/auth"
+	"ginner/config"
+	"ginner/errcode"
+	"ginner/model"
 )
 
 // GetJWT get a jwt token if login success

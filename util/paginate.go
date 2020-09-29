@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"use-gin/logger"
+	"ginner/logger"
 
 	"github.com/gin-gonic/gin"
 )

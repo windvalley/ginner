@@ -9,11 +9,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
-	"use-gin/api"
-	"use-gin/config"
-	"use-gin/logger"
-	"use-gin/model"
-	"use-gin/util"
+	"ginner/api"
+	"ginner/config"
+	"ginner/logger"
+	"ginner/model"
+	"ginner/util"
 )
 
 type bodyLogWriter struct {

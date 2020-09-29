@@ -5,8 +5,8 @@ import (
 
 	"github.com/influxdata/influxdb/client/v2"
 
-	"use-gin/config"
-	"use-gin/logger"
+	"ginner/config"
+	"ginner/logger"
 )
 
 var cli client.Client

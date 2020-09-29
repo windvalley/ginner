@@ -3,7 +3,7 @@ package cron
 import (
 	"github.com/muesli/cache2go"
 
-	"use-gin/logger"
+	"ginner/logger"
 )
 
 // Cache usage:

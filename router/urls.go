@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"use-gin/api/apiv1"
-	"use-gin/midware"
+	"ginner/api/apiv1"
+	"ginner/midware"
 )
 
 func urls(router *gin.Engine) {

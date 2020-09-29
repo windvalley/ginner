@@ -1,4 +1,4 @@
-module use-gin
+module ginner
 
 go 1.15
 

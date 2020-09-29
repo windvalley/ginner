@@ -1,7 +1,7 @@
 package util
 
 import (
-	"use-gin/config"
+	"ginner/config"
 
 	"github.com/gin-gonic/gin"
 )

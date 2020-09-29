@@ -6,8 +6,8 @@ import (
 
 	"github.com/qiniu/qmgo"
 
-	"use-gin/config"
-	"use-gin/logger"
+	"ginner/config"
+	"ginner/logger"
 )
 
 var (

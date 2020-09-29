@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"use-gin/config"
+	"ginner/config"
 )
 
 // ProcessLock How to use:

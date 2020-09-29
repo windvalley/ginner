@@ -1,8 +1,8 @@
 package util
 
 import (
-	"use-gin/db/rdb"
-	"use-gin/model"
+	"ginner/db/rdb"
+	"ginner/model"
 )
 
 // MigrateRDBTables migrate relation db's schemas and keep schemas up to date

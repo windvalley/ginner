@@ -8,10 +8,10 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 
-	"use-gin/api"
-	"use-gin/auth"
-	"use-gin/config"
-	"use-gin/errcode"
+	"ginner/api"
+	"ginner/auth"
+	"ginner/config"
+	"ginner/errcode"
 )
 
 // JWT Json Web Token, and used for /login and api signature.

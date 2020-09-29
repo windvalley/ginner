@@ -3,7 +3,7 @@ package apiv1
 import (
 	"github.com/gin-gonic/gin"
 
-	"use-gin/api"
+	"ginner/api"
 )
 
 // SignatureDemo for testing API Signature Authentication

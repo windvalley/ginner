@@ -3,7 +3,7 @@ package user
 import (
 	"github.com/jinzhu/gorm"
 
-	"use-gin/model"
+	"ginner/model"
 )
 
 // Get get user info by username

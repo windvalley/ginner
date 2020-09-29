@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"use-gin/api"
+	"ginner/api"
 )
 
 // BasicAuthDemo basic auth demo

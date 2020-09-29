@@ -5,7 +5,7 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
-	"use-gin/db/rdb"
+	"ginner/db/rdb"
 )
 
 // User user table

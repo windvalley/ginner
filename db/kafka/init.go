@@ -6,8 +6,8 @@ import (
 
 	"github.com/Shopify/sarama"
 
-	cfg "use-gin/config"
-	"use-gin/logger"
+	cfg "ginner/config"
+	"ginner/logger"
 )
 
 var (

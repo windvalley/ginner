@@ -9,11 +9,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/pquerna/ffjson/ffjson"
 
-	"use-gin/api"
-	cfg "use-gin/config"
-	"use-gin/db/kafka"
-	"use-gin/errcode"
-	"use-gin/logger"
+	"ginner/api"
+	cfg "ginner/config"
+	"ginner/db/kafka"
+	"ginner/errcode"
+	"ginner/logger"
 )
 
 const consumeTaskTimeout = 6 * time.Minute

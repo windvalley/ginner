@@ -3,7 +3,7 @@ package redclus
 import (
 	"github.com/go-redis/redis"
 
-	"use-gin/config"
+	"ginner/config"
 )
 
 // Redis client instance of redis cluster

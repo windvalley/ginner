@@ -3,9 +3,9 @@ package apiv1
 import (
 	"github.com/gin-gonic/gin"
 
-	"use-gin/api"
-	"use-gin/errcode"
-	"use-gin/service/user"
+	"ginner/api"
+	"ginner/errcode"
+	"ginner/service/user"
 )
 
 // CreateUser user register

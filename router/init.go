@@ -17,11 +17,11 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 
-	"use-gin/config"
-	_ "use-gin/docs" // for swagger
-	"use-gin/logger"
-	"use-gin/midware"
-	"use-gin/util"
+	"ginner/config"
+	_ "ginner/docs" // for swagger
+	"ginner/logger"
+	"ginner/midware"
+	"ginner/util"
 )
 
 // Group router group

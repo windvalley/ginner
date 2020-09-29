@@ -1,26 +1,26 @@
 package main
 
 import (
-	//"use-gin/model/influxdb"
-	//"use-gin/model/kafka"
+	//"ginner/model/influxdb"
+	//"ginner/model/kafka"
 
-	"use-gin/config"
-	"use-gin/cron"
-	"use-gin/db/mongodb"
-	"use-gin/db/rdb"
-	"use-gin/db/redis"
-	"use-gin/logger"
-	"use-gin/router"
-	"use-gin/util"
+	"ginner/config"
+	"ginner/cron"
+	"ginner/db/mongodb"
+	"ginner/db/rdb"
+	"ginner/db/redis"
+	"ginner/logger"
+	"ginner/router"
+	"ginner/util"
 )
 
 func init() {
 	// Load config from command line parameters.
-	//    e.g. ./use-gin -c conf/dev.config.conf
+	//    e.g. ./ginner -c conf/dev.config.conf
 	//config.LoadFromCLIParams()
 
 	// Load config from system environment variable RUNENV: prod/dev
-	//    e.g. RUNENV=dev ./use-gin
+	//    e.g. RUNENV=dev ./ginner
 	//config.LoadFromENV()
 
 	// If load config from CLI params failed,
@@ -43,8 +43,8 @@ func init() {
 // @contact.name Windvalley
 // @contact.email i@sre.im
 // @license.name MIT
-// @license.url https://github.com/windvalley/use-gin/blob/master/LICENSE
-// @host use-gin.sre.im:8000
+// @license.url https://github.com/windvalley/ginner/blob/master/LICENSE
+// @host ginner.sre.im:8000
 // @BasePath /api
 func main() {
 	// relation db

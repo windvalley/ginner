@@ -3,7 +3,7 @@ package util
 import (
 	"gopkg.in/gomail.v2"
 
-	"use-gin/config"
+	"ginner/config"
 )
 
 // SendMail using for send a alert mail to manager.
@@ -11,7 +11,7 @@ import (
 //mailTo := []string{
 //	"manager@sre.im",
 //}
-//subject := "[alert] use-gin error"
+//subject := "[alert] ginner error"
 //body := "some html codes"
 //if err := util.SendMail(mailTo, subject, body); err != nil {
 //return err

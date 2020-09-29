@@ -2,7 +2,7 @@ package model
 
 import (
 	"time"
-	"use-gin/db/rdb"
+	"ginner/db/rdb"
 )
 
 // UserOperationLog user operation audit

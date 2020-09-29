@@ -11,8 +11,8 @@ import (
 	//_ "github.com/jinzhu/gorm/dialects/sqlite"
 	//_ "github.com/jinzhu/gorm/dialects/mssql"
 
-	"use-gin/config"
-	"use-gin/logger"
+	"ginner/config"
+	"ginner/logger"
 )
 
 // Databases if have any other databases, just put it in this struct

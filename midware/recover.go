@@ -8,8 +8,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"use-gin/api"
-	"use-gin/errcode"
+	"ginner/api"
+	"ginner/errcode"
 )
 
 // Recover recover from panic and send fitting response to client

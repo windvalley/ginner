@@ -6,9 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
-	"use-gin/errcode"
-	"use-gin/logger"
-	"use-gin/util"
+	"ginner/errcode"
+	"ginner/logger"
+	"ginner/util"
 )
 
 // Response response with json format

@@ -1,6 +1,6 @@
 package user
 
-import "use-gin/model"
+import "ginner/model"
 
 // Create create user by username and password
 func Create(username, password string) error {

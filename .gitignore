@@ -2,7 +2,7 @@
 go.sum
 logs/
 *.swp
-use-gin
-use-gin_darwin_amd64
-use-gin_linux_amd64
+ginner
+ginner_darwin_amd64
+ginner_linux_amd64
 rsync_repo.sh

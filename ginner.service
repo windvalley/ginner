@@ -1,5 +1,5 @@
 [Unit]
-Description=Use Gin
+Description=Ginner
 Documentation=
 After=network.target
 Wants=
@@ -7,7 +7,7 @@ Wants=
 [Service]
 Type=simple
 EnvironmentFile=/your-project-path/conf/systemd.ENV
-ExecStart=/your-project-path/use-gin
+ExecStart=/your-project-path/ginner
 KillMode=process
 Restart=on-failure
 RestartSec=1s

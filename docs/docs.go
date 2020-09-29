@@ -24,7 +24,7 @@ var doc = `{
         },
         "license": {
             "name": "MIT",
-            "url": "https://github.com/windvalley/use-gin/blob/master/LICENSE"
+            "url": "https://github.com/windvalley/ginner/blob/master/LICENSE"
         },
         "version": "{{.Version}}"
     },
@@ -45,7 +45,7 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "0.1.0",
-	Host:        "use-gin.sre.im:8000",
+	Host:        "ginner.sre.im:8000",
 	BasePath:    "/api",
 	Schemes:     []string{},
 	Title:       "Use-Gin API",

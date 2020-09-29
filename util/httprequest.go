@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-	"use-gin/logger"
+	"ginner/logger"
 
 	"golang.org/x/net/html/charset"
 	"golang.org/x/text/encoding"

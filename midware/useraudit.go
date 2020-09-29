@@ -3,7 +3,7 @@ package midware
 import (
 	"github.com/gin-gonic/gin"
 
-	"use-gin/config"
+	"ginner/config"
 )
 
 // UserAudit enable user audit log

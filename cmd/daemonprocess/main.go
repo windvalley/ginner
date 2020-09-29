@@ -10,9 +10,9 @@ import (
 
 	"github.com/spf13/pflag"
 
-	"use-gin/config"
-	"use-gin/logger"
-	"use-gin/util"
+	"ginner/config"
+	"ginner/logger"
+	"ginner/util"
 )
 
 func main() {

@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/influxdata/influxdb/models"
 
-	"use-gin/db/influxdb"
+	"ginner/db/influxdb"
 )
 
 const cSQLPartEnd = "fill(0) tz('Asia/Shanghai')"

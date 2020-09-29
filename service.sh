@@ -9,7 +9,7 @@
 
 
 PROJECT_PATH="./"
-BIN_NAME="use-gin"
+BIN_NAME="ginner"
 PID_FILE=$PROJECT_PATH/logs/${BIN_NAME}.pid
 PID=$(cat $PID_FILE 2>/dev/null)
 
