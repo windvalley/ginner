@@ -37,9 +37,9 @@ func init() {
 	//redclus.Init()
 }
 
-// @title Use-Gin API
-// @version 0.1.0
-// @description Using Go Gin to develop high quality applications(Web API) efficiently.
+// @title ginner API
+// @version 0.0.1
+// @description For developing high quality applications(Web API) efficiently by Go Gin.
 // @contact.name Windvalley
 // @contact.email i@sre.im
 // @license.name MIT
