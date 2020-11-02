@@ -1,6 +1,6 @@
 # Ginner [![Go Report Card](https://goreportcard.com/badge/github.com/windvalley/ginner)](https://goreportcard.com/report/github.com/windvalley/ginner) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/7b817bd0effe4d02bbea489ba0541edb)](https://www.codacy.com/gh/windvalley/ginner/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=windvalley/ginner&amp;utm_campaign=Badge_Grade) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=windvalley_ginner&metric=alert_status)](https://sonarcloud.io/dashboard?id=windvalley_ginner) ![Go](https://github.com/windvalley/ginner/workflows/Go/badge.svg) [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://godoc.org/github.com/windvalley/ginner) [![License](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](LICENSE)
 
-For developing high quality applications(Web API) efficiently by Go Gin.
+Based on the Gin framework, this project integrates commonly used web components and tools, and demonstrates a reasonable code organization structure to help users develop web back-end applications efficiently.
 
 [简体中文](README_ZH.md)
 
@@ -8,21 +8,22 @@ For developing high quality applications(Web API) efficiently by Go Gin.
 
 - [x] Go Modules
 - [x] Configuration
-  - [x] toml
-  - [x] Load config from command line parameters
-  - [x] Load config from system environment variable
-  - [x] If load config from CLI params failed, then load config from system environment variable
+  - [x] Object-oriented configuration
+  - [x] Load configuration files from command line parameters
+  - [x] Load configuration files from system environment variables
+  - [x] Load configuration files from command line parameters takes precedence
 - [x] Logger
   - [x] Separation of error log and access log
-  - [x] Customize log dirname, log save days, log rotate interval, log format(json/txt)
-  - [x] When runmode is debug, log can also be output to screen
-- [x] Error code system: for central managing the error response messages
+  - [x] The log format, log retention time, log rotation interval, log directory name can be customized
+  - [x] If the runmode is debug, the log will be output to the screen at the same time
+- [x] Error code system
+  - [x] For centralized managing error response information
 - [x] Swagger
-  - [x] Auto enable swagger when runmode is debug
+  - [x] If the runmode is debug, swagger will be automatically enabled
 - [x] Middlewares
   - [x] JWT Authentication
     - [x] Login: get JWT token by username and password
-    - [x] API Signature Authentication: user need to apply `appKey` and `appSecret` in advance
+    - [x] API Signature Authentication: Users need to apply for `appKey` and `appSecret` in advance
   - [x] API Signature Authentication
     - [x] HmacMd5
     - [x] HmacSha1
@@ -63,29 +64,29 @@ For developing high quality applications(Web API) efficiently by Go Gin.
 - [x] Crontab: cron
 - [x] Go cache: cache2go
 - [x] Utils
-  - [x] Processlock: avoiding errors caused by repeated execution
+  - [x] Processlock: avoid errors caused by repeated execution of the program(process)
+  - [x] Live reloading gin server in development phase
+  - [x] HTTP request
   - [x] Gomail
   - [x] Paginate
-  - [x] HTTP request
-  - [x] Live reloading server in development stage
-- [x] Graceful restart or stop server
-- [x] Server health check when started
+- [x] Graceful restart or stop gin server
+- [x] Health check when the server starts
 - [x] SSL support
 - [x] Deployment
   - [x] Dockerfile
-  - [x] Simple manage script: service.sh
   - [x] Systemd
   - [x] Supervisord
+  - [x] Simple manage script: service.sh
 
 ## Deployment
 
-Change project name first:
+First you need to change the current project name to your own:
 
 ```bash
 git clone git@github.com:windvalley/ginner.git
 cd ginner
 
-# This will be change ginner(current package name) to your own name.
+# This will change the current project name `ginner` to your own project name.
 ./change_project_name.sh your-project-name
 ```
 
@@ -94,7 +95,7 @@ cd ginner
 ```bash
 ./build.sh
 
-# dev
+# development
 export RUNENV=dev
 # production
 export RUNENV=prod
