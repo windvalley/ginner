@@ -1,46 +1,34 @@
 package util
 
 import (
-	"fmt"
-	"strconv"
+	"github.com/gin-gonic/gin"
 
 	"ginner/logger"
-
-	"github.com/gin-gonic/gin"
 )
 
-// Paginate The request url must has page and page_size parameter,
-// and if not have this two parameters, the server will return all records.
-func Paginate(c *gin.Context) (int, int, int, int) {
-	page, pageSize := 0, 0
-	if pageStr := c.Query("page"); pageStr != "" {
-		var err error
-		page, err = strconv.Atoi(pageStr)
-		if err != nil {
-			logger.Log.Warnf("page(string) convert to int error: %v", err)
-		}
-	}
-	if pageSizeStr := c.Query("page_size"); pageSizeStr != "" {
-		var err error
-		pageSize, err = strconv.Atoi(pageSizeStr)
-		if err != nil {
-			logger.Log.Warnf("page_size(string) convert to int error: %v", err)
-		}
+type pagination struct {
+	Page     int `form:"page" binding:"required"`
+	PageSize int `form:"page-size" binding:"required"`
+}
+
+// Paginate If page and page-size validate error, it will return defaultPageSize records.
+func Paginate(c *gin.Context, defaultPageSize int) (offset, limit, page, pageSize int) {
+	var r pagination
+	if err := c.ShouldBind(&r); err != nil {
+		logger.Log.Debugf(
+			"use the default values of page(1) and page-size(%d), bind error: %v",
+			defaultPageSize, err)
+		return 0, defaultPageSize, 1, defaultPageSize
 	}
 
-	// return all records
-	offset, limit := -1, -1
-
-	// paginate
-	if page > 0 && pageSize > 0 {
-		offset = (page - 1) * pageSize
-		limit = pageSize
+	if r.Page > 0 && r.PageSize > 0 {
+		offset = (r.Page - 1) * r.PageSize
+		limit = r.PageSize
 	} else {
-		fmt.Println(page, pageSize)
-		page, pageSize = -1, -1
+		return 0, defaultPageSize, 1, defaultPageSize
 	}
 
-	// offset and limit used for mysql query;
-	// page and pageSize used for return to users.
-	return offset, limit, page, pageSize
+	// offset and limit used for quering mysql,
+	// and r.page and r.pageSize used for responsing to users.
+	return offset, limit, r.Page, r.PageSize
 }
