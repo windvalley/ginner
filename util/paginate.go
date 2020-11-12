@@ -29,6 +29,6 @@ func Paginate(c *gin.Context, defaultPageSize int) (offset, limit, page, pageSiz
 	}
 
 	// offset and limit used for quering mysql,
-	// and r.page and r.pageSize used for responsing to users.
+	// and r.page and r.pageSize used for responding to users.
 	return offset, limit, r.Page, r.PageSize
 }
