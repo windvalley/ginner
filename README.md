@@ -66,9 +66,10 @@ Based on the Gin framework, this project integrates commonly used web components
 - [x] Utils
   - [x] Processlock: avoid errors caused by repeated execution of the program(process)
   - [x] Live reloading gin server in development phase
+  - [x] Pagination
+  - [x] Redis mutex
   - [x] HTTP request
   - [x] Gomail
-  - [x] Paginate
 - [x] Graceful restart or stop gin server
 - [x] Health check when the server starts
 - [x] SSL support

@@ -62,10 +62,11 @@
 - [x] 进程内缓存`cache2go`
 - [x] 其他小工具(`util`)
   - [x] 进程锁`processlock`: 防止程序被重复执行导致未知错误
-  - [x] 发送邮件`gomail`
-  - [x] 分页`paginate`
-  - [x] 请求客户端`httprequest`
   - [x] 内置的实时`reload`工具, 用于开发阶段, 提升开发效率
+  - [x] 分页`pagination`
+  - [x] 实现`redis`分布式锁工具
+  - [x] 请求客户端`httprequest`
+  - [x] 发送邮件`gomail`
 - [x] 支持优雅地重启和停止
 - [x] 服务健康检查
 - [x] 支持开启`HTTPS`
