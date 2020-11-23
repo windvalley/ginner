@@ -8,7 +8,6 @@ import (
 	"ginner/cron"
 	"ginner/db/mongodb"
 	"ginner/db/rdb"
-	"ginner/db/redis"
 	"ginner/logger"
 	"ginner/router"
 	"ginner/util"
@@ -33,8 +32,12 @@ func init() {
 	cron.Init()
 
 	// cache
-	redis.Init()
+	//redis.Init()
+	// or
 	//redclus.Init()
+
+	// search
+	//es.Init()
 }
 
 // @title ginner API

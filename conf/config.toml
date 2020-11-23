@@ -67,6 +67,13 @@ consumer_topic = ""
 consumer_group = ""
 keepalive = 10
 
+[es]
+nodes = [
+    "http://127.0.0.1:9800",
+]
+username = ""
+password = ""
+
 [influxdb]
 address = "http://127.0.0.1:8086"
 username = ""

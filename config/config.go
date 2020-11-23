@@ -14,6 +14,7 @@ type GlobalConfig struct {
 	RDBs         map[string]rdb
 	Mongo        mongo
 	Kafka        kafka
+	ES           es
 	Influxdb     influxdb
 	Redis        redis
 	RedisCluster redisCluster `toml:"redis_cluster"`
@@ -71,6 +72,12 @@ type kafka struct {
 	ConsumerTopic string `toml:"consumer_topic"`
 	ConsumerGroup string `toml:"consumer_group"`
 	Keepalive     time.Duration
+}
+
+type es struct {
+	Nodes    []string
+	Username string
+	Password string
 }
 
 type influxdb struct {
