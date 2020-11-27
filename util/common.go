@@ -2,6 +2,7 @@ package util
 
 import (
 	"ginner/config"
+	"reflect"
 
 	"github.com/gin-gonic/gin"
 )
@@ -34,4 +35,24 @@ func GetUsername(c *gin.Context) string {
 	}
 
 	return username.(string)
+}
+
+// HasEntry determine whether an entry exists in a container(slice/array/map)
+func HasEntry(entries interface{}, entry interface{}) bool {
+	containerValue := reflect.ValueOf(entries)
+
+	switch reflect.TypeOf(entries).Kind() {
+	case reflect.Slice, reflect.Array:
+		for i := 0; i < containerValue.Len(); i++ {
+			if containerValue.Index(i).Interface() == entry {
+				return true
+			}
+		}
+	case reflect.Map:
+		if containerValue.MapIndex(reflect.ValueOf(entry)).IsValid() {
+			return true
+		}
+	}
+
+	return false
 }
