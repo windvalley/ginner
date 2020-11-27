@@ -5,10 +5,10 @@ import (
 	"net"
 )
 
-var privateIPBlocks []*net.IPNet
+var (
+	privateIPBlocks []*net.IPNet
 
-func init() {
-	for _, cidr := range []string{
+	privateCIDRs = []string{
 		"127.0.0.0/8",    // IPv4 loopback
 		"10.0.0.0/8",     // RFC1918
 		"172.16.0.0/12",  // RFC1918
@@ -17,7 +17,11 @@ func init() {
 		"::1/128",        // IPv6 loopback
 		"fe80::/10",      // IPv6 link-local
 		"fc00::/7",       // IPv6 unique local addr
-	} {
+	}
+)
+
+func init() {
+	for _, cidr := range privateCIDRs {
 		_, block, err := net.ParseCIDR(cidr)
 		if err != nil {
 			panic(fmt.Errorf("parse error on %q: %v", cidr, err))
