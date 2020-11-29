@@ -3,6 +3,7 @@ package midware
 import (
 	"bytes"
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"time"
 
@@ -42,16 +43,19 @@ func AccessLogger() gin.HandlerFunc {
 
 		startTime := time.Now()
 
+		requestBody := ""
+		if c.Request.Body != nil {
+			bodyBytes, _ := ioutil.ReadAll(c.Request.Body)
+			c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
+			requestBody = string(bodyBytes)
+		}
+
 		c.Next()
 
 		responseBody := bodyLogWriter.body.String()
 		responseCode, responseMsg, responseData := parseResponseBody(responseBody)
 
 		latencyTime := time.Since(startTime).Seconds()
-
-		if c.Request.Method == http.MethodPost {
-			_ = c.Request.ParseForm()
-		}
 
 		requestID := util.GetRequestID(c)
 		requestURI := util.GetRequestURI(c)
@@ -60,7 +64,6 @@ func AccessLogger() gin.HandlerFunc {
 		clientIP := c.ClientIP()
 		httpStatusCode := c.Writer.Status()
 		requestReferer := c.Request.Referer()
-		requestBodyData := c.Request.PostForm.Encode()
 		requestUA := c.Request.UserAgent()
 
 		logger.Log.WithFields(logrus.Fields{
@@ -72,7 +75,7 @@ func AccessLogger() gin.HandlerFunc {
 			"latency_time":    latencyTime,
 			"request_proto":   c.Request.Proto,
 			"request_referer": requestReferer,
-			"request_body":    requestBodyData,
+			"request_body":    requestBody,
 			"request_id":      requestID,
 			"request_ua":      requestUA,
 			"response_code":   responseCode,
@@ -93,7 +96,7 @@ func AccessLogger() gin.HandlerFunc {
 			ClientIP:   clientIP,
 			ReqMethod:  c.Request.Method,
 			ReqPath:    requestURI,
-			ReqBody:    requestBodyData,
+			ReqBody:    requestBody,
 			ReqReferer: requestReferer,
 			UserAgent:  requestUA,
 			ReqTime:    startTime,
