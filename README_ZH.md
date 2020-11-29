@@ -54,6 +54,8 @@
     - [x] `RedisCluster`
   - [x] 时序数据库
     - [x] `InfluxDB`
+  - [x] 搜索引擎
+    - [x] `Elasticsearch`
   - [x] 消息队列
     - [x] `Kafka`
 - [x] 子项目`demo`

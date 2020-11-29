@@ -57,6 +57,8 @@ Based on the Gin framework, this project integrates commonly used web components
     - [x] RedisCluster
   - [x] Time Series Database
     - [x] InfluxDB
+  - [x] Search
+    - [x] Elasticsearch
   - [x] MQ
     - [x] Kafka
 - [x] Subproject demo
