@@ -22,8 +22,19 @@ var (
 	// InternalServerError unknown error inside server
 	InternalServerError = &ErrCode{
 		Status:  http.StatusInternalServerError,
-		Code:    "UnkownError",
+		Code:    "InternalError",
 		Message: "Internal server error.",
+	}
+
+	// CustomInternalServerError custom error message of response
+	// Usage:
+	// err := errcode.New(errcode.CustomInternalServerError, nil)
+	// err1 := err.Add("some error message string")
+	// handler.SendResponse(c, err1, nil)
+	CustomInternalServerError = &ErrCode{
+		Status:  http.StatusInternalServerError,
+		Code:    "InternalError",
+		Message: "Internal server error: %v",
 	}
 
 	// ServerPanicError panic error
@@ -31,23 +42,6 @@ var (
 		Status:  http.StatusInternalServerError,
 		Code:    "PanicError",
 		Message: "Server meets up panic error, please contact admin.",
-	}
-
-	// DBError Usage:
-	// err := errcode.New(errcode.ErrDataNotExist, nil)
-	// err1 := err.Add("somestring")
-	// handler.SendResponse(c, err1, nil)
-	DBError = &ErrCode{
-		Status:  http.StatusInternalServerError,
-		Code:    "DBError",
-		Message: "%v",
-	}
-
-	// CustomServerError custom your own error
-	CustomServerError = &ErrCode{
-		Status:  http.StatusInternalServerError,
-		Code:    "InternalError",
-		Message: "%v",
 	}
 
 	// follows are error responses of client-side

@@ -19,7 +19,7 @@ func CreateUser(c *gin.Context) {
 	}
 
 	if err := user.Create(r.Username, r.Password); err != nil {
-		err1 := errcode.New(errcode.InternalServerError, err)
+		err1 := errcode.New(errcode.CustomInternalServerError, err)
 		err1.Add("create user failed.")
 		api.SendResponse(c, err1, nil)
 		return
@@ -70,7 +70,7 @@ func GetUser(c *gin.Context) {
 
 	user, err := user.Get(username)
 	if err != nil {
-		err1 := errcode.New(errcode.CustomServerError, err)
+		err1 := errcode.New(errcode.CustomInternalServerError, err)
 		err1.Add("get user failed.")
 		api.SendResponse(c, err1, nil)
 		return

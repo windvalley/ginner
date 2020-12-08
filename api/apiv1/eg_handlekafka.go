@@ -84,7 +84,7 @@ func HandleKafkaDemo(c *gin.Context) {
 	// producer
 	produceTask := produceTask{}
 	if err := addTaskToTopic(c, produceTask); err != nil {
-		err1 := errcode.New(errcode.InternalServerError, err)
+		err1 := errcode.New(errcode.CustomInternalServerError, err)
 		api.SendResponse(c, err1, nil)
 		return
 	}
