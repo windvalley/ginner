@@ -22,13 +22,29 @@ func Init() {
 }
 
 // Get redis get
+//    e.g.
+// fooStr, _ := redclus.Get("rediskey")
+// if fooStr != "" {
+//     if err := json.Unmarshal([]byte(fooStr), &foo); err != nil {
+//         return err
+//     }
+//     return nil
+// }
 func Get(key string) (string, error) {
 	return Redis.Get(key).Result()
 }
 
 // Set redis set
+//    e.g.
+// fooBytes, err := json.Marshal(foo)
+// if err != nil {
+//     return err
+// }
+// if _, err = redclus.Set("rediskey", fooBytes, 120); err != nil {
+//     return err
+// }
 func Set(key string, value interface{}, expiration int) (string, error) {
-	return Redis.Set(key, value, time.Duration(expiration)).Result()
+	return Redis.Set(key, value, time.Duration(expiration)*time.Second).Result()
 }
 
 // Del redis del
