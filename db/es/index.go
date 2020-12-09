@@ -39,6 +39,10 @@ func DeleteIndices(indexNames []string) error {
 
 // DeleteIndexAliases delete aliases
 func DeleteIndexAliases(indexNames, aliasNames []string) error {
+	if len(indexNames) == 0 || len(aliasNames) == 0 {
+		return nil
+	}
+
 	res, err := Client.Indices.DeleteAlias(indexNames, aliasNames)
 	if err != nil {
 		return err
@@ -69,7 +73,9 @@ func PutIndexAlias(indexNames []string, aliasName string) error {
 func GetIndexAliases(indexAliasName string) ([]string, error) {
 	var resp map[string]interface{}
 	res, err := Client.Indices.GetAlias(
-		Client.Indices.GetAlias.WithIndex(indexAliasName))
+		Client.Indices.GetAlias.WithIndex(indexAliasName),
+		Client.Indices.GetAlias.WithIgnoreUnavailable(true),
+	)
 	if err != nil {
 		return nil, err
 	}
