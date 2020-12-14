@@ -9,6 +9,7 @@ require (
 	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc
 	github.com/cenkalti/backoff/v4 v4.1.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/dustin/go-humanize v1.0.0
 	github.com/elastic/go-elasticsearch/v6 v6.8.10
 	github.com/elastic/go-elasticsearch/v7 v7.10.0
 	github.com/fastly/go-utils v0.0.0-20180712184237-d95a45783239 // indirect
