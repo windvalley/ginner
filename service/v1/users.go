@@ -1,4 +1,4 @@
-package user
+package service
 
 import (
 	"github.com/jinzhu/gorm"
@@ -9,8 +9,33 @@ import (
 	"ginner/model"
 )
 
-// GetJWT get a jwt token if login success
-func GetJWT(username, password string) (string, error) {
+// CreateUser create user by username and password
+func CreateUser(username, password string) error {
+	u := &model.User{
+		Username: username,
+		Password: password,
+	}
+
+	if err := u.EncryptPassword(); err != nil {
+		return err
+	}
+
+	err := u.Create()
+	return err
+}
+
+// GetUser get user info by username
+func GetUser(username string) (*model.User, error) {
+	user, err := model.GetUser(username)
+	if err == gorm.ErrRecordNotFound {
+		return nil, nil
+	}
+
+	return user, err
+}
+
+// GetUserJWT get a jwt token if login success
+func GetUserJWT(username, password string) (string, error) {
 	d, err := model.GetUser(username)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {

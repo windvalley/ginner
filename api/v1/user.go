@@ -1,11 +1,11 @@
-package apiv1
+package api
 
 import (
 	"github.com/gin-gonic/gin"
 
 	"ginner/api"
 	"ginner/errcode"
-	"ginner/service/user"
+	"ginner/service/v1"
 )
 
 // CreateUser user register
@@ -18,7 +18,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	if err := user.Create(r.Username, r.Password); err != nil {
+	if err := service.CreateUser(r.Username, r.Password); err != nil {
 		err1 := errcode.New(errcode.CustomInternalServerError, err)
 		err1.Add("create user failed.")
 		api.SendResponse(c, err1, nil)
@@ -55,7 +55,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	jwt, err := user.GetJWT(r.Username, r.Password)
+	jwt, err := service.GetUserJWT(r.Username, r.Password)
 	if err != nil {
 		api.SendResponse(c, err, nil)
 		return
@@ -68,7 +68,7 @@ func Login(c *gin.Context) {
 func GetUser(c *gin.Context) {
 	username := c.Param("username")
 
-	user, err := user.Get(username)
+	user, err := service.GetUser(username)
 	if err != nil {
 		err1 := errcode.New(errcode.CustomInternalServerError, err)
 		err1.Add("get user failed.")

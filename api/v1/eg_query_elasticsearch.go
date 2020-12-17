@@ -1,4 +1,4 @@
-package apiv1
+package api
 
 import (
 	"strings"
@@ -7,13 +7,13 @@ import (
 
 	"ginner/api"
 	"ginner/errcode"
-	servicev1 "ginner/service/v1"
+	"ginner/service/v1"
 	"ginner/util"
 )
 
 // FilterRecordsReq request parameters of the client
 type FilterRecordsReq struct {
-	servicev1.FilterParams
+	service.FilterParams
 	LeafIDs string `form:"leaf_ids" binding:"required"`
 }
 
@@ -37,7 +37,7 @@ func FilterRecordsFromES(c *gin.Context) {
 	departIDs := strings.Split(r.LeafIDs, ",")
 
 	offset, limit, page, pageSize := util.Paginate(c, 20)
-	resp, count, err := servicev1.FilterRecords(
+	resp, count, err := service.FilterRecordsFromES(
 		departIDs, r.FilterParams, offset, limit)
 	if err != nil {
 		err1 := errcode.New(errcode.CustomInternalServerError, err)

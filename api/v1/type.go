@@ -1,4 +1,4 @@
-package apiv1
+package api
 
 type userInfo struct {
 	Username string `form:"username" binding:"required,alphanum,min=4,max=10"`

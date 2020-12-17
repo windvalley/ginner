@@ -1,4 +1,4 @@
-package v1
+package service
 
 import (
 	"ginner/db/es"
@@ -15,8 +15,8 @@ type FilterParams struct {
 	SearchMode string `form:"search_mod"`
 }
 
-// FilterRecords filter and search service
-func FilterRecords(departIDs []string, params FilterParams,
+// FilterRecordsFromES filter and search service
+func FilterRecordsFromES(departIDs []string, params FilterParams,
 	offset, limit int) ([]map[string]interface{}, int, error) {
 
 	filter := []map[string]interface{}{}

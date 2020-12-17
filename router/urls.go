@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"ginner/api/apiv1"
+	"ginner/api/v1"
 	"ginner/midware"
 )
 
@@ -24,17 +24,17 @@ func urls(router *gin.Engine) {
 	})
 
 	// Login, and get jwt token
-	router.POST("/login", apiv1.Login)
-	router.GET("/login", apiv1.Login)
+	router.POST("/login", api.Login)
+	router.GET("/login", api.Login)
 
 	// User manage demo
 	g1 := router.Group("/v1/users")
-	g1.POST("", apiv1.CreateUser) // user register request can not use jwt
-	g1.Use(midware.JWT())         // use jwt
-	g1.Use(midware.UserAudit())   // enable user audit
+	g1.POST("", api.CreateUser) // user register request can not use jwt
+	g1.Use(midware.JWT())       // use jwt
+	g1.Use(midware.UserAudit()) // enable user audit
 	{
-		g1.GET("/:username", apiv1.GetUser)
-		g1.POST("/:username", apiv1.GetUser)
+		g1.GET("/:username", api.GetUser)
+		g1.POST("/:username", api.GetUser)
 	}
 
 	// API signature demo
@@ -48,7 +48,7 @@ func urls(router *gin.Engine) {
 	// NOTE: need to issue appKey and appSecret to users in advance
 	g2.Use(midware.JWT())
 	{
-		g2.GET("", apiv1.SignatureDemo)
+		g2.GET("", api.SignatureDemo)
 	}
 
 	// Basic auth demo
@@ -60,15 +60,15 @@ func urls(router *gin.Engine) {
 		"admin": "123456",
 	}))
 	{
-		g3.GET("", apiv1.BasicAuthDemo)
+		g3.GET("", api.BasicAuthDemo)
 	}
 
 	// handle dbs demo
 	g4 := router.Group("/v1/handle-dbs-demo")
 	{
-		g4.GET("/kafka", apiv1.HandleKafkaDemo)
-		g4.POST("/influxdb", apiv1.HandleInfluxdbDemo)
-		g4.GET("/mongodb", apiv1.HandleMongodbDemo)
-		g4.GET("/elasticsearch", apiv1.FilterRecordsFromES)
+		g4.GET("/kafka", api.HandleKafkaDemo)
+		g4.POST("/influxdb", api.HandleInfluxdbDemo)
+		g4.GET("/mongodb", api.HandleMongodbDemo)
+		g4.GET("/elasticsearch", api.FilterRecordsFromES)
 	}
 }
