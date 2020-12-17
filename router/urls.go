@@ -69,5 +69,6 @@ func urls(router *gin.Engine) {
 		g4.GET("/kafka", apiv1.HandleKafkaDemo)
 		g4.POST("/influxdb", apiv1.HandleInfluxdbDemo)
 		g4.GET("/mongodb", apiv1.HandleMongodbDemo)
+		g4.GET("/elasticsearch", apiv1.FilterRecordsFromES)
 	}
 }
