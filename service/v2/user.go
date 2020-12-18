@@ -1,3 +1,4 @@
+// Package service The purpose of this module is just to demonstrate version control of the service
 package service
 
 import (
