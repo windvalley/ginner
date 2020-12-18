@@ -20,6 +20,7 @@ require (
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/gomodule/redigo v2.0.1-0.20180401191855-9352ab68be13+incompatible
 	github.com/gookit/color v1.2.9
+	github.com/hashicorp/go-version v1.2.1 // indirect
 	github.com/influxdata/influxdb v1.8.2
 	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 // indirect
 	github.com/jinzhu/gorm v1.9.16
@@ -27,6 +28,7 @@ require (
 	github.com/lestrrat-go/file-rotatelogs v2.3.0+incompatible
 	github.com/lestrrat-go/strftime v1.0.3 // indirect
 	github.com/lib/pq v1.2.0 // indirect
+	github.com/mitchellh/gox v1.0.1 // indirect
 	github.com/muesli/cache2go v0.0.0-20200423001931-a100c5aac93f
 	github.com/onsi/ginkgo v1.14.0 // indirect
 	github.com/pquerna/ffjson v0.0.0-20190930134022-aa0246cd15f7
