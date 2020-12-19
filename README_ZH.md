@@ -5,6 +5,8 @@
 ## 主要特性
 
 - [x] 项目依赖管理`Go Modules`
+- [x] 项目的目录组织结构设计与示范
+- [x] `API`与`Service`的版本控制示范
 - [x] 配置文件组件
   - [x] 采用面向对象配置文件包`toml`
   - [x] 可从命令行加载配置文件
@@ -60,6 +62,7 @@
     - [x] `Kafka`
 - [x] 子项目`demo`
   - [x] 后台常驻进程示例: `cmd/daemonprocess`
+  - [x] 同步数据到`Elasticsearch`程序示例: `cmd/sync-data-into-es`
 - [x] 计划任务`cron`
 - [x] 进程内缓存`cache2go`
 - [x] 其他小工具(`util`)
@@ -93,6 +96,18 @@ cd ginner
 ### 常规方式
 
 ```bash
+go build
+
+# 开发环境
+./your-project-name -c conf/dev.config.toml
+
+# 生产环境
+./your-project-name -c conf/config.toml
+```
+
+或者使用本项目提供的服务脚本:
+
+```bash
 ./build.sh
 
 # 开发环境
@@ -114,6 +129,52 @@ export RUNENV=prod
 
 # 查看当前服务运行状态
 ./service.sh status
+```
+
+开发环境下, 程序启动后的输出效果如下所示:
+
+```text
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:	export GIN_MODE=release
+ - using code:	gin.SetMode(gin.ReleaseMode)
+
+[GIN-debug] GET    /debug/pprof/             --> github.com/gin-contrib/pprof.pprofHandler.func1 (9 handlers)
+[GIN-debug] GET    /debug/pprof/cmdline      --> github.com/gin-contrib/pprof.pprofHandler.func1 (9 handlers)
+[GIN-debug] GET    /debug/pprof/profile      --> github.com/gin-contrib/pprof.pprofHandler.func1 (9 handlers)
+[GIN-debug] POST   /debug/pprof/symbol       --> github.com/gin-contrib/pprof.pprofHandler.func1 (9 handlers)
+[GIN-debug] GET    /debug/pprof/symbol       --> github.com/gin-contrib/pprof.pprofHandler.func1 (9 handlers)
+[GIN-debug] GET    /debug/pprof/trace        --> github.com/gin-contrib/pprof.pprofHandler.func1 (9 handlers)
+[GIN-debug] GET    /debug/pprof/allocs       --> github.com/gin-contrib/pprof.pprofHandler.func1 (9 handlers)
+[GIN-debug] GET    /debug/pprof/block        --> github.com/gin-contrib/pprof.pprofHandler.func1 (9 handlers)
+[GIN-debug] GET    /debug/pprof/goroutine    --> github.com/gin-contrib/pprof.pprofHandler.func1 (9 handlers)
+[GIN-debug] GET    /debug/pprof/heap         --> github.com/gin-contrib/pprof.pprofHandler.func1 (9 handlers)
+[GIN-debug] GET    /debug/pprof/mutex        --> github.com/gin-contrib/pprof.pprofHandler.func1 (9 handlers)
+[GIN-debug] GET    /debug/pprof/threadcreate --> github.com/gin-contrib/pprof.pprofHandler.func1 (9 handlers)
+[GIN-debug] GET    /doc/*any                 --> github.com/swaggo/gin-swagger.CustomWrapHandler.func1 (9 handlers)
+[GIN-debug] GET    /s/*filepath              --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (9 handlers)
+[GIN-debug] HEAD   /s/*filepath              --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (9 handlers)
+[GIN-debug] GET    /status                   --> ginner/router.urls.func1 (9 handlers)
+[GIN-debug] GET    /ping                     --> ginner/router.urls.func2 (9 handlers)
+[GIN-debug] POST   /login                    --> ginner/api/v1.Login (9 handlers)
+[GIN-debug] GET    /login                    --> ginner/api/v1.Login (9 handlers)
+[GIN-debug] POST   /v1/users                 --> ginner/api/v1.CreateUser (9 handlers)
+[GIN-debug] GET    /v1/users/:username       --> ginner/api/v1.GetUser (11 handlers)
+[GIN-debug] POST   /v1/users/:username       --> ginner/api/v1.GetUser (11 handlers)
+[GIN-debug] POST   /v2/users                 --> ginner/api/v2.CreateUser (9 handlers)
+[GIN-debug] GET    /v2/users/:username       --> ginner/api/v2.GetUser (11 handlers)
+[GIN-debug] POST   /v2/users/:username       --> ginner/api/v2.GetUser (11 handlers)
+[GIN-debug] GET    /v1/sign-demo             --> ginner/api/v1.SignatureDemo (10 handlers)
+[GIN-debug] GET    /v1/basic-auth-demo       --> ginner/api/v1.BasicAuthDemo (10 handlers)
+[GIN-debug] GET    /v1/handle-dbs-demo/kafka --> ginner/api/v1.HandleKafkaDemo (9 handlers)
+[GIN-debug] POST   /v1/handle-dbs-demo/influxdb --> ginner/api/v1.HandleInfluxdbDemo (9 handlers)
+[GIN-debug] GET    /v1/handle-dbs-demo/mongodb --> ginner/api/v1.HandleMongodbDemo (9 handlers)
+[GIN-debug] GET    /v1/handle-dbs-demo/elasticsearch --> ginner/api/v1.FilterRecordsFromES (9 handlers)
+[Endless-debug] current pid is 43627
+[Endless-debug] server port is :8000
+DEBU[0000] checking url: http://127.0.0.1:8000/ping
+INFO[0000] accesslog                                     client_ip=127.0.0.1 http_status=200 latency_time=2.6493e-05 request_body= request_id= request_method=GET request_proto=HTTP/1.1 request_referer= request_ua=Go-http-client/1.1 request_uri=/ping response_code= response_msg= username=guest
+[GIN] 2020/12/18 - 17:17:06 | 200 |     772.603µs |       127.0.0.1 | GET      "/ping"
+DEBU[0000] server(43627) started
 ```
 
 ### 容器方式
