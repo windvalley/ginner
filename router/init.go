@@ -46,6 +46,7 @@ func Group() {
 	//router.Use(gin.Recovery())
 	router.Use(midware.Recover())
 	router.Use(midware.RequestID())
+	router.Use(midware.UserAudit())
 	router.Use(midware.AccessLogger())
 	router.Use(midware.ACL())
 	router.Use(midware.CORS())

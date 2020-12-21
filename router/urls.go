@@ -32,7 +32,6 @@ func urls(router *gin.Engine) {
 	g1 := router.Group("/v1/users")
 	g1.POST("", api.CreateUser) // user register request can not use jwt
 	g1.Use(midware.JWT())       // use jwt
-	g1.Use(midware.UserAudit()) // enable user audit
 	{
 		g1.GET("/:username", api.GetUser)
 		g1.POST("/:username", api.GetUser)
@@ -42,7 +41,6 @@ func urls(router *gin.Engine) {
 	g1V2 := router.Group("/v2/users")
 	g1V2.POST("", apiv2.CreateUser) // user register request can not use jwt
 	g1V2.Use(midware.JWT())         // use jwt
-	g1V2.Use(midware.UserAudit())   // enable user audit
 	{
 		g1V2.GET("/:username", apiv2.GetUser)
 		g1V2.POST("/:username", apiv2.GetUser)
