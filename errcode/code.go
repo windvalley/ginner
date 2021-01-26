@@ -55,7 +55,7 @@ var (
 
 	// UserNotFoundError user not found
 	UserNotFoundError = &ErrCode{
-		Status:  http.StatusBadRequest,
+		Status:  http.StatusNotFound,
 		Code:    "UserNotFound",
 		Message: "The user is not found.",
 	}
@@ -90,7 +90,7 @@ var (
 
 	// RecordNotFoundError The data of user request not exists.
 	RecordNotFoundError = &ErrCode{
-		Status:  http.StatusBadRequest,
+		Status:  http.StatusNotFound,
 		Code:    "RecordNotFound",
 		Message: "Record not found.",
 	}
