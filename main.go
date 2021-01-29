@@ -14,17 +14,8 @@ import (
 )
 
 func init() {
-	// Load config from command line parameters.
+	// Load config file from command line parameters.
 	//    e.g. ./ginner -c conf/dev.config.conf
-	//config.LoadFromCLIParams()
-
-	// Load config from system environment variable RUNENV: prod/dev
-	//    e.g. RUNENV=dev ./ginner
-	//config.LoadFromENV()
-
-	// If load config from CLI params failed,
-	// then load config from system environment variable RUNENV,
-	// and the value of RUNENV can only be dev or prod.
 	config.Init()
 
 	logger.Init()

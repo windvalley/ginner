@@ -4,81 +4,59 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"sync"
 
 	"github.com/BurntSushi/toml"
-	"github.com/spf13/pflag"
+	flag "github.com/spf13/pflag"
 )
 
-var (
-	conf *GlobalConfig
-	lock = new(sync.RWMutex)
-)
+// Init config from command line params
+func Init() {
+	cfg := getConfigFileFromCli()
+	ParseConfig(*cfg, config)
+}
+
+// InitCmd config for subproject cmd
+func InitCmd(conf interface{}) {
+	cfg := getConfigFileFromCli()
+	ParseConfig(*cfg, conf)
+}
 
 // ParseConfig parse config from path string
-func ParseConfig(f string) {
-	if _, err := toml.DecodeFile(f, &conf); err != nil {
-		panic(err)
-	}
-}
-
-// Conf get config instance
-func Conf() *GlobalConfig {
-	lock.RLock()
-	defer lock.RUnlock()
-	return conf
-}
-
-// Init If load config from CLI params failed,
-// then load config from system environment variable RUNENV,
-// and the value of RUNENV can only be dev or prod.
-func Init() {
-	cfg := getConfigFromCLI()
-	if *cfg != "" {
-		ParseConfig(*cfg)
-		return
-	}
-
-	LoadFromENV()
-}
-
-// LoadFromCLIParams load config from command line parameters.
-func LoadFromCLIParams() {
-	cfg := getConfigFromCLI()
-	if *cfg == "" {
-		binName := filepath.Base(os.Args[0])
-		fmt.Printf("missing parameter\nUsage of %s:\n  -c, --config string"+
-			"   Specify your configuration file\n", binName)
-		os.Exit(2)
-	}
-
-	ParseConfig(*cfg)
-}
-
-// LoadFromENV load from system environment variable RUNENV: prod/dev
-func LoadFromENV() {
-	abPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
+func ParseConfig(f string, conf interface{}) {
+	metaData, err := toml.DecodeFile(f, conf)
 	if err != nil {
-		panic(err)
+		fmt.Printf("Parse config file failed: %s\n", err)
+		usage()
 	}
 
-	confPath := abPath + "/conf/"
-	runenv := os.Getenv("RUNENV")
+	if len(metaData.Keys()) == 0 {
+		fmt.Println("Parse config file failed: has no valid config items")
+		usage()
+	}
 
-	switch runenv {
-	case "dev":
-		ParseConfig(confPath + "dev.config.toml")
-	case "prod":
-		ParseConfig(confPath + "config.toml")
-	case "":
-		panic("system environment variable RUNENV is not set, optinal value: prod or dev")
-	default:
-		panic("the value of RUNENV can only be prod or dev")
+	undecodeItems := metaData.Undecoded()
+	if len(undecodeItems) != 0 {
+		fmt.Printf(
+			"Parse config file failed: follow iterms failed to resolve:\n  %s\n\n",
+			undecodeItems,
+		)
+		usage()
 	}
 }
 
-func getConfigFromCLI() *string {
-	cfg := pflag.StringP("config", "c", "", "Specify your configuration file")
-	pflag.Parse()
+func getConfigFileFromCli() *string {
+	cfg := flag.StringP("config", "c", "", "Specify your configuration file")
+	flag.Parse()
+
+	if *cfg == "" {
+		usage()
+	}
+
 	return cfg
+}
+
+func usage() {
+	fmt.Printf("Usage of %s:\n", filepath.Base(os.Args[0]))
+	flag.PrintDefaults()
+	os.Exit(2)
 }

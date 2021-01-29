@@ -1,9 +1,29 @@
 package config
 
-import "time"
+import (
+	"sync"
+	"time"
+)
 
-// GlobalConfig map conf/config.toml
-type GlobalConfig struct {
+var (
+	config *Global
+	lock   = new(sync.RWMutex)
+)
+
+func init() {
+	config = &Global{}
+}
+
+// Conf get config instance
+func Conf() *Global {
+	lock.RLock()
+	defer lock.RUnlock()
+
+	return config
+}
+
+// Global config, used to map conf/config.toml
+type Global struct {
 	AppName      string `toml:"app_name"`
 	ServerPort   string `toml:"server_port"`
 	Runmode      string
@@ -92,16 +112,16 @@ type redis struct {
 	Address     string
 	DB          int
 	Password    string
-	MaxIdle     int
-	MaxActive   int
-	IdleTimeout time.Duration
+	MaxIdle     int           `toml:"max_idle"`
+	MaxActive   int           `toml:"max_active"`
+	IdleTimeout time.Duration `toml:"idle_timeout"`
 }
 
 type redisCluster struct {
 	Nodes       []string
 	Secret      string
-	PoolSize    int
-	PoolTimeout time.Duration
+	PoolSize    int           `toml:"pool_size"`
+	PoolTimeout time.Duration `toml:"pool_timeout"`
 }
 
 type acl struct {
