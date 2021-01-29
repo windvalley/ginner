@@ -11,9 +11,8 @@ Based on the Gin framework, this project integrates commonly used web components
 - [x] API and Service version control demonstration
 - [x] Configuration
   - [x] Object-oriented configuration
-  - [x] Load configuration files from command line parameters
-  - [x] Load configuration files from system environment variables
-  - [x] Load configuration files from command line parameters takes precedence
+  - [x] Load configuration file from command line parameters
+  - [x] Support sub-projects(in cmd/) to use independent configuration file
 - [x] Logger
   - [x] Separation of error log and access log
   - [x] The log format, log retention time, log rotation interval, log directory name can be customized
