@@ -20,23 +20,28 @@ var Log = logrus.New()
 
 const timeFormat = "2006-01-02 15:04:05"
 
-// Init logger initialization
+// Init logger
 func Init() {
-	logDir, err := createLogdir()
+	dirName := config.Conf().Log.Dirname
+	rotationHours := config.Conf().Log.RotationHours
+	saveDays := config.Conf().Log.SaveDays
+	logFormat := config.Conf().Log.LogFormat
+
+	logDir, err := createLogdir(dirName)
 	if err != nil {
-		panic(fmt.Sprintf("create log dir failed: %v", err))
+		panic(fmt.Sprintf("create log dir '%s' failed: %s", logDir, err))
 	}
 
 	Log.SetLevel(logrus.DebugLevel)
 
 	accessLog := path.Join(logDir, "access.log")
-	accesslogWriter, err := getLogWriter(accessLog)
+	accesslogWriter, err := getLogWriter(accessLog, rotationHours, saveDays)
 	if err != nil {
 		panic(err)
 	}
 
 	errorLog := path.Join(logDir, "error.log")
-	errorlogWriter, err := getLogWriter(errorLog)
+	errorlogWriter, err := getLogWriter(errorLog, rotationHours, saveDays)
 	if err != nil {
 		panic(err)
 	}
@@ -54,7 +59,7 @@ func Init() {
 		TimestampFormat: timeFormat,
 	})
 
-	if config.Conf().Log.LogFormat == "txt" {
+	if logFormat == "txt" {
 		lfHook = lfshook.NewHook(writeMap, &logrus.TextFormatter{
 			TimestampFormat: timeFormat,
 		})
@@ -62,24 +67,24 @@ func Init() {
 
 	Log.AddHook(lfHook)
 
-	// Only log in file, not to screen(io.Stderr) in production.
+	// Only write log to file, not to screen(io.Stderr) in production.
 	if config.Conf().Runmode == "release" {
 		Log.Out = ioutil.Discard
 	}
 }
 
-// InitCMDLog preserve error log for cmd
-func InitCMDLog() {
-	logDir, err := createLogdir()
+// InitCmdLogger init logger for subproject(in cmd/)
+func InitCmdLogger(dirName, logFormat string, rotationHours, saveDays int) {
+	logDir, err := createLogdir(dirName)
 	if err != nil {
-		panic(fmt.Sprintf("create log dir failed: %v", err))
+		panic(fmt.Sprintf("create log dir '%s' failed: %s", logDir, err))
 	}
 
 	Log.SetLevel(logrus.DebugLevel)
 
 	filename := filepath.Base(os.Args[0])
 	logfile := logDir + "/" + filename + ".log"
-	logWriter, err := getLogWriter(logfile)
+	logWriter, err := getLogWriter(logfile, rotationHours, saveDays)
 	if err != nil {
 		panic(err)
 	}
@@ -96,35 +101,42 @@ func InitCMDLog() {
 	lfHook := lfshook.NewHook(writeMap, &logrus.JSONFormatter{
 		TimestampFormat: timeFormat,
 	})
+
+	if logFormat == "txt" {
+		lfHook = lfshook.NewHook(writeMap, &logrus.TextFormatter{
+			TimestampFormat: timeFormat,
+		})
+	}
+
 	Log.AddHook(lfHook)
-	//Log.Out = ioutil.Discard
+
+	if config.Conf().Runmode == "release" {
+		Log.Out = ioutil.Discard
+	}
 }
 
-func createLogdir() (string, error) {
+func createLogdir(dirName string) (string, error) {
 	abPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
 		return "", err
 	}
 
-	logDir := abPath + "/" + config.Conf().Log.Dirname
+	logDir := abPath + "/" + dirName
 	if !IsPathExist(logDir) {
 		if err := os.Mkdir(logDir, 0755); err != nil {
-			return "", err
+			return logDir, err
 		}
 	}
 
 	return logDir, nil
 }
 
-func getLogWriter(logFile string) (*rotatelogs.RotateLogs, error) {
-	rotationHours := time.Duration(config.Conf().Log.RotationHours)
-	saveDays := time.Duration(config.Conf().Log.SaveDays)
-
+func getLogWriter(logFile string, rotationHours, saveDays int) (*rotatelogs.RotateLogs, error) {
 	logWiter, err := rotatelogs.New(
 		logFile+"-%Y-%m-%d",
 		rotatelogs.WithLinkName(logFile),
-		rotatelogs.WithRotationTime(rotationHours*time.Hour),
-		rotatelogs.WithMaxAge(saveDays*24*time.Hour),
+		rotatelogs.WithRotationTime(time.Duration(rotationHours)),
+		rotatelogs.WithMaxAge(time.Duration(saveDays)),
 	)
 	if err != nil {
 		return nil, err
