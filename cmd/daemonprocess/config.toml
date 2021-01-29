@@ -1,0 +1,8 @@
+runmode = "release"
+
+[log]
+dirname = "logs"
+log_format = "json"  # json or txt
+rotation_hours = 24
+save_days = 7
+

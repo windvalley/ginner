@@ -2,32 +2,29 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"os/signal"
-	"path/filepath"
 	"syscall"
-
-	"github.com/spf13/pflag"
 
 	"ginner/config"
 	"ginner/logger"
 	"ginner/util"
+
+	"ginner/cmd/daemonprocess/cfg"
 )
 
+func init() {
+	config.InitCmd(&cfg.Config)
+
+	logger.InitCmdLogger(
+		cfg.Conf().Log.Dirname,
+		cfg.Conf().Log.LogFormat,
+		cfg.Conf().Log.RotationHours,
+		cfg.Conf().Log.SaveDays,
+	)
+}
+
 func main() {
-	cfg := pflag.StringP("config", "c", "", "Specify your configuration file")
-	pflag.Parse()
-	if *cfg == "" {
-		binName := filepath.Base(os.Args[0])
-		fmt.Printf("missing parameter\nUsage of %s:\n  -c, --config string"+
-			"   Specify your configuration file\n", binName)
-		os.Exit(2)
-	}
-
-	config.ParseConfig(*cfg)
-	logger.InitCMDLog()
-
 	lock, lockFile, err := util.ProcessLock()
 	if err != nil {
 		logger.Log.Fatal(err)
