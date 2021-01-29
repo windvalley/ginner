@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"syscall"
 
 	"ginner/config"
@@ -25,7 +26,12 @@ func init() {
 }
 
 func main() {
-	lock, lockFile, err := util.ProcessLock()
+	abPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		panic(err)
+	}
+	pidDir := abPath + "/" + cfg.Conf().Log.Dirname
+	lock, lockFile, err := util.ProcessLock(pidDir)
 	if err != nil {
 		logger.Log.Fatal(err)
 	}

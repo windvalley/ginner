@@ -6,28 +6,26 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
-
-	"ginner/config"
+	"strings"
 )
 
 // ProcessLock How to use:
 //func main() {
-//lock, lockFile, err := util.ProcessLock()
+//abPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
+//if err != nil {
+//panic(err)
+//}
+//lock, lockFile, err := util.ProcessLock(abPath+"/logs")
 //if err != nil {
 //logger.Log.Fatal(err)
 //}
 //defer os.Remove(lockFile)
 //defer lock.Close()
 //}
-func ProcessLock() (*os.File, string, error) {
-	abPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
-	if err != nil {
-		return nil, "", err
-	}
-
-	logDir := abPath + "/" + config.Conf().Log.Dirname + "/"
+func ProcessLock(pidDir string) (*os.File, string, error) {
+	pidDir = strings.TrimSuffix(pidDir, "/") + "/"
 	filename := filepath.Base(os.Args[0])
-	lockFile := logDir + filename + ".pid"
+	lockFile := pidDir + filename + ".pid"
 
 	lock, err := os.Open(lockFile)
 	if err != nil {
