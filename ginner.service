@@ -6,11 +6,15 @@ Wants=
 
 [Service]
 Type=simple
-EnvironmentFile=/your-project-path/conf/systemd.ENV
-ExecStart=/your-project-path/ginner
+#User=
+#Group=
+# dev
+ExecStart=/your-project-path/ginner -c /your-project-path/conf/dev.config.toml
+# production
+#ExecStart=/your-project-path/ginner -c /your-project-path/conf/config.toml
 KillMode=process
-Restart=on-failure
-RestartSec=1s
+Restart=always
+RestartSec=1
 
 [Install]
 WantedBy=multi-user.target

@@ -6,11 +6,8 @@ import (
 
 	"ginner/config"
 	"ginner/cron"
-	"ginner/db/mongodb"
-	"ginner/db/rdb"
 	"ginner/logger"
 	"ginner/router"
-	"ginner/util"
 )
 
 func init() {
@@ -41,16 +38,16 @@ func init() {
 // @host ginner.sre.im:8000
 // @BasePath /api
 func main() {
-	// relation db
-	rdb.Init()
-	defer rdb.Close()
+	// relation db, e.g. mysql
+	//rdb.Init()
+	//defer rdb.Close()
 
 	// migrate relation db tables
-	util.MigrateRDBTables()
+	//util.MigrateRDBTables()
 
 	// mongodb
-	mongodb.Init()
-	defer mongodb.Close()
+	//mongodb.Init()
+	//defer mongodb.Close()
 
 	// influxdb
 	//influxdb.Init()
