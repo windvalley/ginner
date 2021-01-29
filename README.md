@@ -112,11 +112,6 @@ Or:
 ```bash
 ./build.sh
 
-# development
-export RUNENV=dev
-# production
-export RUNENV=prod
-
 # start
 ./service.sh start
 
@@ -187,10 +182,10 @@ DEBU[0000] server(43627) started
 docker build -t your-project-name .
 
 # dev
-docker run --name your-project-name -p80:8000 -d your-project-name
+docker run --name your-project-name -p80:8000 -d your-project-name ./ginner -c conf/dev.config.toml
 
 # production
-docker run --name your-project-name -p80:8000 -d -e RUNENV=prod your-project-name
+docker run --name your-project-name -p80:8000 -d your-project-name ./ginner -c conf/config.toml
 ```
 
 ### Systemd
@@ -203,12 +198,6 @@ sudo systemctl daemon-reload
 
 # autostart after rebooting
 sudo systemctl enable your-project-name
-
-# production
-echo "RUNENV=prod" > conf/systemd.ENV
-
-# development
-echo "RUNENV=dev" > conf/systemd.ENV
 
 # start
 sudo systemctl start your-project-name

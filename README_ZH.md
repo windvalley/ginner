@@ -109,11 +109,6 @@ go build
 ```bash
 ./build.sh
 
-# 开发环境
-export RUNENV=dev
-# 生产环境
-export RUNENV=prod
-
 # 启动服务
 ./service.sh start
 
@@ -183,10 +178,10 @@ DEBU[0000] server(43627) started
 docker build -t your-project-name .
 
 # 开发环境下运行容器
-docker run --name your-project-name -p80:8000 -d your-project-name
+docker run --name your-project-name -p80:8000 -d your-project-name ./ginner -c conf/dev.config.toml
 
 # 生产环境下运行容器
-docker run --name your-project-name -p80:8000 -d -e RUNENV=prod your-project-name
+docker run --name your-project-name -p80:8000 -d your-project-name ./ginner -c conf/config.toml
 ```
 
 ### Systemd
@@ -201,12 +196,6 @@ sudo systemctl daemon-reload
 
 # 开机自动启动服务
 sudo systemctl enable your-project-name
-
-# 生产环境
-echo "RUNENV=prod" > conf/systemd.ENV
-
-# 开发环境
-echo "RUNENV=dev" > conf/systemd.ENV
 
 # 启动服务
 sudo systemctl start your-project-name
