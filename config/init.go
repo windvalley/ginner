@@ -3,7 +3,6 @@ package config
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 
 	"github.com/BurntSushi/toml"
 	flag "github.com/spf13/pflag"
@@ -56,7 +55,6 @@ func getConfigFileFromCli() *string {
 }
 
 func usage() {
-	fmt.Printf("Usage of %s:\n", filepath.Base(os.Args[0]))
-	flag.PrintDefaults()
+	flag.Usage()
 	os.Exit(2)
 }
