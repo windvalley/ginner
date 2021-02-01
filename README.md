@@ -15,7 +15,8 @@ Based on the Gin framework, this project integrates commonly used web components
   - [x] Support sub-projects(in cmd/) to use independent configuration file
 - [x] Logger
   - [x] Separation of error log and access log
-  - [x] The log format, log retention time, log rotation interval, log directory name can be customized
+  - [x] The log format, log level, log retention time, log rotation interval, log directory name can be customized
+  - [x] Support sub-projects(in cmd/) to use logger to log to independent log file
   - [x] If the runmode is debug, the log will be output to the screen at the same time
 - [x] Error code system
   - [x] For centralized managing error response information

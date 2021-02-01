@@ -23,16 +23,17 @@ const timeFormat = "2006-01-02 15:04:05"
 // Init logger
 func Init() {
 	dirName := config.Conf().Log.Dirname
+	logFormat := config.Conf().Log.LogFormat
+	logLevel := config.Conf().Log.LogLevel
 	rotationHours := config.Conf().Log.RotationHours
 	saveDays := config.Conf().Log.SaveDays
-	logFormat := config.Conf().Log.LogFormat
 
 	logDir, err := createLogdir(dirName)
 	if err != nil {
 		panic(fmt.Sprintf("create log dir '%s' failed: %s", logDir, err))
 	}
 
-	Log.SetLevel(logrus.DebugLevel)
+	Log.SetLevel(getLogLevel(logLevel))
 
 	accessLog := path.Join(logDir, "access.log")
 	accesslogWriter, err := getLogWriter(accessLog, rotationHours, saveDays)
@@ -74,13 +75,13 @@ func Init() {
 }
 
 // InitCmdLogger init logger for subproject(in cmd/)
-func InitCmdLogger(dirName, logFormat string, rotationHours, saveDays int) {
+func InitCmdLogger(dirName, logFormat, logLevel string, rotationHours, saveDays int) {
 	logDir, err := createLogdir(dirName)
 	if err != nil {
 		panic(fmt.Sprintf("create log dir '%s' failed: %s", logDir, err))
 	}
 
-	Log.SetLevel(logrus.DebugLevel)
+	Log.SetLevel(getLogLevel(logLevel))
 
 	filename := filepath.Base(os.Args[0])
 	logfile := logDir + "/" + filename + ".log"
@@ -135,14 +136,35 @@ func getLogWriter(logFile string, rotationHours, saveDays int) (*rotatelogs.Rota
 	logWiter, err := rotatelogs.New(
 		logFile+"-%Y-%m-%d",
 		rotatelogs.WithLinkName(logFile),
-		rotatelogs.WithRotationTime(time.Duration(rotationHours)),
-		rotatelogs.WithMaxAge(time.Duration(saveDays)),
+		rotatelogs.WithRotationTime(time.Duration(rotationHours)*time.Hour),
+		rotatelogs.WithMaxAge(time.Duration(saveDays)*24*time.Hour),
 	)
 	if err != nil {
 		return nil, err
 	}
 
 	return logWiter, nil
+}
+
+func getLogLevel(level string) (logLevel logrus.Level) {
+	switch level {
+	case "trace":
+		logLevel = logrus.TraceLevel
+	case "debug":
+		logLevel = logrus.DebugLevel
+	case "warn":
+		logLevel = logrus.WarnLevel
+	case "error":
+		logLevel = logrus.ErrorLevel
+	case "fatal":
+		logLevel = logrus.FatalLevel
+	case "panic":
+		logLevel = logrus.PanicLevel
+	default:
+		panic("no such log level: " + level)
+	}
+
+	return logLevel
 }
 
 // IsPathExist file or dir is exist or not

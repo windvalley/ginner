@@ -3,6 +3,7 @@ runmode = "release"
 [log]
 dirname = "logs"
 log_format = "json"  # json or txt
+log_level = "debug"  # trace, debug, info, warn, error, fatal, panic
 rotation_hours = 24
 save_days = 7
 

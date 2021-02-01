@@ -9,9 +9,10 @@ key = "conf/ssl/key.pem"
 
 [log]
 dirname = "logs"
+log_format = "json"  # json/txt
+log_level = "debug"  # trace, debug, info, warn, error, fatal, panic
 rotation_hours = 24
 save_days = 7
-log_format = "json"  # json/txt
 
 [mail]
 smtp_host = "smtp.example.com"

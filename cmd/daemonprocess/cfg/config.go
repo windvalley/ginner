@@ -25,6 +25,7 @@ type Global struct {
 type log struct {
 	Dirname       string
 	LogFormat     string `toml:"log_format"`
+	LogLevel      string `toml:"log_level"`
 	RotationHours int    `toml:"rotation_hours"`
 	SaveDays      int    `toml:"save_days"`
 }
