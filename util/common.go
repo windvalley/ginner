@@ -1,10 +1,12 @@
 package util
 
 import (
-	"ginner/config"
+	"os"
 	"reflect"
 
 	"github.com/gin-gonic/gin"
+
+	"ginner/config"
 )
 
 // GetRequestID get X-Request-Id
@@ -55,4 +57,26 @@ func HasEntry(entries interface{}, entry interface{}) bool {
 	}
 
 	return false
+}
+
+// StrSliceSet De-duplicate elements of a slice of string type
+func StrSliceSet(slice []string) []string {
+	set := make([]string, 0)
+	tempMap := make(map[string]bool, len(slice))
+	for _, v := range slice {
+		if tempMap[v] == false {
+			set = append(set, v)
+			tempMap[v] = true
+		}
+	}
+
+	return set
+}
+
+// IsPathExist file or dir is exist or not
+func IsPathExist(path string) bool {
+	if _, err := os.Stat(path); err != nil && os.IsNotExist(err) {
+		return false
+	}
+	return true
 }

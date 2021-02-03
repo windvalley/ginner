@@ -22,27 +22,23 @@ const timeFormat = "2006-01-02 15:04:05"
 
 // Init logger
 func Init() {
-	dirName := config.Conf().Log.Dirname
-	logFormat := config.Conf().Log.LogFormat
-	logLevel := config.Conf().Log.LogLevel
-	rotationHours := config.Conf().Log.RotationHours
-	saveDays := config.Conf().Log.SaveDays
+	log := config.Conf().Log
 
-	logDir, err := createLogdir(dirName)
+	logDir, err := createLogdir(log.Dirname)
 	if err != nil {
 		panic(fmt.Sprintf("create log dir '%s' failed: %s", logDir, err))
 	}
 
-	Log.SetLevel(getLogLevel(logLevel))
+	Log.SetLevel(getLogLevel(log.LogLevel))
 
 	accessLog := path.Join(logDir, "access.log")
-	accesslogWriter, err := getLogWriter(accessLog, rotationHours, saveDays)
+	accesslogWriter, err := getLogWriter(accessLog, log.RotationHours, log.SaveDays)
 	if err != nil {
 		panic(err)
 	}
 
 	errorLog := path.Join(logDir, "error.log")
-	errorlogWriter, err := getLogWriter(errorLog, rotationHours, saveDays)
+	errorlogWriter, err := getLogWriter(errorLog, log.RotationHours, log.SaveDays)
 	if err != nil {
 		panic(err)
 	}
@@ -60,7 +56,7 @@ func Init() {
 		TimestampFormat: timeFormat,
 	})
 
-	if logFormat == "txt" {
+	if log.LogFormat == "txt" {
 		lfHook = lfshook.NewHook(writeMap, &logrus.TextFormatter{
 			TimestampFormat: timeFormat,
 		})
@@ -74,18 +70,19 @@ func Init() {
 	}
 }
 
-// InitCmdLogger init logger for subproject(in cmd/)
-func InitCmdLogger(dirName, logFormat, logLevel string, rotationHours, saveDays int) {
-	logDir, err := createLogdir(dirName)
+// InitCmd init logger for subproject(in cmd/) that using config file of main project
+func InitCmd() {
+	log := config.Conf().Log
+	logDir, err := createLogdir(log.Dirname)
 	if err != nil {
 		panic(fmt.Sprintf("create log dir '%s' failed: %s", logDir, err))
 	}
 
-	Log.SetLevel(getLogLevel(logLevel))
+	Log.SetLevel(getLogLevel(log.LogLevel))
 
 	filename := filepath.Base(os.Args[0])
 	logfile := logDir + "/" + filename + ".log"
-	logWriter, err := getLogWriter(logfile, rotationHours, saveDays)
+	logWriter, err := getLogWriter(logfile, log.RotationHours, log.SaveDays)
 	if err != nil {
 		panic(err)
 	}
@@ -103,7 +100,7 @@ func InitCmdLogger(dirName, logFormat, logLevel string, rotationHours, saveDays 
 		TimestampFormat: timeFormat,
 	})
 
-	if logFormat == "txt" {
+	if log.LogFormat == "txt" {
 		lfHook = lfshook.NewHook(writeMap, &logrus.TextFormatter{
 			TimestampFormat: timeFormat,
 		})
@@ -123,7 +120,7 @@ func createLogdir(dirName string) (string, error) {
 	}
 
 	logDir := abPath + "/" + dirName
-	if !IsPathExist(logDir) {
+	if !isPathExist(logDir) {
 		if err := os.Mkdir(logDir, 0755); err != nil {
 			return logDir, err
 		}
@@ -167,8 +164,7 @@ func getLogLevel(level string) (logLevel logrus.Level) {
 	return logLevel
 }
 
-// IsPathExist file or dir is exist or not
-func IsPathExist(path string) bool {
+func isPathExist(path string) bool {
 	if _, err := os.Stat(path); err != nil && os.IsNotExist(err) {
 		return false
 	}

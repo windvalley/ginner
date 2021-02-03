@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"path/filepath"
 
 	"ginner/config"
 	"ginner/db/es"
@@ -12,9 +13,10 @@ import (
 )
 
 func init() {
-	config.LoadFromCLIParams()
+	// use config file of main project
+	config.Init()
 
-	logger.InitCMDLog()
+	logger.InitCmd()
 
 	redclus.Init()
 
@@ -22,7 +24,12 @@ func init() {
 }
 
 func main() {
-	lock, lockFile, err := util.ProcessLock()
+	abPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		panic(err)
+	}
+	pidDir := abPath + "/" + config.Conf().Log.Dirname
+	lock, lockFile, err := util.ProcessLock(pidDir)
 	if err != nil {
 		logger.Log.Fatal(err)
 	}
