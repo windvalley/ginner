@@ -8,21 +8,16 @@ import (
 	"syscall"
 
 	"ginner/config"
-	"ginner/logger"
 	"ginner/util"
 
 	"ginner/cmd/daemonprocess/cfg"
+	"ginner/cmd/daemonprocess/logger"
 )
 
 func init() {
 	config.InitCmd(&cfg.Config)
 
-	logger.InitCmdLogger(
-		cfg.Conf().Log.Dirname,
-		cfg.Conf().Log.LogFormat,
-		cfg.Conf().Log.RotationHours,
-		cfg.Conf().Log.SaveDays,
-	)
+	logger.Init()
 }
 
 func main() {
@@ -33,7 +28,7 @@ func main() {
 	pidDir := abPath + "/" + cfg.Conf().Log.Dirname
 	lock, lockFile, err := util.ProcessLock(pidDir)
 	if err != nil {
-		logger.Log.Fatal(err)
+		logger.Log1.Fatal(err)
 	}
 	defer os.Remove(lockFile)
 	defer lock.Close()
@@ -47,7 +42,7 @@ func main() {
 		switch sig {
 		case syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT,
 			syscall.SIGKILL:
-			logger.Log.Infof("%v signal captured, quit.", sig)
+			logger.Log2.Infof("%v signal captured, quit.", sig)
 			cancel()
 			os.Remove(lockFile)
 			os.Exit(1)
