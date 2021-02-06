@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Using Go Gin to develop high quality applications(Web API) efficiently.",
-        "title": "Use-Gin API",
+        "description": "For developing high quality applications(Web API) efficiently by Go Gin.",
+        "title": "ginner API",
         "contact": {
             "name": "Windvalley",
             "email": "i@sre.im"
@@ -11,7 +11,7 @@
             "name": "MIT",
             "url": "https://github.com/windvalley/ginner/blob/master/LICENSE"
         },
-        "version": "0.1.0"
+        "version": "0.0.1"
     },
     "host": "ginner.sre.im:8000",
     "basePath": "/api",

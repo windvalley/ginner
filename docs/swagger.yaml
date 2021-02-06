@@ -4,11 +4,11 @@ info:
   contact:
     email: i@sre.im
     name: Windvalley
-  description: Using Go Gin to develop high quality applications(Web API) efficiently.
+  description: For developing high quality applications(Web API) efficiently by Go Gin.
   license:
     name: MIT
     url: https://github.com/windvalley/ginner/blob/master/LICENSE
-  title: Use-Gin API
-  version: 0.1.0
+  title: ginner API
+  version: 0.0.1
 paths: {}
 swagger: "2.0"
