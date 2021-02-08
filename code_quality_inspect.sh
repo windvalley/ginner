@@ -3,27 +3,36 @@
 
 
 # Markdown
-# install:
+# install markdownlint-cli:
 #    npm install -g markdownlint-cli
-markdownlint ./*.md
+#markdownlint ./*.md
+
+# Markdown
+# install mdl:
+#    sudo gem install mdl
+MDL_IGNORE_RULES="MD013"
+MDL_APPLY_RULES=$(mdl -l | grep -Eo '^MD[0-9]{3}' | grep -Ev $MDL_IGNORE_RULES |
+    xargs | sed 's/ /,/g')
+
+mdl -r "$MDL_APPLY_RULES" ./*.md
 
 # Dockerfile
-# install:
+# install hadolint:
 #    brew install hadolint
 hadolint ./Dockerfile
 
 # Shell
-# install:
+# install shellcheck:
 #    brew install shellcheck
 shellcheck ./*.sh
 
 # Go
-# install:
+# install revive:
 #    go get -u -v github.com/mgechev/revive
 revive ./...
 
 # Go
-# install:
+# install goreportcard-cli:
 #    brew tap alecthomas/homebrew-tap
 #    brew install gometalinter
 #    go get github.com/gojp/goreportcard/cmd/goreportcard-cli
