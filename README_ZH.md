@@ -70,7 +70,6 @@
   - [x] 内置的实时`reload`工具, 用于开发阶段, 提升开发效率
   - [x] 分页`pagination`
   - [x] 实现`redis`分布式锁工具
-  - [x] 请求客户端`httprequest`
   - [x] 发送邮件`gomail`
 - [x] 支持优雅地重启和停止
 - [x] 服务健康检查
@@ -130,8 +129,8 @@ go build
 
 ```text
 [GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
- - using env:	export GIN_MODE=release
- - using code:	gin.SetMode(gin.ReleaseMode)
+ - using env:   export GIN_MODE=release
+ - using code:  gin.SetMode(gin.ReleaseMode)
 
 [GIN-debug] GET    /debug/pprof/             --> github.com/gin-contrib/pprof.pprofHandler.func1 (9 handlers)
 [GIN-debug] GET    /debug/pprof/cmdline      --> github.com/gin-contrib/pprof.pprofHandler.func1 (9 handlers)

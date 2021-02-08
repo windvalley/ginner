@@ -73,7 +73,6 @@ Based on the Gin framework, this project integrates commonly used web components
   - [x] Live reloading gin server in development phase
   - [x] Pagination
   - [x] Redis mutex
-  - [x] HTTP request
   - [x] Gomail
 - [x] Graceful restart or stop gin server
 - [x] Health check when the server starts
@@ -134,8 +133,8 @@ the output after the program is started is as follows:
 
 ```text
 [GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
- - using env:	export GIN_MODE=release
- - using code:	gin.SetMode(gin.ReleaseMode)
+ - using env:   export GIN_MODE=release
+ - using code:  gin.SetMode(gin.ReleaseMode)
 
 [GIN-debug] GET    /debug/pprof/             --> github.com/gin-contrib/pprof.pprofHandler.func1 (9 handlers)
 [GIN-debug] GET    /debug/pprof/cmdline      --> github.com/gin-contrib/pprof.pprofHandler.func1 (9 handlers)
