@@ -4,8 +4,7 @@ ENV GOPROXY https://goproxy.cn,direct
 WORKDIR /src
 
 COPY . /src
-RUN go mod tidy
-RUN go build -o ginner
+RUN go build -i -o ginner
 
 
 FROM alpine:3
