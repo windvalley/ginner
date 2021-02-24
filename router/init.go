@@ -24,7 +24,7 @@ import (
 	"ginner/util"
 )
 
-// Group router group
+// Group routes
 func Group() {
 	runmode := config.Conf().Runmode
 
@@ -43,7 +43,7 @@ func Group() {
 	if runmode == "debug" {
 		router.Use(gin.Logger())
 	}
-	//router.Use(gin.Recovery())
+
 	router.Use(midware.Recover())
 	router.Use(midware.RequestID())
 	router.Use(midware.UserAudit())
@@ -51,8 +51,7 @@ func Group() {
 	router.Use(midware.ACL())
 	router.Use(midware.CORS())
 	router.Use(midware.GlobalTrafficLimiter(100000))
-	// requests/second per client IP
-	router.Use(midware.UserTrafficLimiter(100))
+	router.Use(midware.UserTrafficLimiter(100)) // requests/second per client IP
 
 	router.NoRoute(func(c *gin.Context) {
 		c.String(
@@ -79,8 +78,7 @@ func Group() {
 
 		// Live reloading the server in development stage for coding in high efficiency.
 		// NOTE: Do not run server in this way: `go run main.go`,
-		// and the correct way: `go build -o appname && RUNENV=dev ./appname`,
-		// or `go build && export RUNENV=dev && ./service.sh start`
+		// and the correct way: `go build -o appname && ./appname -c conf/dev.config.conf`
 		go util.LiveReloadServer([]string{
 			"logs",
 		})

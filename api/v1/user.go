@@ -8,7 +8,7 @@ import (
 	"ginner/service/v1"
 )
 
-// CreateUser user register
+// CreateUser for user register
 func CreateUser(c *gin.Context) {
 	var r userInfo
 	if err := c.Bind(&r); err != nil {
@@ -64,7 +64,7 @@ func Login(c *gin.Context) {
 	api.SendResponse(c, nil, &loginResp{jwt})
 }
 
-// GetUser get user by path params "username"
+// GetUser by path params "username"
 func GetUser(c *gin.Context) {
 	username := c.Param("username")
 

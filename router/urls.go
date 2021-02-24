@@ -16,7 +16,7 @@ func urls(router *gin.Engine) {
 	// i.e.: request path: /s/js/xxx.js vs real path: html/statics/js/xxx.js
 	router.Static("s", "html/statics")
 
-	// For monitor the server
+	// For monitoring the server healthy
 	router.GET("/status", func(c *gin.Context) {
 		c.String(http.StatusOK, "ok")
 	})

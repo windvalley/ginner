@@ -129,7 +129,7 @@ Or:
 ```
 
 If you are using the configuration file of the development environment,
-the output after the program is started is as follows:
+the output after the program is started as follows:
 
 ```text
 [GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
