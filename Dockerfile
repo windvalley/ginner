@@ -1,10 +1,10 @@
-FROM golang:alpine AS build-env
+FROM golang:1.16-alpine AS build-env
 
 ENV GOPROXY https://goproxy.cn,direct
 WORKDIR /src
 
 COPY . /src
-RUN go build -i -o ginner
+RUN go build -o ginner
 
 
 FROM alpine:3
