@@ -32,6 +32,11 @@ shellcheck ./*.sh
 revive ./...
 
 # Go
+# install golangci-lint:
+#    go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.38.0
+golangci-lint run
+
+# Go
 # install goreportcard-cli:
 #    brew tap alecthomas/homebrew-tap
 #    brew install gometalinter
