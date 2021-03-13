@@ -39,15 +39,13 @@ func (e *Err) Error() string {
 }
 
 // Add replace origin Message field's %s or %d and so on
-func (e *Err) Add(item ...interface{}) error {
+func (e *Err) Add(item ...interface{}) {
 	e.Message = fmt.Sprintf(e.Message, item...)
-	return e
 }
 
 // Addf add additional content for Message field
-func (e *Err) Addf(format string, a ...interface{}) error {
+func (e *Err) Addf(format string, a ...interface{}) {
 	e.Message += " " + fmt.Sprintf(format, a...)
-	return e
 }
 
 // DecodeErr get Status, Code and Message field from ErrCode、Err、error for showing to client,
