@@ -107,7 +107,13 @@ func AccessLogger() gin.HandlerFunc {
 			ResData:    string(resData),
 		}
 
-		go userOperationLog.Create()
+		go func() {
+			if err := userOperationLog.Create(); err != nil {
+				logger.Log.Errorf(
+					"request id %s: user operation log create failed: %s",
+					requestURI, err)
+			}
+		}()
 	}
 }
 

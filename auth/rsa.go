@@ -68,7 +68,9 @@ func getPemBlock(path string) (*pem.Block, error) {
 	}
 
 	buf := make([]byte, info.Size())
-	file.Read(buf)
+	if _, err := file.Read(buf); err != nil {
+		return nil, err
+	}
 
 	block, _ := pem.Decode(buf)
 	return block, nil

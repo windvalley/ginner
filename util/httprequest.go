@@ -80,7 +80,9 @@ func PostWithFormdata(
 	body := new(bytes.Buffer)
 	mw := multipart.NewWriter(body)
 	for k, v := range postData {
-		mw.WriteField(k, v)
+		if err := mw.WriteField(k, v); err != nil {
+			return nil, err
+		}
 	}
 	defer mw.Close()
 

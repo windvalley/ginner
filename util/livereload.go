@@ -3,6 +3,7 @@ package util
 import (
 	"errors"
 	"fmt"
+	"ginner/logger"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -19,7 +20,7 @@ func LiveReloadServer(excludeDirs []string) {
 	rootPath := "."
 
 	for {
-		filepath.Walk(rootPath, func(path string, info os.FileInfo, err error) error {
+		err := filepath.Walk(rootPath, func(path string, info os.FileInfo, err error) error {
 			if isSkipPath(path, info, excludeDirs) {
 				return filepath.SkipDir
 			}
@@ -37,6 +38,9 @@ func LiveReloadServer(excludeDirs []string) {
 
 			return nil
 		})
+		if err != nil {
+			logger.Log.Error("filepath.Walk failed")
+		}
 
 		time.Sleep(500 * time.Millisecond)
 	}

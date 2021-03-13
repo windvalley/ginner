@@ -34,8 +34,8 @@ func ProcessLock(pidDir string) (*os.File, string, error) {
 			return lock, lockFile, err
 		}
 		pid := fmt.Sprint(os.Getpid())
-		lock.WriteString(pid)
-		return lock, lockFile, nil
+		_, err = lock.WriteString(pid)
+		return lock, lockFile, err
 	}
 
 	filePid, err := ioutil.ReadAll(lock)

@@ -9,7 +9,9 @@ import (
 )
 
 func main() {
-	genRsaKeyPairs(1024)
+	if err := genRsaKeyPairs(1024); err != nil {
+		panic(err)
+	}
 }
 
 // generate private.pem and public.pem
