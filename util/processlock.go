@@ -49,7 +49,7 @@ func ProcessLock(pidDir string) (*os.File, string, error) {
 	}
 
 	return lock, lockFile, fmt.Errorf(
-		"Found lockfile %s, another copy is running, pid %d",
+		"found lockfile %s, another copy is running, pid %d",
 		lockFile,
 		pid,
 	)

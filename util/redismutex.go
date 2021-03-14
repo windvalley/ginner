@@ -53,13 +53,8 @@ func (m *RedisMutex) Lock() error {
 
 	timeoutC := make(chan bool)
 	go func() {
-		for {
-			select {
-			case <-time.After(m.Timeout * time.Second):
-				timeoutC <- true
-				return
-			}
-		}
+		time.Sleep(m.Timeout * time.Second)
+		timeoutC <- true
 	}()
 
 	go func() {

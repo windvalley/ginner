@@ -14,10 +14,14 @@ const cSQLPartEnd = "fill(0) tz('Asia/Shanghai')"
 
 // HandleInfluxdbDemo a demo of handle influxdb
 func HandleInfluxdbDemo() error {
-
 	// your specific logic
+	_, err := readInfluxdb()
+	if err != nil {
+		return err
+	}
 
-	return nil
+	err = writeInfluxdb()
+	return err
 }
 
 func writeInfluxdb() error {

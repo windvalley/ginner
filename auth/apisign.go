@@ -63,7 +63,7 @@ func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
 
 	userInfo, ok := userInfos[keyID]
 	if !ok {
-		return nil, fmt.Errorf("KeyID '%s' not found", keyID)
+		return nil, fmt.Errorf("key id '%s' not found", keyID)
 	}
 
 	keySecret, err := getKeySecret(keyID, signType, userInfo)
@@ -101,7 +101,7 @@ func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
 
 	if params.Timestamp.Unix() > curTimestamp ||
 		curTimestamp-params.Timestamp.Unix() >= apisignLifetime {
-		return nil, errors.New("Signature expired")
+		return nil, errors.New("signature expired")
 	}
 
 	strForSign := createStrForSign(c, allParamsMap)
@@ -113,7 +113,7 @@ func VerifySign(c *gin.Context, signType string) (map[string]string, error) {
 
 func verifySiganature(strForSign, signType, keySecret, requestSignature string,
 	userInfo userInfo) error {
-	signInvalidError := errors.New("Signature invalid")
+	signInvalidError := errors.New("signature invalid")
 
 	switch signType {
 	case "aes":
@@ -144,7 +144,7 @@ func verifySiganature(strForSign, signType, keySecret, requestSignature string,
 			return signInvalidError
 		}
 	default:
-		return errors.New("Signature encrypt type invalid")
+		return errors.New("signature encrypt type invalid")
 	}
 
 	return nil

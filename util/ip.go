@@ -32,10 +32,7 @@ func init() {
 
 // IsIP determine whether the given string is an IP
 func IsIP(ipaddr string) bool {
-	if net.ParseIP(ipaddr) == nil {
-		return false
-	}
-	return true
+	return net.ParseIP(ipaddr) != nil
 }
 
 // IsPrivateIP determine whether the given string is an intranet IP

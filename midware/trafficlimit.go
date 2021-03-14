@@ -28,7 +28,6 @@ func UserTrafficLimiter(burstSize int) gin.HandlerFunc {
 		api.SendResponse(c, err1, nil)
 
 		c.Abort()
-		return
 	}
 }
 
@@ -46,6 +45,5 @@ func GlobalTrafficLimiter(burstSize int) gin.HandlerFunc {
 		api.SendResponse(c, err1, nil)
 
 		c.Abort()
-		return
 	}
 }

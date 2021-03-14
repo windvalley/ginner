@@ -98,7 +98,7 @@ func getTokenFromRequest(c *gin.Context) (string, error) {
 
 		values := strings.Split(authHeader, " ")
 		if len(values) != 2 || values[0] != "Bearer" {
-			return "", errors.New("Request header 'Authorization' format invalid")
+			return "", errors.New("request header 'Authorization' format invalid")
 		}
 		jwtToken = values[1]
 	}

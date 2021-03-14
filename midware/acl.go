@@ -44,6 +44,5 @@ func ACL() gin.HandlerFunc {
 		}
 
 		c.Next()
-		return
 	}
 }

@@ -64,7 +64,7 @@ func StrSliceSet(slice []string) []string {
 	set := make([]string, 0)
 	tempMap := make(map[string]bool, len(slice))
 	for _, v := range slice {
-		if tempMap[v] == false {
+		if !tempMap[v] {
 			set = append(set, v)
 			tempMap[v] = true
 		}
