@@ -16,7 +16,7 @@ func init() {
 	// use config file of main project
 	config.Init()
 
-	logger.InitCmd()
+	logger.Init()
 
 	redclus.Init()
 

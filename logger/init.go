@@ -20,6 +20,16 @@ var Log = logrus.New()
 
 const timeFormat = "2006-01-02 15:04:05"
 
+// Config as logger init parameters
+type Config struct {
+	Runmode       string
+	Dirname       string
+	LogFormat     string
+	LogLevel      string
+	RotationHours time.Duration
+	SaveDays      time.Duration
+}
+
 // Init logger
 func Init() {
 	log := config.Conf().Log
@@ -71,18 +81,17 @@ func Init() {
 }
 
 // InitCmd init logger for subproject(in cmd/) that using config file of main project
-func InitCmd() {
-	log := config.Conf().Log
-	logDir, err := createLogdir(log.Dirname)
+func InitCmd(logConf *Config) {
+	logDir, err := createLogdir(logConf.Dirname)
 	if err != nil {
 		panic(fmt.Sprintf("create log dir '%s' failed: %s", logDir, err))
 	}
 
-	Log.SetLevel(getLogLevel(log.LogLevel))
+	Log.SetLevel(getLogLevel(logConf.LogLevel))
 
 	filename := filepath.Base(os.Args[0])
 	logfile := logDir + "/" + filename + ".log"
-	logWriter, err := getLogWriter(logfile, log.RotationHours, log.SaveDays)
+	logWriter, err := getLogWriter(logfile, logConf.RotationHours, logConf.SaveDays)
 	if err != nil {
 		panic(err)
 	}
@@ -100,7 +109,7 @@ func InitCmd() {
 		TimestampFormat: timeFormat,
 	})
 
-	if log.LogFormat == "txt" {
+	if logConf.LogFormat == "txt" {
 		lfHook = lfshook.NewHook(writeMap, &logrus.TextFormatter{
 			TimestampFormat: timeFormat,
 		})
@@ -108,7 +117,7 @@ func InitCmd() {
 
 	Log.AddHook(lfHook)
 
-	if config.Conf().Runmode == "release" {
+	if logConf.Runmode == "release" {
 		Log.Out = ioutil.Discard
 	}
 }
@@ -129,12 +138,12 @@ func createLogdir(dirName string) (string, error) {
 	return logDir, nil
 }
 
-func getLogWriter(logFile string, rotationHours, saveDays int) (*rotatelogs.RotateLogs, error) {
+func getLogWriter(logFile string, rotationHours, saveDays time.Duration) (*rotatelogs.RotateLogs, error) {
 	logWiter, err := rotatelogs.New(
 		logFile+"-%Y-%m-%d",
 		rotatelogs.WithLinkName(logFile),
-		rotatelogs.WithRotationTime(time.Duration(rotationHours)*time.Hour),
-		rotatelogs.WithMaxAge(time.Duration(saveDays)*24*time.Hour),
+		rotatelogs.WithRotationTime(rotationHours*time.Hour),
+		rotatelogs.WithMaxAge(saveDays*24*time.Hour),
 	)
 	if err != nil {
 		return nil, err
