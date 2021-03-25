@@ -7,9 +7,10 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"syscall"
 )
 
-// ProcessLock How to use:
+// ProcessLock usage:
 //func main() {
 //abPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
 //if err != nil {
@@ -24,33 +25,41 @@ import (
 //}
 func ProcessLock(pidDir string) (*os.File, string, error) {
 	pidDir = strings.TrimSuffix(pidDir, "/") + "/"
-	filename := filepath.Base(os.Args[0])
-	lockFile := pidDir + filename + ".pid"
+	lockfileName := filepath.Base(os.Args[0])
+	lockfileFullName := pidDir + lockfileName + ".pid"
 
-	lock, err := os.Open(lockFile)
+	file, err := os.OpenFile(lockfileFullName, os.O_CREATE|os.O_RDWR, 0644)
 	if err != nil {
-		lock, err := os.Create(lockFile)
+		return file, lockfileFullName, err
+	}
+
+	prePIDByte, err := ioutil.ReadAll(file)
+	if err != nil {
+		return file, lockfileFullName, err
+	}
+
+	if len(prePIDByte) != 0 {
+		prePID, err := strconv.Atoi(string(prePIDByte))
 		if err != nil {
-			return lock, lockFile, err
+			return file, lockfileFullName, err
 		}
-		pid := fmt.Sprint(os.Getpid())
-		_, err = lock.WriteString(pid)
-		return lock, lockFile, err
+
+		if err := syscall.Kill(prePID, 0); err == nil {
+			return file, lockfileFullName, fmt.Errorf(
+				"existing lock %s: another copy is running as pid %d",
+				lockfileFullName,
+				prePID,
+			)
+		}
 	}
 
-	filePid, err := ioutil.ReadAll(lock)
+	file, err = os.OpenFile(lockfileFullName, os.O_TRUNC|os.O_RDWR, 0644)
 	if err != nil {
-		return lock, lockFile, err
+		return file, lockfileFullName, err
 	}
 
-	pid, err := strconv.Atoi(string(filePid))
-	if err != nil {
-		return lock, lockFile, err
-	}
+	pid := fmt.Sprint(os.Getpid())
+	_, err = file.WriteString(pid)
 
-	return lock, lockFile, fmt.Errorf(
-		"found lockfile %s, another copy is running, pid %d",
-		lockFile,
-		pid,
-	)
+	return file, lockfileFullName, err
 }
