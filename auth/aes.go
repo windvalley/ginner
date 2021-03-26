@@ -10,6 +10,7 @@ import (
 // AESEncrypt aes-128-cbc
 func AESEncrypt(src, key string) (string, error) {
 	srcBytes, keyBytes := []byte(src), []byte(key)
+	keyBytes = aesKeyPaddingLeft(keyBytes, '0', 16)
 
 	block, err := aes.NewCipher(keyBytes)
 	if err != nil {
@@ -17,7 +18,7 @@ func AESEncrypt(src, key string) (string, error) {
 	}
 
 	blockSize := block.BlockSize()
-	srcBytes = PKCS7Padding(srcBytes, blockSize)
+	srcBytes = pkcs7Padding(srcBytes, blockSize)
 	blockMode := cipher.NewCBCEncrypter(block, keyBytes[:blockSize])
 
 	signatureBytes := make([]byte, len(srcBytes))
@@ -30,6 +31,8 @@ func AESEncrypt(src, key string) (string, error) {
 // AESDecrypt AES decrypt by signature and key
 func AESDecrypt(signature, key string) (string, error) {
 	keyBytes := []byte(key)
+	keyBytes = aesKeyPaddingLeft(keyBytes, '0', 16)
+
 	signatureBytes, err := base64.URLEncoding.DecodeString(signature)
 	if err != nil {
 		return "", err
@@ -45,23 +48,33 @@ func AESDecrypt(signature, key string) (string, error) {
 
 	srcBytes := make([]byte, len(signatureBytes))
 	blockMode.CryptBlocks(srcBytes, signatureBytes)
-	srcBytes = PKCS7UnPadding(srcBytes)
+	srcBytes = pkcs7UnPadding(srcBytes)
 
 	return string(srcBytes), nil
 }
 
-// PKCS7UnPadding for unpadding
-func PKCS7UnPadding(src []byte) []byte {
+func pkcs7UnPadding(src []byte) []byte {
 	length := len(src)
 	unpadding := int(src[length-1])
 
 	return src[:length-unpadding]
 }
 
-// PKCS7Padding for padding
-func PKCS7Padding(src []byte, blockSize int) []byte {
+func pkcs7Padding(src []byte, blockSize int) []byte {
 	padding := blockSize - len(src)%blockSize
 	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
 
 	return append(src, padtext...)
+}
+
+func aesKeyPaddingLeft(key []byte, pad byte, length int) []byte {
+	keyLength := len(key)
+	if keyLength >= length {
+		return key[:length]
+	}
+
+	pads := bytes.Repeat([]byte{pad}, length-len(key))
+	pads = append(pads, key...)
+
+	return pads
 }
